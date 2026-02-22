@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: life-vault
+    runtime: node
+    buildCommand: npm install
+    startCommand: node server.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PASSWORD
+        sync: false
+      - key: SESSION_SECRET
+        sync: false
+      - key: API_KEY
+        sync: false
+      - key: VAPID_PUBLIC_KEY
+        sync: false
+      - key: VAPID_PRIVATE_KEY
+        sync: false
+      - key: VAPID_EMAIL
+        sync: false
+    disk:
+      name: life-vault-data
+      mountPath: /opt/render/project/src/data
+      sizeGB: 1
