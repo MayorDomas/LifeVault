@@ -480,6 +480,30 @@
     .edit-cat-chips { display: flex; gap: 4px; margin-bottom: 8px; flex-wrap: wrap; }
     .edit-cat-chips .cat-chip { padding: 4px 10px; font-size: 11px; }
 
+    /* History */
+    .btn-history-toggle {
+      padding: 10px 24px;
+      background: var(--surface);
+      border: 1px solid var(--glass-border);
+      border-radius: 10px;
+      color: var(--text-dim);
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-history-toggle:hover { border-color: var(--accent); color: var(--text); }
+    .history-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text-dim);
+      margin: 20px 0 16px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--glass-border);
+    }
+    .idea-card.history-card { opacity: 0.65; }
+    .idea-card.history-card:hover { opacity: 0.85; }
+    .history-date { font-size: 11px; color: var(--danger); opacity: 0.7; }
+
     /* ==========================================
        FILES SECTION
        ========================================== */
@@ -1147,6 +1171,19 @@
         <div class="empty-icon">&#128161;</div>
         <p>No ideas yet. Type or dictate your first one!</p>
       </div>
+
+      <!-- Ideas History -->
+      <div class="history-toggle" style="margin-top: 32px; text-align: center;">
+        <button class="btn-history-toggle" id="historyToggleBtn" onclick="toggleHistory()">&#128220; Show History</button>
+      </div>
+      <div class="ideas-history" id="ideasHistory" style="display:none;">
+        <h3 class="history-title">&#128220; Deleted Ideas History</h3>
+        <div class="ideas-list" id="historyList"></div>
+        <div class="empty-state" id="historyEmpty" style="display:none;">
+          <div class="empty-icon">&#128220;</div>
+          <p>No deleted ideas in history.</p>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -1255,7 +1292,21 @@
         </div>
         <div class="modal-field">
           <label>Time</label>
-          <input type="time" id="eventTimeInput" />
+          <select id="eventTimeInput">
+            <option value="">-- None --</option>
+            <option value="00:00">00:00</option><option value="01:00">01:00</option>
+            <option value="02:00">02:00</option><option value="03:00">03:00</option>
+            <option value="04:00">04:00</option><option value="05:00">05:00</option>
+            <option value="06:00">06:00</option><option value="07:00">07:00</option>
+            <option value="08:00">08:00</option><option value="09:00">09:00</option>
+            <option value="10:00">10:00</option><option value="11:00">11:00</option>
+            <option value="12:00">12:00</option><option value="13:00">13:00</option>
+            <option value="14:00">14:00</option><option value="15:00">15:00</option>
+            <option value="16:00">16:00</option><option value="17:00">17:00</option>
+            <option value="18:00">18:00</option><option value="19:00">19:00</option>
+            <option value="20:00">20:00</option><option value="21:00">21:00</option>
+            <option value="22:00">22:00</option><option value="23:00">23:00</option>
+          </select>
         </div>
       </div>
       <div class="modal-field">
@@ -1617,9 +1668,78 @@
     try {
       const res = await api(`/api/ideas/${id}`, { method: 'DELETE' });
       const data = await res.json();
-      if (data.success) { toast('Idea deleted', 'success'); loadIdeas(); }
+      if (data.success) {
+        toast('Idea moved to history', 'success');
+        loadIdeas();
+        if (historyVisible) loadHistory();
+      }
       else toast(data.error || 'Failed to delete', 'error');
     } catch (err) { toast('Error deleting idea', 'error'); }
+  }
+
+  // --- Ideas History ---
+  let historyVisible = false;
+
+  function toggleHistory() {
+    historyVisible = !historyVisible;
+    const btn = document.getElementById('historyToggleBtn');
+    const container = document.getElementById('ideasHistory');
+    if (historyVisible) {
+      btn.textContent = '\uD83D\uDCDC Hide History';
+      container.style.display = 'block';
+      loadHistory();
+    } else {
+      btn.textContent = '\uD83D\uDCDC Show History';
+      container.style.display = 'none';
+    }
+  }
+
+  async function loadHistory() {
+    try {
+      const res = await api('/api/ideas/history');
+      const data = await res.json();
+      renderHistory(data.ideas || []);
+    } catch (err) {}
+  }
+
+  function renderHistory(ideas) {
+    const list = document.getElementById('historyList');
+    const empty = document.getElementById('historyEmpty');
+    if (ideas.length === 0) {
+      list.innerHTML = '';
+      empty.style.display = 'block';
+      return;
+    }
+    empty.style.display = 'none';
+    list.innerHTML = ideas.map(idea => `
+      <div class="idea-card history-card">
+        <div class="idea-card-top">
+          <div class="idea-text">${escapeHtml(idea.text)}</div>
+        </div>
+        <div class="idea-card-meta">
+          <div class="idea-meta-left">
+            <span class="idea-category-badge">${ideaCatName(idea.category)}</span>
+            <span class="idea-date">${formatDate(idea.createdAt)}</span>
+            <span class="history-date">Deleted ${formatDate(idea.deletedAt)}</span>
+          </div>
+          <div class="idea-actions">
+            <button class="btn-action edit" onclick="restoreIdea('${idea.id}')">&#8634; Restore</button>
+          </div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  async function restoreIdea(id) {
+    try {
+      const res = await api(`/api/ideas/history/${id}/restore`, { method: 'POST' });
+      const data = await res.json();
+      if (data.success) {
+        toast('Idea restored!', 'success');
+        loadIdeas();
+        loadHistory();
+      } else toast(data.error || 'Restore failed', 'error');
+    } catch (err) { toast('Error restoring idea', 'error'); }
   }
 
   // Voice input

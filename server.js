@@ -19,6 +19,7 @@ const FILE_CATEGORIES = ['documents', 'images', 'code', '3d-models', 'other'];
 const TIMELINE_CATEGORIES = ['personal', 'work', 'health', 'finance', 'milestone', 'other'];
 const DATA_DIR = path.join(__dirname, 'data');
 const IDEAS_FILE = path.join(DATA_DIR, 'ideas.json');
+const IDEAS_HISTORY_FILE = path.join(DATA_DIR, 'ideas-history.json');
 const TIMELINE_FILE = path.join(DATA_DIR, 'timeline.json');
 const SUBSCRIPTIONS_FILE = path.join(DATA_DIR, 'subscriptions.json');
 const SENT_NOTIFICATIONS_FILE = path.join(DATA_DIR, 'sent-notifications.json');
@@ -229,13 +230,48 @@ app.delete('/api/ideas/:id', requireAuth, (req, res) => {
   try {
     const { id } = req.params;
     let ideas = readJSON(IDEAS_FILE);
-    const before = ideas.length;
+    const deleted = ideas.find(i => i.id === id);
+    if (!deleted) return res.status(404).json({ error: 'Idea not found' });
     ideas = ideas.filter(i => i.id !== id);
-    if (ideas.length === before) return res.status(404).json({ error: 'Idea not found' });
     writeJSON(IDEAS_FILE, ideas);
+    // Save to history
+    const history = readJSON(IDEAS_HISTORY_FILE);
+    deleted.deletedAt = new Date().toISOString();
+    history.unshift(deleted);
+    writeJSON(IDEAS_HISTORY_FILE, history);
     res.json({ success: true });
   } catch (err) {
     res.status(500).json({ error: 'Failed to delete idea' });
+  }
+});
+
+// Get ideas history
+app.get('/api/ideas/history', requireAuth, (req, res) => {
+  try {
+    const history = readJSON(IDEAS_HISTORY_FILE);
+    res.json({ ideas: history });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to load history' });
+  }
+});
+
+// Restore idea from history
+app.post('/api/ideas/history/:id/restore', requireAuth, (req, res) => {
+  try {
+    const { id } = req.params;
+    let history = readJSON(IDEAS_HISTORY_FILE);
+    const idea = history.find(i => i.id === id);
+    if (!idea) return res.status(404).json({ error: 'Idea not found in history' });
+    history = history.filter(i => i.id !== id);
+    writeJSON(IDEAS_HISTORY_FILE, history);
+    delete idea.deletedAt;
+    idea.updatedAt = new Date().toISOString();
+    const ideas = readJSON(IDEAS_FILE);
+    ideas.unshift(idea);
+    writeJSON(IDEAS_FILE, ideas);
+    res.json({ success: true, idea });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to restore idea' });
   }
 });
 
