@@ -483,6 +483,33 @@ app.post('/api/push/unsubscribe', requireAuth, (req, res) => {
   }
 });
 
+// Test push notification
+app.post('/api/push/test', requireAuth, (req, res) => {
+  try {
+    if (!process.env.VAPID_PUBLIC_KEY || !process.env.VAPID_PRIVATE_KEY) {
+      return res.status(400).json({ error: 'VAPID keys not configured' });
+    }
+    const subs = readJSON(SUBSCRIPTIONS_FILE);
+    if (subs.length === 0) {
+      return res.status(400).json({ error: 'No subscriptions found. Allow notifications first.' });
+    }
+    const payload = JSON.stringify({
+      title: 'Life Vault - Test',
+      body: 'Push notifications are working!',
+      tag: 'test-' + Date.now()
+    });
+    let sent = 0;
+    subs.forEach(sub => {
+      webpush.sendNotification(sub, payload)
+        .then(() => sent++)
+        .catch(() => {});
+    });
+    res.json({ success: true, subscribers: subs.length });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to send test notification' });
+  }
+});
+
 // --- Push Notification Scheduler ---
 function checkAndSendNotifications() {
   if (!process.env.VAPID_PUBLIC_KEY || !process.env.VAPID_PRIVATE_KEY) return;
