@@ -1343,7 +1343,11 @@
         </div>
         <div class="modal-field">
           <label>Time</label>
-          <input type="time" id="eventTimeInput" step="60" />
+          <div style="display:flex; gap:6px; align-items:center;">
+            <select id="eventHourInput"><option value="">--</option></select>
+            <span style="color:var(--text); font-weight:600;">:</span>
+            <select id="eventMinInput"><option value="">--</option></select>
+          </div>
         </div>
       </div>
       <div class="modal-field">
@@ -2035,6 +2039,32 @@
   const MONTH_NAMES = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
   const MONTH_FULL = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
+  // Populate time selects
+  (function() {
+    const h = document.getElementById('eventHourInput');
+    const m = document.getElementById('eventMinInput');
+    for (let i = 0; i < 24; i++) h.innerHTML += `<option value="${String(i).padStart(2,'0')}">${String(i).padStart(2,'0')}</option>`;
+    for (let i = 0; i < 60; i++) m.innerHTML += `<option value="${String(i).padStart(2,'0')}">${String(i).padStart(2,'0')}</option>`;
+  })();
+
+  function getTimeValue() {
+    const h = document.getElementById('eventHourInput').value;
+    const m = document.getElementById('eventMinInput').value;
+    if (!h || !m) return '';
+    return h + ':' + m;
+  }
+
+  function setTimeValue(time) {
+    if (!time) {
+      document.getElementById('eventHourInput').value = '';
+      document.getElementById('eventMinInput').value = '';
+      return;
+    }
+    const parts = time.split(':');
+    document.getElementById('eventHourInput').value = parts[0] || '';
+    document.getElementById('eventMinInput').value = parts[1] || '00';
+  }
+
   function tlCatName(cat) {
     const names = { 'personal': 'Personal', 'work': 'Work', 'health': 'Health', 'finance': 'Finance', 'milestone': 'Milestone', 'other': 'Other' };
     return names[cat] || cat;
@@ -2201,6 +2231,7 @@
     document.getElementById('modalSubmitBtn').textContent = 'Save Event';
     eventForm.reset();
     document.getElementById('eventNotifyInput').checked = true;
+    setTimeValue('');
     // Default date to selected month
     const defaultDate = `${timelineYear}-${String(timelineMonth).padStart(2, '0')}-${String(new Date().getDate()).padStart(2, '0')}`;
     document.getElementById('eventDateInput').value = defaultDate;
@@ -2228,7 +2259,7 @@
     document.getElementById('eventTitleInput').value = event.title;
     document.getElementById('eventDescInput').value = event.description || '';
     document.getElementById('eventDateInput').value = event.date;
-    document.getElementById('eventTimeInput').value = event.time || '';
+    setTimeValue(event.time || '');
     document.getElementById('eventCatInput').value = event.category;
     document.getElementById('eventNotifyInput').checked = event.notify;
     eventModal.classList.add('active');
@@ -2240,7 +2271,7 @@
       title: document.getElementById('eventTitleInput').value.trim(),
       description: document.getElementById('eventDescInput').value.trim(),
       date: document.getElementById('eventDateInput').value,
-      time: document.getElementById('eventTimeInput').value,
+      time: getTimeValue(),
       category: document.getElementById('eventCatInput').value,
       notify: document.getElementById('eventNotifyInput').checked
     };
