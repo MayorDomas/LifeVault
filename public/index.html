@@ -1489,6 +1489,21 @@
       const data = await res.json();
       if (data.authenticated) {
         showDashboard();
+        return;
+      }
+      // Session expired but we have saved password - auto login
+      const saved = localStorage.getItem('lv_k');
+      if (saved) {
+        const loginRes = await api('/api/login', {
+          method: 'POST',
+          body: JSON.stringify({ password: saved })
+        });
+        const loginData = await loginRes.json();
+        if (loginData.success) {
+          showDashboard();
+        } else {
+          localStorage.removeItem('lv_k');
+        }
       }
     } catch (e) {}
   }
@@ -1505,6 +1520,7 @@
       });
       const data = await res.json();
       if (data.success) {
+        localStorage.setItem('lv_k', pw);
         showDashboard();
       } else {
         errEl.textContent = data.error || 'Wrong password';
