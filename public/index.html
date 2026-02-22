@@ -1311,8 +1311,10 @@
         <p>No events for this period. Click + to add one!</p>
       </div>
 
-      <div style="margin-top: 32px; text-align: center;">
-        <button class="btn-history-toggle" id="testNotifBtn" onclick="sendTestNotification()">&#128276; Send Test Notification</button>
+      <div style="margin-top: 32px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 12px;">
+        <button class="btn-history-toggle" id="enableNotifBtn" onclick="enableNotifications()">&#128276; Enable Notifications</button>
+        <span id="notifStatus" style="font-size: 12px; color: var(--text-dim);"></span>
+        <button class="btn-history-toggle" id="testNotifBtn" onclick="sendTestNotification()" style="display:none;">&#128276; Send Test Notification</button>
       </div>
     </div>
   </div>
@@ -2296,57 +2298,101 @@
   // PUSH NOTIFICATIONS
   // ==========================================
   async function initPush() {
-    if (!('serviceWorker' in navigator) || !('PushManager' in window)) return;
+    if (!('serviceWorker' in navigator)) return;
     try {
+      await navigator.serviceWorker.register('/sw.js');
+      checkNotifStatus();
+    } catch (err) {
+      console.log('SW registration skipped:', err.message);
+    }
+  }
+
+  async function enableNotifications() {
+    const statusEl = document.getElementById('notifStatus');
+    const enableBtn = document.getElementById('enableNotifBtn');
+    const testBtn = document.getElementById('testNotifBtn');
+
+    if (!('serviceWorker' in navigator)) {
+      statusEl.textContent = 'Service Workers not supported. On iPhone: add to Home Screen first, then open from there.';
+      statusEl.style.color = 'var(--danger)';
+      return;
+    }
+    if (!('PushManager' in window)) {
+      statusEl.textContent = 'Push not supported. On iPhone: use Safari > Share > Add to Home Screen, then open from Home Screen.';
+      statusEl.style.color = 'var(--danger)';
+      return;
+    }
+
+    try {
+      statusEl.textContent = 'Registering service worker...';
       const reg = await navigator.serviceWorker.register('/sw.js');
+      await navigator.serviceWorker.ready;
+
+      statusEl.textContent = 'Requesting permission...';
+      const permission = await Notification.requestPermission();
+      if (permission !== 'granted') {
+        statusEl.textContent = 'Permission denied. Go to browser settings and allow notifications for this site.';
+        statusEl.style.color = 'var(--danger)';
+        return;
+      }
+
+      statusEl.textContent = 'Subscribing...';
       const keyRes = await api('/api/push/vapid-public-key');
       const keyData = await keyRes.json();
-      if (!keyData.publicKey) return;
+      if (!keyData.publicKey) {
+        statusEl.textContent = 'VAPID keys not configured on server.';
+        statusEl.style.color = 'var(--danger)';
+        return;
+      }
 
-      const existing = await reg.pushManager.getSubscription();
-      if (existing) return; // Already subscribed
+      let subscription = await reg.pushManager.getSubscription();
+      if (!subscription) {
+        subscription = await reg.pushManager.subscribe({
+          userVisibleOnly: true,
+          applicationServerKey: urlBase64ToUint8Array(keyData.publicKey)
+        });
+      }
 
-      const permission = await Notification.requestPermission();
-      if (permission !== 'granted') return;
+      await api('/api/push/subscribe', { method: 'POST', body: JSON.stringify(subscription) });
 
-      const subscription = await reg.pushManager.subscribe({
-        userVisibleOnly: true,
-        applicationServerKey: urlBase64ToUint8Array(keyData.publicKey)
-      });
-
-      await api('/api/push/subscribe', {
-        method: 'POST',
-        body: JSON.stringify(subscription)
-      });
+      statusEl.textContent = 'Notifications enabled on this device!';
+      statusEl.style.color = 'var(--success)';
+      enableBtn.textContent = '\u2705 Notifications Enabled';
+      testBtn.style.display = 'inline-block';
+      toast('Notifications enabled!', 'success');
     } catch (err) {
-      console.log('Push setup skipped:', err.message);
+      statusEl.textContent = 'Error: ' + err.message;
+      statusEl.style.color = 'var(--danger)';
     }
   }
 
   async function sendTestNotification() {
     try {
-      // Make sure we're subscribed first
-      if ('serviceWorker' in navigator && 'PushManager' in window) {
-        const reg = await navigator.serviceWorker.ready;
-        const existing = await reg.pushManager.getSubscription();
-        if (!existing) {
-          const keyRes = await api('/api/push/vapid-public-key');
-          const keyData = await keyRes.json();
-          if (!keyData.publicKey) return toast('VAPID keys not configured on server', 'error');
-          const permission = await Notification.requestPermission();
-          if (permission !== 'granted') return toast('Notification permission denied', 'error');
-          const subscription = await reg.pushManager.subscribe({
-            userVisibleOnly: true,
-            applicationServerKey: urlBase64ToUint8Array(keyData.publicKey)
-          });
-          await api('/api/push/subscribe', { method: 'POST', body: JSON.stringify(subscription) });
-        }
-      }
       const res = await api('/api/push/test', { method: 'POST' });
       const data = await res.json();
       if (data.success) toast(`Test notification sent to ${data.subscribers} device(s)`, 'success');
       else toast(data.error || 'Failed to send', 'error');
     } catch (err) { toast('Error: ' + err.message, 'error'); }
+  }
+
+  // Check notification status on load
+  async function checkNotifStatus() {
+    const enableBtn = document.getElementById('enableNotifBtn');
+    const testBtn = document.getElementById('testNotifBtn');
+    const statusEl = document.getElementById('notifStatus');
+    if (!('serviceWorker' in navigator) || !('PushManager' in window)) return;
+    try {
+      const reg = await navigator.serviceWorker.getRegistration();
+      if (reg) {
+        const sub = await reg.pushManager.getSubscription();
+        if (sub) {
+          enableBtn.textContent = '\u2705 Notifications Enabled';
+          statusEl.textContent = 'This device is subscribed.';
+          statusEl.style.color = 'var(--success)';
+          testBtn.style.display = 'inline-block';
+        }
+      }
+    } catch (e) {}
   }
 
   function urlBase64ToUint8Array(base64String) {
