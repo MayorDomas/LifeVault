@@ -331,31 +331,6 @@
       box-shadow: 0 6px 20px var(--accent-glow);
     }
     .btn-save:active { transform: translateY(0); }
-    .btn-mic {
-      width: 40px; height: 40px;
-      border-radius: 50%;
-      background: var(--surface);
-      border: 1px solid var(--glass-border);
-      color: var(--text-dim);
-      font-size: 18px;
-      cursor: pointer;
-      transition: all 0.2s;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .btn-mic:hover { border-color: var(--accent); color: var(--accent); }
-    .btn-mic.recording {
-      background: rgba(239, 68, 68, 0.2);
-      border-color: var(--danger);
-      color: var(--danger);
-      animation: pulse 1.5s ease-in-out infinite;
-    }
-    @keyframes pulse {
-      0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.3); }
-      50% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
-    }
-
     .filter-bar { display: flex; gap: 6px; margin-bottom: 20px; flex-wrap: wrap; }
     .filter-chip {
       padding: 7px 16px;
@@ -660,7 +635,7 @@
     }
 
     /* ==========================================
-       TIMELINE SECTION
+       TIMELINE / CALENDAR SECTION
        ========================================== */
     .timeline-section .main {
       padding: 24px;
@@ -729,144 +704,263 @@
       color: var(--text);
     }
 
-    /* Timeline container */
-    .timeline-container {
-      position: relative;
-      padding-left: 40px;
+    /* Calendar Grid */
+    .calendar-header {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 4px;
+      margin-bottom: 4px;
     }
-    .timeline-container::before {
-      content: '';
-      position: absolute;
-      left: 19px;
-      top: 0;
-      bottom: 0;
-      width: 2px;
-      background: linear-gradient(to bottom, var(--accent), rgba(139,92,246,0.1));
-    }
-
-    /* Month header on timeline */
-    .timeline-month-header {
-      position: relative;
-      margin-bottom: 20px;
-      margin-top: 10px;
-    }
-    .timeline-month-header::before {
-      content: '';
-      position: absolute;
-      left: -29px;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 18px;
-      height: 18px;
-      border-radius: 50%;
-      background: var(--accent);
-      box-shadow: 0 0 15px var(--accent-glow), 0 0 30px rgba(139,92,246,0.15);
-    }
-    .timeline-month-header h3 {
-      font-size: 16px;
+    .calendar-header-cell {
+      text-align: center;
+      font-size: 11px;
       font-weight: 600;
-      color: var(--text);
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 1px;
       padding: 8px 0;
     }
-
-    /* Event node */
-    .timeline-event {
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 4px;
+    }
+    .calendar-day {
       position: relative;
-      margin-bottom: 16px;
-      animation: fadeInUp 0.4s ease;
-    }
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    .timeline-event::before {
-      content: '';
-      position: absolute;
-      left: -27px;
-      top: 20px;
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      background: var(--glass);
-      border: 2px solid var(--accent);
-      transition: all 0.3s;
-    }
-    .timeline-event.upcoming::before {
-      background: var(--accent);
-      animation: nodePulse 2s ease-in-out infinite;
-    }
-    @keyframes nodePulse {
-      0%, 100% { box-shadow: 0 0 0 0 var(--accent-glow); }
-      50% { box-shadow: 0 0 0 8px rgba(139,92,246,0); }
-    }
-    .timeline-event.past { opacity: 0.6; }
-    .timeline-event.completed .event-card { opacity: 0.5; }
-    .timeline-event.completed .event-title { text-decoration: line-through; }
-
-    .event-card {
-      background: var(--glass);
-      backdrop-filter: blur(10px);
+      background: var(--surface);
       border: 1px solid var(--glass-border);
-      border-radius: var(--radius);
-      padding: 18px;
-      transition: all 0.25s;
+      border-radius: 10px;
+      min-height: 70px;
+      padding: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
     }
-    .event-card:hover {
-      border-color: rgba(139, 92, 246, 0.3);
-      transform: translateX(4px);
-      box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+    .calendar-day:hover {
+      border-color: rgba(139, 92, 246, 0.4);
+      background: var(--surface-hover);
+      transform: translateY(-1px);
     }
-    .event-card-top {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 12px;
-      margin-bottom: 8px;
-    }
-    .event-title {
-      font-size: 15px;
+    .calendar-day .day-number {
+      font-size: 14px;
       font-weight: 600;
-      flex: 1;
+      color: var(--text);
     }
-    .event-date-badge {
-      font-size: 11px;
-      padding: 3px 10px;
-      border-radius: 6px;
-      background: rgba(6, 182, 212, 0.1);
-      color: var(--accent2);
-      border: 1px solid rgba(6, 182, 212, 0.2);
-      white-space: nowrap;
+    .calendar-day.other-month {
+      opacity: 0.3;
     }
-    .event-description {
-      font-size: 13px;
+    .calendar-day.other-month .day-number {
       color: var(--text-dim);
-      line-height: 1.5;
-      margin-bottom: 10px;
     }
-    .event-meta {
+    .calendar-day.today {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px var(--accent-glow), inset 0 0 20px rgba(139, 92, 246, 0.05);
+    }
+    .calendar-day.today .day-number {
+      background: var(--accent);
+      color: #fff;
+      width: 26px;
+      height: 26px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      font-size: 13px;
+    }
+    .calendar-day .day-dot {
+      position: absolute;
+      bottom: 6px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 3px;
+    }
+    .calendar-day .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+    }
+    .dot.event-dot {
+      background: var(--accent);
+    }
+    .dot.todo-dot {
+      background: var(--danger);
+    }
+
+    /* Day Detail Panel */
+    .day-panel-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 85;
+      background: rgba(0,0,0,0.5);
+      backdrop-filter: blur(4px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+    .day-panel-overlay.active { display: flex; }
+    .day-panel {
+      background: rgba(20, 20, 30, 0.95);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
+      border-radius: 20px;
+      padding: 28px;
+      width: 500px;
+      max-width: 92vw;
+      max-height: 85vh;
+      overflow-y: auto;
+    }
+    .day-panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+    .day-panel-date {
+      font-size: 18px;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .day-panel-close {
+      width: 32px; height: 32px;
+      border-radius: 8px;
+      background: var(--surface);
+      border: 1px solid var(--glass-border);
+      color: var(--text-dim);
+      font-size: 16px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+    .day-panel-close:hover { border-color: var(--danger); color: var(--danger); }
+    .day-panel-tabs {
+      display: flex;
+      gap: 4px;
+      margin-bottom: 16px;
+      background: rgba(255,255,255,0.03);
+      border-radius: 10px;
+      padding: 4px;
+      border: 1px solid var(--glass-border);
+    }
+    .day-panel-tab {
+      flex: 1;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-dim);
+      cursor: pointer;
+      transition: all 0.2s;
+      border: none;
+      background: none;
+      text-align: center;
+    }
+    .day-panel-tab:hover { color: var(--text); }
+    .day-panel-tab.active {
+      background: rgba(139, 92, 246, 0.15);
+      color: var(--accent);
+    }
+    .day-panel-content { min-height: 80px; }
+    .day-panel-item {
+      background: var(--surface);
+      border: 1px solid var(--glass-border);
+      border-radius: 10px;
+      padding: 14px;
+      margin-bottom: 8px;
+      transition: all 0.2s;
+    }
+    .day-panel-item:hover {
+      border-color: rgba(139, 92, 246, 0.3);
+    }
+    .day-panel-item-top {
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 8px;
+      margin-bottom: 4px;
     }
-    .event-meta-left { display: flex; align-items: center; gap: 8px; }
-    .event-category-badge {
+    .day-panel-item-title {
+      font-size: 14px;
+      font-weight: 600;
+      flex: 1;
+    }
+    .day-panel-item-title.completed {
+      text-decoration: line-through;
+      opacity: 0.5;
+    }
+    .day-panel-item-time {
       font-size: 11px;
-      padding: 3px 10px;
+      color: var(--accent2);
+      white-space: nowrap;
+    }
+    .day-panel-item-desc {
+      font-size: 12px;
+      color: var(--text-dim);
+      margin-top: 4px;
+      line-height: 1.4;
+    }
+    .day-panel-item-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 8px;
+      gap: 6px;
+    }
+    .day-panel-item-badge {
+      font-size: 10px;
+      padding: 2px 8px;
       border-radius: 6px;
       background: rgba(139, 92, 246, 0.1);
       color: var(--accent);
       border: 1px solid rgba(139, 92, 246, 0.2);
     }
-    .event-notify-badge {
-      font-size: 11px;
-      padding: 3px 8px;
-      border-radius: 6px;
-      background: rgba(245, 158, 11, 0.1);
-      color: var(--warning);
-      border: 1px solid rgba(245, 158, 11, 0.2);
+    .day-panel-item-actions {
+      display: flex;
+      gap: 4px;
     }
-    .event-actions { display: flex; gap: 6px; }
+    .day-panel-item-actions .btn-action {
+      padding: 4px 10px;
+      font-size: 11px;
+    }
+    .todo-checkbox {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--accent);
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .day-panel-empty {
+      text-align: center;
+      padding: 32px 16px;
+      color: var(--text-dim);
+    }
+    .day-panel-empty .empty-icon { font-size: 36px; margin-bottom: 10px; }
+    .day-panel-add-btn {
+      width: 100%;
+      padding: 12px;
+      margin-top: 8px;
+      background: var(--surface);
+      border: 1px dashed var(--glass-border);
+      border-radius: 10px;
+      color: var(--text-dim);
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .day-panel-add-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: rgba(139, 92, 246, 0.05);
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
 
     /* FAB */
     .fab {
@@ -1121,12 +1215,12 @@
       .year-btn { padding: 6px 14px; font-size: 13px; }
       .month-nav { gap: 4px; }
       .month-pill { padding: 5px 10px; font-size: 11px; }
-      .timeline-container { padding-left: 30px; }
-      .timeline-month-header::before { left: -22px; width: 14px; height: 14px; }
-      .timeline-event::before { left: -20px; width: 10px; height: 10px; }
-      .event-card { padding: 14px; }
-      .event-card-top { flex-direction: column; gap: 6px; }
-      .event-meta { flex-direction: column; align-items: flex-start; gap: 8px; }
+      .calendar-day { min-height: 52px; padding: 5px; }
+      .calendar-day .day-number { font-size: 12px; }
+      .calendar-day.today .day-number { width: 22px; height: 22px; font-size: 11px; }
+      .calendar-header-cell { font-size: 10px; padding: 5px 0; }
+      .day-panel { padding: 18px; }
+      .day-panel-item-meta { flex-direction: column; align-items: flex-start; }
 
       .fab { bottom: 20px; right: 16px; width: 50px; height: 50px; font-size: 24px; }
       .btn-today { bottom: 80px; right: 16px; font-size: 12px; padding: 8px 14px; }
@@ -1187,7 +1281,7 @@
           <h3>New Idea</h3>
           <span class="ideas-count" id="ideasCount"></span>
         </div>
-        <textarea id="ideaInput" placeholder="Type or dictate your idea..."></textarea>
+        <textarea id="ideaInput" placeholder="Type your idea..."></textarea>
         <div class="new-idea-bottom">
           <div class="category-chips" id="newCategoryChips">
             <span class="cat-chip active" data-cat="general">General</span>
@@ -1197,7 +1291,6 @@
             <span class="cat-chip" data-cat="shopping">Shopping</span>
           </div>
           <div class="new-idea-actions">
-            <button class="btn-mic" id="micBtn" title="Voice input">&#127908;</button>
             <button class="btn-save" id="saveIdeaBtn">Save</button>
           </div>
         </div>
@@ -1215,7 +1308,7 @@
       <div class="ideas-list" id="ideasList"></div>
       <div class="empty-state" id="ideasEmpty" style="display:none;">
         <div class="empty-icon">&#128161;</div>
-        <p>No ideas yet. Type or dictate your first one!</p>
+        <p>No ideas yet. Type your first one!</p>
       </div>
 
       <!-- Ideas History -->
@@ -1298,23 +1391,36 @@
     </div>
   </div>
 
-  <!-- ==================== TIMELINE SECTION ==================== -->
+  <!-- ==================== TIMELINE / CALENDAR SECTION ==================== -->
   <div class="section timeline-section" id="sectionTimeline">
     <div class="main">
       <div class="timeline-nav">
         <div class="year-nav" id="yearNav"></div>
         <div class="month-nav" id="monthNav"></div>
       </div>
-      <div class="timeline-container" id="timelineContainer"></div>
-      <div class="empty-state" id="timelineEmpty" style="display:none;">
-        <div class="empty-icon">&#128197;</div>
-        <p>No events for this period. Click + to add one!</p>
-      </div>
+      <div class="calendar-header" id="calendarHeader"></div>
+      <div class="calendar-grid" id="calendarGrid"></div>
 
       <div style="margin-top: 32px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 12px;">
         <button class="btn-history-toggle" id="enableNotifBtn" onclick="enableNotifications()">&#128276; Enable Notifications</button>
         <span id="notifStatus" style="font-size: 12px; color: var(--text-dim);"></span>
       </div>
+    </div>
+  </div>
+
+  <!-- Day Detail Panel -->
+  <div class="day-panel-overlay" id="dayPanelOverlay">
+    <div class="day-panel">
+      <div class="day-panel-header">
+        <div class="day-panel-date" id="dayPanelDate"></div>
+        <button class="day-panel-close" id="dayPanelClose">&#10005;</button>
+      </div>
+      <div class="day-panel-tabs">
+        <button class="day-panel-tab active" data-panel-tab="events">&#128197; Events</button>
+        <button class="day-panel-tab" data-panel-tab="todos">&#9745; To-Do</button>
+      </div>
+      <div class="day-panel-content" id="dayPanelContent"></div>
+      <button class="day-panel-add-btn" id="dayPanelAddBtn">+ Add</button>
     </div>
   </div>
 </div>
@@ -1323,10 +1429,14 @@
 <button class="fab" id="fabBtn">+</button>
 <button class="btn-today" id="todayBtn">&#128205; Today</button>
 
-<!-- Event Modal -->
+<!-- Event / To-Do Modal -->
 <div class="modal-overlay" id="eventModal">
   <div class="modal">
     <h2 id="modalTitle">Add Event</h2>
+    <div class="day-panel-tabs" id="modalTypeToggle" style="margin-bottom:20px;">
+      <button class="day-panel-tab active" data-modal-type="event">&#128197; Event</button>
+      <button class="day-panel-tab" data-modal-type="todo">&#9745; To-Do</button>
+    </div>
     <form id="eventForm">
       <div class="modal-field">
         <label>Title *</label>
@@ -1350,7 +1460,7 @@
           </div>
         </div>
       </div>
-      <div class="modal-field">
+      <div class="modal-field" id="eventCatField">
         <label>Category</label>
         <select id="eventCatInput">
           <option value="personal">Personal</option>
@@ -1799,39 +1909,6 @@
     } catch (err) { toast('Error restoring idea', 'error'); }
   }
 
-  // Voice input
-  const micBtn = document.getElementById('micBtn');
-  let recognition = null;
-  let isRecording = false;
-
-  if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    recognition = new SpeechRecognition();
-    recognition.lang = 'en-US';
-    recognition.interimResults = true;
-    recognition.continuous = true;
-    let finalTranscript = '';
-
-    recognition.onstart = () => { isRecording = true; micBtn.classList.add('recording'); finalTranscript = document.getElementById('ideaInput').value; };
-    recognition.onresult = (event) => {
-      let interim = '', newFinal = '';
-      for (let i = event.resultIndex; i < event.results.length; i++) {
-        if (event.results[i].isFinal) newFinal += event.results[i][0].transcript + ' ';
-        else interim += event.results[i][0].transcript;
-      }
-      finalTranscript += newFinal;
-      document.getElementById('ideaInput').value = finalTranscript + interim;
-    };
-    recognition.onend = () => { isRecording = false; micBtn.classList.remove('recording'); };
-    recognition.onerror = (event) => {
-      isRecording = false; micBtn.classList.remove('recording');
-      if (event.error !== 'aborted') toast('Speech error: ' + event.error, 'error');
-    };
-    micBtn.addEventListener('click', () => { isRecording ? recognition.stop() : recognition.start(); });
-  } else {
-    micBtn.style.display = 'none';
-  }
-
   // ==========================================
   // FILES
   // ==========================================
@@ -2045,15 +2122,21 @@
   }
 
   // ==========================================
-  // TIMELINE
+  // CALENDAR (replaces old Timeline)
   // ==========================================
   let timelineYear = new Date().getFullYear();
   let timelineMonth = new Date().getMonth() + 1;
   let allEvents = [];
+  let allTodos = [];
   let editingEventId = null;
+  let editingTodoId = null;
+  let modalType = 'event'; // 'event' or 'todo'
+  let selectedDayDate = null;
+  let dayPanelTab = 'events';
 
   const MONTH_NAMES = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
   const MONTH_FULL = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+  const DAY_NAMES = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
   // Populate time selects
   (function() {
@@ -2087,9 +2170,17 @@
   }
 
   function initTimeline() {
+    renderCalendarHeader();
     renderYearNav();
     renderMonthNav();
-    loadTimeline();
+    loadCalendarData();
+    initDayPanel();
+    initModalTypeToggle();
+  }
+
+  function renderCalendarHeader() {
+    const container = document.getElementById('calendarHeader');
+    container.innerHTML = DAY_NAMES.map(d => `<div class="calendar-header-cell">${d}</div>`).join('');
   }
 
   function renderYearNav() {
@@ -2111,111 +2202,232 @@
   function setTimelineYear(y) {
     timelineYear = y;
     renderYearNav();
-    loadTimeline();
+    loadCalendarData();
   }
 
   function setTimelineMonth(m) {
     timelineMonth = m;
     renderMonthNav();
-    loadTimeline();
+    loadCalendarData();
   }
 
-  async function loadTimeline() {
+  async function loadCalendarData() {
     try {
-      const res = await api(`/api/timeline?year=${timelineYear}&month=${timelineMonth}`);
-      const data = await res.json();
-      allEvents = data.events || [];
-      renderTimeline();
+      const [eventsRes, todosRes] = await Promise.all([
+        api(`/api/timeline?year=${timelineYear}&month=${timelineMonth}`),
+        api(`/api/todos?year=${timelineYear}&month=${timelineMonth}`)
+      ]);
+      const eventsData = await eventsRes.json();
+      const todosData = await todosRes.json();
+      allEvents = eventsData.events || [];
+      allTodos = todosData.todos || [];
+      renderCalendar();
       highlightMonthsWithEvents();
     } catch (err) {
-      toast('Failed to load timeline', 'error');
+      toast('Failed to load calendar', 'error');
     }
   }
 
   async function highlightMonthsWithEvents() {
     try {
-      const res = await api(`/api/timeline?year=${timelineYear}`);
-      const data = await res.json();
-      const yearEvents = data.events || [];
-      const monthsWithEvents = new Set();
-      yearEvents.forEach(e => {
-        if (e.date) {
-          const m = parseInt(e.date.split('-')[1], 10);
-          monthsWithEvents.add(m);
-        }
-      });
+      const [eventsRes, todosRes] = await Promise.all([
+        api(`/api/timeline?year=${timelineYear}`),
+        api(`/api/todos?year=${timelineYear}`)
+      ]);
+      const eventsData = await eventsRes.json();
+      const todosData = await todosRes.json();
+      const yearEvents = eventsData.events || [];
+      const yearTodos = todosData.todos || [];
+      const monthsWithItems = new Set();
+      yearEvents.forEach(e => { if (e.date) monthsWithItems.add(parseInt(e.date.split('-')[1], 10)); });
+      yearTodos.forEach(t => { if (t.date) monthsWithItems.add(parseInt(t.date.split('-')[1], 10)); });
       document.querySelectorAll('.month-pill').forEach((pill, i) => {
-        if (monthsWithEvents.has(i + 1) && (i + 1) !== timelineMonth) {
+        if (monthsWithItems.has(i + 1) && (i + 1) !== timelineMonth) {
           pill.classList.add('has-events');
         }
       });
     } catch (e) {}
   }
 
-  function renderTimeline() {
-    const container = document.getElementById('timelineContainer');
-    const empty = document.getElementById('timelineEmpty');
+  function renderCalendar() {
+    const grid = document.getElementById('calendarGrid');
+    const year = timelineYear;
+    const month = timelineMonth;
 
-    if (allEvents.length === 0) {
-      container.innerHTML = '';
-      empty.style.display = 'block';
-      return;
-    }
-    empty.style.display = 'none';
+    // Calculate calendar layout
+    const firstDay = new Date(year, month - 1, 1);
+    const lastDay = new Date(year, month, 0);
+    const daysInMonth = lastDay.getDate();
+    // getDay: 0=Sun, we need Mon=0
+    let startDow = firstDay.getDay() - 1;
+    if (startDow < 0) startDow = 6;
 
-    const today = new Date().toISOString().split('T')[0];
-    const nextWeek = new Date();
-    nextWeek.setDate(nextWeek.getDate() + 7);
-    const nextWeekStr = nextWeek.toISOString().split('T')[0];
+    const todayStr = new Date().toISOString().split('T')[0];
 
-    // Group by day
-    const groups = {};
+    // Build maps of items per date
+    const eventsByDate = {};
     allEvents.forEach(e => {
-      const day = e.date;
-      if (!groups[day]) groups[day] = [];
-      groups[day].push(e);
+      if (!eventsByDate[e.date]) eventsByDate[e.date] = [];
+      eventsByDate[e.date].push(e);
+    });
+    const todosByDate = {};
+    allTodos.forEach(t => {
+      if (!todosByDate[t.date]) todosByDate[t.date] = [];
+      todosByDate[t.date].push(t);
     });
 
-    let html = `<div class="timeline-month-header"><h3>${MONTH_FULL[timelineMonth - 1]} ${timelineYear}</h3></div>`;
+    let html = '';
 
-    Object.keys(groups).sort().forEach(day => {
-      const dayDate = new Date(day + 'T00:00:00');
-      const dayLabel = dayDate.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+    // Leading days from previous month
+    const prevMonth = new Date(year, month - 1, 0);
+    const prevDays = prevMonth.getDate();
+    for (let i = startDow - 1; i >= 0; i--) {
+      const d = prevDays - i;
+      const pm = month - 1 < 1 ? 12 : month - 1;
+      const py = month - 1 < 1 ? year - 1 : year;
+      const dateStr = `${py}-${String(pm).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+      html += `<div class="calendar-day other-month" data-date="${dateStr}"><div class="day-number">${d}</div></div>`;
+    }
 
-      groups[day].forEach(event => {
-        let statusClass = '';
-        if (event.completed) statusClass = 'completed';
-        else if (event.date < today) statusClass = 'past';
-        else if (event.date >= today && event.date <= nextWeekStr) statusClass = 'upcoming';
+    // Current month days
+    for (let d = 1; d <= daysInMonth; d++) {
+      const dateStr = `${year}-${String(month).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+      const isToday = dateStr === todayStr;
+      const hasEvents = eventsByDate[dateStr] && eventsByDate[dateStr].length > 0;
+      const hasTodos = todosByDate[dateStr] && todosByDate[dateStr].length > 0;
 
-        html += `
-          <div class="timeline-event ${statusClass}" id="event-${event.id}">
-            <div class="event-card">
-              <div class="event-card-top">
-                <div class="event-title">${event.completed ? '&#10003; ' : ''}${escapeHtml(event.title)}</div>
-                <span class="event-date-badge">${dayLabel}${event.time ? ' ' + event.time : ''}</span>
-              </div>
-              ${event.description ? `<div class="event-description">${escapeHtml(event.description)}</div>` : ''}
-              <div class="event-meta">
-                <div class="event-meta-left">
-                  <span class="event-category-badge">${tlCatName(event.category)}</span>
-                  ${event.notify ? '<span class="event-notify-badge">&#128276; Notify</span>' : ''}
-                </div>
-                <div class="event-actions">
-                  <button class="btn-action" onclick="toggleComplete('${event.id}', ${!event.completed})">${event.completed ? '&#8634; Undo' : '&#10003; Done'}</button>
-                  <button class="btn-action edit" onclick="editEvent('${event.id}')">&#9998;</button>
-                  <button class="btn-action delete" onclick="deleteEvent('${event.id}')">&#10006;</button>
-                </div>
-              </div>
-            </div>
-          </div>
-        `;
+      let classes = 'calendar-day';
+      if (isToday) classes += ' today';
+
+      let dotsHtml = '';
+      if (hasEvents || hasTodos) {
+        dotsHtml = '<div class="day-dot">';
+        if (hasEvents) dotsHtml += '<span class="dot event-dot"></span>';
+        if (hasTodos) dotsHtml += '<span class="dot todo-dot"></span>';
+        dotsHtml += '</div>';
+      }
+
+      html += `<div class="${classes}" data-date="${dateStr}"><div class="day-number">${d}</div>${dotsHtml}</div>`;
+    }
+
+    // Trailing days from next month
+    const totalCells = startDow + daysInMonth;
+    const trailing = totalCells % 7 === 0 ? 0 : 7 - (totalCells % 7);
+    for (let d = 1; d <= trailing; d++) {
+      const nm = month + 1 > 12 ? 1 : month + 1;
+      const ny = month + 1 > 12 ? year + 1 : year;
+      const dateStr = `${ny}-${String(nm).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+      html += `<div class="calendar-day other-month" data-date="${dateStr}"><div class="day-number">${d}</div></div>`;
+    }
+
+    grid.innerHTML = html;
+
+    // Add click handlers to day cells
+    grid.querySelectorAll('.calendar-day').forEach(cell => {
+      cell.addEventListener('click', () => {
+        openDayPanel(cell.dataset.date);
+      });
+    });
+  }
+
+  // ==========================================
+  // DAY DETAIL PANEL
+  // ==========================================
+  function initDayPanel() {
+    const overlay = document.getElementById('dayPanelOverlay');
+    const closeBtn = document.getElementById('dayPanelClose');
+
+    closeBtn.addEventListener('click', () => overlay.classList.remove('active'));
+    overlay.addEventListener('click', (e) => {
+      if (e.target === overlay) overlay.classList.remove('active');
+    });
+
+    // Tab switching
+    document.querySelectorAll('[data-panel-tab]').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('[data-panel-tab]').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        dayPanelTab = tab.dataset.panelTab;
+        renderDayPanelContent();
       });
     });
 
-    container.innerHTML = html;
+    // Add button
+    document.getElementById('dayPanelAddBtn').addEventListener('click', () => {
+      document.getElementById('dayPanelOverlay').classList.remove('active');
+      openModalForDate(selectedDayDate, dayPanelTab === 'todos' ? 'todo' : 'event');
+    });
   }
 
+  function openDayPanel(dateStr) {
+    selectedDayDate = dateStr;
+    const d = new Date(dateStr + 'T00:00:00');
+    const label = d.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+    document.getElementById('dayPanelDate').textContent = label;
+    renderDayPanelContent();
+    document.getElementById('dayPanelOverlay').classList.add('active');
+  }
+
+  function renderDayPanelContent() {
+    const content = document.getElementById('dayPanelContent');
+    const dateStr = selectedDayDate;
+
+    if (dayPanelTab === 'events') {
+      const dayEvents = allEvents.filter(e => e.date === dateStr);
+      if (dayEvents.length === 0) {
+        content.innerHTML = `<div class="day-panel-empty"><div class="empty-icon">&#128197;</div><p>No events</p></div>`;
+        return;
+      }
+      content.innerHTML = dayEvents.map(ev => `
+        <div class="day-panel-item">
+          <div class="day-panel-item-top">
+            <div class="day-panel-item-title ${ev.completed ? 'completed' : ''}">${ev.completed ? '&#10003; ' : ''}${escapeHtml(ev.title)}</div>
+            ${ev.time ? `<span class="day-panel-item-time">${ev.time}</span>` : ''}
+          </div>
+          ${ev.description ? `<div class="day-panel-item-desc">${escapeHtml(ev.description)}</div>` : ''}
+          <div class="day-panel-item-meta">
+            <div style="display:flex;gap:6px;align-items:center;">
+              <span class="day-panel-item-badge">${tlCatName(ev.category)}</span>
+              ${ev.notify ? '<span class="day-panel-item-badge" style="background:rgba(245,158,11,0.1);color:var(--warning);border-color:rgba(245,158,11,0.2);">&#128276;</span>' : ''}
+            </div>
+            <div class="day-panel-item-actions">
+              <button class="btn-action" onclick="toggleComplete('${ev.id}', ${!ev.completed})">${ev.completed ? '&#8634;' : '&#10003;'}</button>
+              <button class="btn-action edit" onclick="editEvent('${ev.id}')">&#9998;</button>
+              <button class="btn-action delete" onclick="deleteEvent('${ev.id}')">&#10006;</button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    } else {
+      // Todos tab
+      const dayTodos = allTodos.filter(t => t.date === dateStr);
+      if (dayTodos.length === 0) {
+        content.innerHTML = `<div class="day-panel-empty"><div class="empty-icon">&#9745;</div><p>No to-dos</p></div>`;
+        return;
+      }
+      content.innerHTML = dayTodos.map(todo => `
+        <div class="day-panel-item">
+          <div class="day-panel-item-top">
+            <input type="checkbox" class="todo-checkbox" ${todo.completed ? 'checked' : ''} onchange="toggleTodoComplete('${todo.id}', this.checked)" />
+            <div class="day-panel-item-title ${todo.completed ? 'completed' : ''}">${escapeHtml(todo.title)}</div>
+            ${todo.time ? `<span class="day-panel-item-time">${todo.time}</span>` : ''}
+          </div>
+          ${todo.description ? `<div class="day-panel-item-desc">${escapeHtml(todo.description)}</div>` : ''}
+          <div class="day-panel-item-meta">
+            <span class="day-panel-item-badge" style="background:rgba(239,68,68,0.1);color:var(--danger);border-color:rgba(239,68,68,0.2);">To-Do</span>
+            <div class="day-panel-item-actions">
+              <button class="btn-action edit" onclick="editTodo('${todo.id}')">&#9998;</button>
+              <button class="btn-action delete" onclick="deleteTodo('${todo.id}')">&#10006;</button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+  }
+
+  // ==========================================
+  // EVENT / TODO ACTIONS
+  // ==========================================
   async function toggleComplete(id, completed) {
     try {
       const res = await api(`/api/timeline/${id}`, {
@@ -2223,8 +2435,19 @@
         body: JSON.stringify({ completed })
       });
       const data = await res.json();
-      if (data.success) loadTimeline();
+      if (data.success) { await loadCalendarData(); renderDayPanelContent(); }
     } catch (err) { toast('Error updating event', 'error'); }
+  }
+
+  async function toggleTodoComplete(id, completed) {
+    try {
+      const res = await api(`/api/todos/${id}`, {
+        method: 'PUT',
+        body: JSON.stringify({ completed })
+      });
+      const data = await res.json();
+      if (data.success) { await loadCalendarData(); renderDayPanelContent(); }
+    } catch (err) { toast('Error updating todo', 'error'); }
   }
 
   async function deleteEvent(id) {
@@ -2232,9 +2455,76 @@
     try {
       const res = await api(`/api/timeline/${id}`, { method: 'DELETE' });
       const data = await res.json();
-      if (data.success) { toast('Event deleted', 'success'); loadTimeline(); }
+      if (data.success) { toast('Event deleted', 'success'); await loadCalendarData(); renderDayPanelContent(); }
       else toast(data.error || 'Failed to delete', 'error');
     } catch (err) { toast('Error deleting event', 'error'); }
+  }
+
+  async function deleteTodo(id) {
+    if (!confirm('Delete this to-do?')) return;
+    try {
+      const res = await api(`/api/todos/${id}`, { method: 'DELETE' });
+      const data = await res.json();
+      if (data.success) { toast('To-do deleted', 'success'); await loadCalendarData(); renderDayPanelContent(); }
+      else toast(data.error || 'Failed to delete', 'error');
+    } catch (err) { toast('Error deleting to-do', 'error'); }
+  }
+
+  // ==========================================
+  // MODAL TYPE TOGGLE (Event / To-Do)
+  // ==========================================
+  function initModalTypeToggle() {
+    document.querySelectorAll('[data-modal-type]').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('[data-modal-type]').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        modalType = tab.dataset.modalType;
+        updateModalForType();
+      });
+    });
+  }
+
+  function updateModalForType() {
+    const catField = document.getElementById('eventCatField');
+    const titleInput = document.getElementById('eventTitleInput');
+    const submitBtn = document.getElementById('modalSubmitBtn');
+    const titleEl = document.getElementById('modalTitle');
+
+    if (modalType === 'todo') {
+      catField.style.display = 'none';
+      titleInput.placeholder = 'To-do name';
+      if (!editingEventId && !editingTodoId) {
+        titleEl.textContent = 'Add To-Do';
+        submitBtn.textContent = 'Save To-Do';
+      }
+    } else {
+      catField.style.display = 'block';
+      titleInput.placeholder = 'Event name';
+      if (!editingEventId && !editingTodoId) {
+        titleEl.textContent = 'Add Event';
+        submitBtn.textContent = 'Save Event';
+      }
+    }
+  }
+
+  function openModalForDate(dateStr, type) {
+    editingEventId = null;
+    editingTodoId = null;
+    modalType = type || 'event';
+
+    // Reset type toggle
+    document.querySelectorAll('[data-modal-type]').forEach(t => t.classList.remove('active'));
+    const activeTypeTab = document.querySelector(`[data-modal-type="${modalType}"]`);
+    if (activeTypeTab) activeTypeTab.classList.add('active');
+    document.getElementById('modalTypeToggle').style.display = '';
+
+    eventForm.reset();
+    document.getElementById('eventNotifyInput').checked = true;
+    setTimeValue('');
+    document.getElementById('eventDateInput').value = dateStr || `${timelineYear}-${String(timelineMonth).padStart(2,'0')}-${String(new Date().getDate()).padStart(2,'0')}`;
+
+    updateModalForType();
+    eventModal.classList.add('active');
   }
 
   // Event modal
@@ -2242,27 +2532,21 @@
   const eventForm = document.getElementById('eventForm');
 
   document.getElementById('fabBtn').addEventListener('click', () => {
-    editingEventId = null;
-    document.getElementById('modalTitle').textContent = 'Add Event';
-    document.getElementById('modalSubmitBtn').textContent = 'Save Event';
-    eventForm.reset();
-    document.getElementById('eventNotifyInput').checked = true;
-    setTimeValue('');
-    // Default date to selected month
-    const defaultDate = `${timelineYear}-${String(timelineMonth).padStart(2, '0')}-${String(new Date().getDate()).padStart(2, '0')}`;
-    document.getElementById('eventDateInput').value = defaultDate;
-    eventModal.classList.add('active');
+    const todayDate = `${timelineYear}-${String(timelineMonth).padStart(2, '0')}-${String(new Date().getDate()).padStart(2, '0')}`;
+    openModalForDate(todayDate, 'event');
   });
 
   document.getElementById('modalCancelBtn').addEventListener('click', () => {
     eventModal.classList.remove('active');
     editingEventId = null;
+    editingTodoId = null;
   });
 
   eventModal.addEventListener('click', (e) => {
     if (e.target === eventModal) {
       eventModal.classList.remove('active');
       editingEventId = null;
+      editingTodoId = null;
     }
   });
 
@@ -2270,6 +2554,11 @@
     const event = allEvents.find(e => e.id === id);
     if (!event) return;
     editingEventId = id;
+    editingTodoId = null;
+    modalType = 'event';
+    document.querySelectorAll('[data-modal-type]').forEach(t => t.classList.remove('active'));
+    document.querySelector('[data-modal-type="event"]').classList.add('active');
+    document.getElementById('modalTypeToggle').style.display = 'none';
     document.getElementById('modalTitle').textContent = 'Edit Event';
     document.getElementById('modalSubmitBtn').textContent = 'Update Event';
     document.getElementById('eventTitleInput').value = event.title;
@@ -2277,43 +2566,87 @@
     document.getElementById('eventDateInput').value = event.date;
     setTimeValue(event.time || '');
     document.getElementById('eventCatInput').value = event.category;
+    document.getElementById('eventCatField').style.display = 'block';
     document.getElementById('eventNotifyInput').checked = event.notify;
+    eventModal.classList.add('active');
+  }
+
+  function editTodo(id) {
+    const todo = allTodos.find(t => t.id === id);
+    if (!todo) return;
+    editingTodoId = id;
+    editingEventId = null;
+    modalType = 'todo';
+    document.querySelectorAll('[data-modal-type]').forEach(t => t.classList.remove('active'));
+    document.querySelector('[data-modal-type="todo"]').classList.add('active');
+    document.getElementById('modalTypeToggle').style.display = 'none';
+    document.getElementById('modalTitle').textContent = 'Edit To-Do';
+    document.getElementById('modalSubmitBtn').textContent = 'Update To-Do';
+    document.getElementById('eventTitleInput').value = todo.title;
+    document.getElementById('eventDescInput').value = todo.description || '';
+    document.getElementById('eventDateInput').value = todo.date;
+    setTimeValue(todo.time || '');
+    document.getElementById('eventCatField').style.display = 'none';
+    document.getElementById('eventNotifyInput').checked = true;
     eventModal.classList.add('active');
   }
 
   eventForm.addEventListener('submit', async (e) => {
     e.preventDefault();
-    const payload = {
-      title: document.getElementById('eventTitleInput').value.trim(),
-      description: document.getElementById('eventDescInput').value.trim(),
-      date: document.getElementById('eventDateInput').value,
-      time: getTimeValue(),
-      category: document.getElementById('eventCatInput').value,
-      notify: document.getElementById('eventNotifyInput').checked
-    };
-    if (!payload.title) return toast('Title is required', 'error');
-    if (!payload.date) return toast('Date is required', 'error');
+    const title = document.getElementById('eventTitleInput').value.trim();
+    const description = document.getElementById('eventDescInput').value.trim();
+    const date = document.getElementById('eventDateInput').value;
+    const time = getTimeValue();
+    const notify = document.getElementById('eventNotifyInput').checked;
+
+    if (!title) return toast('Title is required', 'error');
+    if (!date) return toast('Date is required', 'error');
 
     try {
-      const url = editingEventId ? `/api/timeline/${editingEventId}` : '/api/timeline';
-      const method = editingEventId ? 'PUT' : 'POST';
-      const res = await api(url, { method, body: JSON.stringify(payload) });
-      const data = await res.json();
-      if (data.success) {
-        toast(editingEventId ? 'Event updated' : 'Event created', 'success');
-        eventModal.classList.remove('active');
-        editingEventId = null;
-        // Jump to the event's month
-        const [y, m] = payload.date.split('-');
-        timelineYear = parseInt(y, 10);
-        timelineMonth = parseInt(m, 10);
-        renderYearNav();
-        renderMonthNav();
-        loadTimeline();
+      if (modalType === 'todo' || editingTodoId) {
+        // To-Do save
+        const payload = { title, description, date, time };
+        const url = editingTodoId ? `/api/todos/${editingTodoId}` : '/api/todos';
+        const method = editingTodoId ? 'PUT' : 'POST';
+        const res = await api(url, { method, body: JSON.stringify(payload) });
+        const data = await res.json();
+        if (data.success) {
+          toast(editingTodoId ? 'To-do updated' : 'To-do created', 'success');
+          eventModal.classList.remove('active');
+          editingTodoId = null;
+          const [y, m] = date.split('-');
+          timelineYear = parseInt(y, 10);
+          timelineMonth = parseInt(m, 10);
+          renderYearNav();
+          renderMonthNav();
+          await loadCalendarData();
+          if (selectedDayDate) renderDayPanelContent();
+        } else {
+          toast(data.error || 'Failed to save', 'error');
+        }
       } else {
-        toast(data.error || 'Failed to save', 'error');
+        // Event save
+        const payload = { title, description, date, time, category: document.getElementById('eventCatInput').value, notify };
+        const url = editingEventId ? `/api/timeline/${editingEventId}` : '/api/timeline';
+        const method = editingEventId ? 'PUT' : 'POST';
+        const res = await api(url, { method, body: JSON.stringify(payload) });
+        const data = await res.json();
+        if (data.success) {
+          toast(editingEventId ? 'Event updated' : 'Event created', 'success');
+          eventModal.classList.remove('active');
+          editingEventId = null;
+          const [y, m] = date.split('-');
+          timelineYear = parseInt(y, 10);
+          timelineMonth = parseInt(m, 10);
+          renderYearNav();
+          renderMonthNav();
+          await loadCalendarData();
+          if (selectedDayDate) renderDayPanelContent();
+        } else {
+          toast(data.error || 'Failed to save', 'error');
+        }
       }
-    } catch (err) { toast('Error saving event', 'error'); }
+    } catch (err) { toast('Error saving', 'error'); }
   });
 
   // Today button
@@ -2323,7 +2656,7 @@
     timelineMonth = now.getMonth() + 1;
     renderYearNav();
     renderMonthNav();
-    loadTimeline();
+    loadCalendarData();
   });
 
   // ==========================================

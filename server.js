@@ -22,6 +22,7 @@ const IDEAS_FILE = path.join(DATA_DIR, 'ideas.json');
 const IDEAS_HISTORY_FILE = path.join(DATA_DIR, 'ideas-history.json');
 const TIMELINE_FILE = path.join(DATA_DIR, 'timeline.json');
 const SUBSCRIPTIONS_FILE = path.join(DATA_DIR, 'subscriptions.json');
+const TODOS_FILE = path.join(DATA_DIR, 'todos.json');
 const SENT_NOTIFICATIONS_FILE = path.join(DATA_DIR, 'sent-notifications.json');
 const UPLOAD_DIR = path.join(__dirname, 'uploads');
 const MAX_FILE_SIZE = 100 * 1024 * 1024; // 100MB
@@ -446,6 +447,96 @@ app.delete('/api/timeline/:id', requireAuth, (req, res) => {
 });
 
 // ==========================================
+// TODOS ROUTES
+// ==========================================
+
+app.post('/api/todos', requireAuth, (req, res) => {
+  try {
+    const { title, description, date, time } = req.body;
+    if (!title || !title.trim()) {
+      return res.status(400).json({ error: 'Title is required' });
+    }
+    if (!date) {
+      return res.status(400).json({ error: 'Date is required' });
+    }
+    const todo = {
+      id: uuidv4(),
+      title: title.trim(),
+      description: (description || '').trim(),
+      date,
+      time: time || '',
+      completed: false,
+      notify: true,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    };
+    const todos = readJSON(TODOS_FILE);
+    todos.unshift(todo);
+    writeJSON(TODOS_FILE, todos);
+    res.json({ success: true, todo });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to save todo' });
+  }
+});
+
+app.get('/api/todos', requireAuth, (req, res) => {
+  try {
+    let todos = readJSON(TODOS_FILE);
+    const { year, month } = req.query;
+    if (year) {
+      todos = todos.filter(t => t.date && t.date.startsWith(year));
+    }
+    if (year && month) {
+      const prefix = `${year}-${month.padStart(2, '0')}`;
+      todos = todos.filter(t => t.date && t.date.startsWith(prefix));
+    }
+    todos.sort((a, b) => {
+      if (a.date === b.date) {
+        return (a.time || '').localeCompare(b.time || '');
+      }
+      return a.date.localeCompare(b.date);
+    });
+    res.json({ todos });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to load todos' });
+  }
+});
+
+app.put('/api/todos/:id', requireAuth, (req, res) => {
+  try {
+    const { id } = req.params;
+    const { title, description, date, time, completed } = req.body;
+    const todos = readJSON(TODOS_FILE);
+    const idx = todos.findIndex(t => t.id === id);
+    if (idx === -1) return res.status(404).json({ error: 'Todo not found' });
+    if (title !== undefined) todos[idx].title = title.trim();
+    if (description !== undefined) todos[idx].description = description.trim();
+    if (date !== undefined) todos[idx].date = date;
+    if (time !== undefined) todos[idx].time = time;
+    if (completed !== undefined) todos[idx].completed = !!completed;
+    todos[idx].updatedAt = new Date().toISOString();
+    writeJSON(TODOS_FILE, todos);
+    res.json({ success: true, todo: todos[idx] });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to update todo' });
+  }
+});
+
+app.delete('/api/todos/:id', requireAuth, (req, res) => {
+  try {
+    const { id } = req.params;
+    let todos = readJSON(TODOS_FILE);
+    const before = todos.length;
+    todos = todos.filter(t => t.id !== id);
+    if (todos.length === before) return res.status(404).json({ error: 'Todo not found' });
+    writeJSON(TODOS_FILE, todos);
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to delete todo' });
+  }
+});
+
+// ==========================================
 // PUSH NOTIFICATION ROUTES (NEW)
 // ==========================================
 
@@ -533,16 +624,29 @@ function checkAndSendNotifications() {
       (e.date === tomorrowStr || e.date === todayStr)
     );
 
-    upcomingEvents.forEach(event => {
-      const notifKey = `${event.id}_${event.date}`;
+    // Also check todos
+    const todos = readJSON(TODOS_FILE);
+    const upcomingTodos = todos.filter(t =>
+      t.notify !== false &&
+      !t.completed &&
+      (t.date === tomorrowStr || t.date === todayStr)
+    );
+
+    const allItems = [
+      ...upcomingEvents.map(e => ({ ...e, _type: 'Event' })),
+      ...upcomingTodos.map(t => ({ ...t, _type: 'To-Do' }))
+    ];
+
+    allItems.forEach(item => {
+      const notifKey = `${item.id}_${item.date}`;
       if (sent.includes(notifKey)) return;
 
-      const isToday = event.date === todayStr;
+      const isToday = item.date === todayStr;
       const payload = JSON.stringify({
-        title: `Life Vault - ${isToday ? 'Today' : 'Tomorrow'}`,
-        body: `${event.title}${event.time ? ' at ' + event.time : ''}`,
+        title: `Life Vault - ${item._type} ${isToday ? 'Today' : 'Tomorrow'}`,
+        body: `${item.title}${item.time ? ' at ' + item.time : ''}`,
         icon: '/manifest-icon-192.png',
-        tag: event.id
+        tag: item.id
       });
 
       const deadSubs = [];
