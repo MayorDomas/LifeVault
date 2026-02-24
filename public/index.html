@@ -6,6 +6,9 @@
   <title>Life Vault</title>
   <link rel="manifest" href="/manifest.json">
   <meta name="theme-color" content="#0a0a0f">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -2754,6 +2757,33 @@
     for (let i = 0; i < raw.length; i++) arr[i] = raw.charCodeAt(i);
     return arr;
   }
+
+  // ==========================================
+  // VERSION CHECK — auto-reload on new deploy
+  // ==========================================
+  (async function versionCheck() {
+    try {
+      const res = await fetch('/api/health');
+      const data = await res.json();
+      const serverVersion = data.version;
+      const storedVersion = localStorage.getItem('lv_version');
+      if (storedVersion && storedVersion !== serverVersion) {
+        // New deploy detected — clear caches and reload
+        if ('caches' in window) {
+          const names = await caches.keys();
+          await Promise.all(names.map(n => caches.delete(n)));
+        }
+        if ('serviceWorker' in navigator) {
+          const regs = await navigator.serviceWorker.getRegistrations();
+          await Promise.all(regs.map(r => r.unregister()));
+        }
+        localStorage.setItem('lv_version', serverVersion);
+        window.location.reload(true);
+        return;
+      }
+      localStorage.setItem('lv_version', serverVersion);
+    } catch (e) {}
+  })();
 
   // ==========================================
   // INIT

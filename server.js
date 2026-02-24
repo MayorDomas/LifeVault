@@ -12,6 +12,7 @@ const webpush = require('web-push');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+const BUILD_VERSION = Date.now().toString();
 
 // --- Config ---
 const IDEA_CATEGORIES = ['general', 'project', 'work', 'personal', 'shopping'];
@@ -78,7 +79,28 @@ if (process.env.NODE_ENV === 'production') {
   app.set('trust proxy', 1);
 }
 
-app.use(express.static(path.join(__dirname, 'public')));
+// --- No-cache headers for all static files ---
+app.use((req, res, next) => {
+  res.set('Cache-Control', 'no-cache, no-store, must-revalidate');
+  res.set('Pragma', 'no-cache');
+  res.set('Expires', '0');
+  next();
+});
+
+// --- Serve sw.js dynamically with unique version ---
+app.get('/sw.js', (req, res) => {
+  const swPath = path.join(__dirname, 'public', 'sw.js');
+  let content = fs.readFileSync(swPath, 'utf8');
+  content = `// BUILD_VERSION: ${BUILD_VERSION}\n` + content;
+  res.set('Content-Type', 'application/javascript');
+  res.send(content);
+});
+
+app.use(express.static(path.join(__dirname, 'public'), {
+  etag: false,
+  lastModified: false,
+  maxAge: 0
+}));
 
 // --- Data Helpers ---
 function readJSON(file) {
@@ -130,6 +152,14 @@ const storage = multer.diskStorage({
 const upload = multer({
   storage,
   limits: { fileSize: MAX_FILE_SIZE }
+});
+
+// ==========================================
+// HEALTH CHECK
+// ==========================================
+
+app.get('/api/health', (req, res) => {
+  res.json({ status: 'ok', version: BUILD_VERSION, timestamp: new Date().toISOString() });
 });
 
 // ==========================================
