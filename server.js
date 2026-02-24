@@ -25,6 +25,11 @@ const TIMELINE_FILE = path.join(DATA_DIR, 'timeline.json');
 const SUBSCRIPTIONS_FILE = path.join(DATA_DIR, 'subscriptions.json');
 const TODOS_FILE = path.join(DATA_DIR, 'todos.json');
 const SENT_NOTIFICATIONS_FILE = path.join(DATA_DIR, 'sent-notifications.json');
+const COURSES_FILE = path.join(DATA_DIR, 'courses.json');
+const DEADLINES_FILE = path.join(DATA_DIR, 'deadlines.json');
+const HABITS_FILE = path.join(DATA_DIR, 'habits.json');
+const HABIT_CHECKINS_FILE = path.join(DATA_DIR, 'habit-checkins.json');
+const GOALS_FILE = path.join(DATA_DIR, 'goals.json');
 const UPLOAD_DIR = path.join(__dirname, 'uploads');
 const MAX_FILE_SIZE = 100 * 1024 * 1024; // 100MB
 
@@ -567,6 +572,337 @@ app.delete('/api/todos/:id', requireAuth, (req, res) => {
 });
 
 // ==========================================
+// COURSES ROUTES (Studies)
+// ==========================================
+
+app.get('/api/courses', requireAuth, (req, res) => {
+  try {
+    const courses = readJSON(COURSES_FILE);
+    res.json({ courses });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to load courses' });
+  }
+});
+
+app.post('/api/courses', requireAuth, (req, res) => {
+  try {
+    const { name, day, startTime, endTime, room, color } = req.body;
+    if (!name || !name.trim()) return res.status(400).json({ error: 'Name is required' });
+    if (!day || day < 1 || day > 7) return res.status(400).json({ error: 'Day must be 1-7' });
+    const course = {
+      id: uuidv4(),
+      name: name.trim(),
+      day: parseInt(day, 10),
+      startTime: startTime || '08:00',
+      endTime: endTime || '09:30',
+      room: (room || '').trim(),
+      color: color || '#8b5cf6',
+      createdAt: new Date().toISOString()
+    };
+    const courses = readJSON(COURSES_FILE);
+    courses.push(course);
+    writeJSON(COURSES_FILE, courses);
+    res.json({ success: true, course });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to save course' });
+  }
+});
+
+app.put('/api/courses/:id', requireAuth, (req, res) => {
+  try {
+    const { id } = req.params;
+    const { name, day, startTime, endTime, room, color } = req.body;
+    const courses = readJSON(COURSES_FILE);
+    const idx = courses.findIndex(c => c.id === id);
+    if (idx === -1) return res.status(404).json({ error: 'Course not found' });
+    if (name !== undefined) courses[idx].name = name.trim();
+    if (day !== undefined) courses[idx].day = parseInt(day, 10);
+    if (startTime !== undefined) courses[idx].startTime = startTime;
+    if (endTime !== undefined) courses[idx].endTime = endTime;
+    if (room !== undefined) courses[idx].room = room.trim();
+    if (color !== undefined) courses[idx].color = color;
+    writeJSON(COURSES_FILE, courses);
+    res.json({ success: true, course: courses[idx] });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to update course' });
+  }
+});
+
+app.delete('/api/courses/:id', requireAuth, (req, res) => {
+  try {
+    const { id } = req.params;
+    let courses = readJSON(COURSES_FILE);
+    const before = courses.length;
+    courses = courses.filter(c => c.id !== id);
+    if (courses.length === before) return res.status(404).json({ error: 'Course not found' });
+    writeJSON(COURSES_FILE, courses);
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to delete course' });
+  }
+});
+
+// ==========================================
+// DEADLINES ROUTES (Studies)
+// ==========================================
+
+app.get('/api/deadlines', requireAuth, (req, res) => {
+  try {
+    const deadlines = readJSON(DEADLINES_FILE);
+    deadlines.sort((a, b) => a.date.localeCompare(b.date));
+    res.json({ deadlines });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to load deadlines' });
+  }
+});
+
+app.post('/api/deadlines', requireAuth, (req, res) => {
+  try {
+    const { title, courseId, courseName, date, time, type, description, notify } = req.body;
+    if (!title || !title.trim()) return res.status(400).json({ error: 'Title is required' });
+    if (!date) return res.status(400).json({ error: 'Date is required' });
+    const deadline = {
+      id: uuidv4(),
+      title: title.trim(),
+      courseId: courseId || '',
+      courseName: (courseName || '').trim(),
+      date,
+      time: time || '',
+      type: ['exam', 'assignment', 'project', 'other'].includes(type) ? type : 'other',
+      description: (description || '').trim(),
+      notify: notify !== false,
+      completed: false,
+      createdAt: new Date().toISOString()
+    };
+    const deadlines = readJSON(DEADLINES_FILE);
+    deadlines.push(deadline);
+    writeJSON(DEADLINES_FILE, deadlines);
+    res.json({ success: true, deadline });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to save deadline' });
+  }
+});
+
+app.put('/api/deadlines/:id', requireAuth, (req, res) => {
+  try {
+    const { id } = req.params;
+    const { title, courseId, courseName, date, time, type, description, notify, completed } = req.body;
+    const deadlines = readJSON(DEADLINES_FILE);
+    const idx = deadlines.findIndex(d => d.id === id);
+    if (idx === -1) return res.status(404).json({ error: 'Deadline not found' });
+    if (title !== undefined) deadlines[idx].title = title.trim();
+    if (courseId !== undefined) deadlines[idx].courseId = courseId;
+    if (courseName !== undefined) deadlines[idx].courseName = courseName.trim();
+    if (date !== undefined) deadlines[idx].date = date;
+    if (time !== undefined) deadlines[idx].time = time;
+    if (type !== undefined) deadlines[idx].type = type;
+    if (description !== undefined) deadlines[idx].description = description.trim();
+    if (notify !== undefined) deadlines[idx].notify = !!notify;
+    if (completed !== undefined) deadlines[idx].completed = !!completed;
+    writeJSON(DEADLINES_FILE, deadlines);
+    res.json({ success: true, deadline: deadlines[idx] });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to update deadline' });
+  }
+});
+
+app.delete('/api/deadlines/:id', requireAuth, (req, res) => {
+  try {
+    const { id } = req.params;
+    let deadlines = readJSON(DEADLINES_FILE);
+    const before = deadlines.length;
+    deadlines = deadlines.filter(d => d.id !== id);
+    if (deadlines.length === before) return res.status(404).json({ error: 'Deadline not found' });
+    writeJSON(DEADLINES_FILE, deadlines);
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to delete deadline' });
+  }
+});
+
+// ==========================================
+// HABITS ROUTES
+// ==========================================
+
+app.get('/api/habits', requireAuth, (req, res) => {
+  try {
+    const habits = readJSON(HABITS_FILE);
+    res.json({ habits });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to load habits' });
+  }
+});
+
+app.post('/api/habits', requireAuth, (req, res) => {
+  try {
+    const { name, frequency, color } = req.body;
+    if (!name || !name.trim()) return res.status(400).json({ error: 'Name is required' });
+    const habit = {
+      id: uuidv4(),
+      name: name.trim(),
+      frequency: frequency === 'weekly' ? 'weekly' : 'daily',
+      color: color || '#8b5cf6',
+      createdAt: new Date().toISOString()
+    };
+    const habits = readJSON(HABITS_FILE);
+    habits.push(habit);
+    writeJSON(HABITS_FILE, habits);
+    res.json({ success: true, habit });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to save habit' });
+  }
+});
+
+app.put('/api/habits/:id', requireAuth, (req, res) => {
+  try {
+    const { id } = req.params;
+    const { name, frequency, color } = req.body;
+    const habits = readJSON(HABITS_FILE);
+    const idx = habits.findIndex(h => h.id === id);
+    if (idx === -1) return res.status(404).json({ error: 'Habit not found' });
+    if (name !== undefined) habits[idx].name = name.trim();
+    if (frequency !== undefined) habits[idx].frequency = frequency;
+    if (color !== undefined) habits[idx].color = color;
+    writeJSON(HABITS_FILE, habits);
+    res.json({ success: true, habit: habits[idx] });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to update habit' });
+  }
+});
+
+app.delete('/api/habits/:id', requireAuth, (req, res) => {
+  try {
+    const { id } = req.params;
+    let habits = readJSON(HABITS_FILE);
+    const before = habits.length;
+    habits = habits.filter(h => h.id !== id);
+    if (habits.length === before) return res.status(404).json({ error: 'Habit not found' });
+    writeJSON(HABITS_FILE, habits);
+    // Also remove checkins for this habit
+    let checkins = readJSON(HABIT_CHECKINS_FILE);
+    checkins = checkins.filter(c => c.habitId !== id);
+    writeJSON(HABIT_CHECKINS_FILE, checkins);
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to delete habit' });
+  }
+});
+
+// ==========================================
+// HABIT CHECK-INS ROUTES
+// ==========================================
+
+app.get('/api/habits/checkins', requireAuth, (req, res) => {
+  try {
+    let checkins = readJSON(HABIT_CHECKINS_FILE);
+    const { habitId, from, to } = req.query;
+    if (habitId) checkins = checkins.filter(c => c.habitId === habitId);
+    if (from) checkins = checkins.filter(c => c.date >= from);
+    if (to) checkins = checkins.filter(c => c.date <= to);
+    res.json({ checkins });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to load checkins' });
+  }
+});
+
+app.post('/api/habits/checkins', requireAuth, (req, res) => {
+  try {
+    const { habitId, date } = req.body;
+    if (!habitId || !date) return res.status(400).json({ error: 'habitId and date required' });
+    const checkins = readJSON(HABIT_CHECKINS_FILE);
+    const exists = checkins.find(c => c.habitId === habitId && c.date === date);
+    if (exists) return res.json({ success: true, checkin: exists });
+    const checkin = { id: uuidv4(), habitId, date };
+    checkins.push(checkin);
+    writeJSON(HABIT_CHECKINS_FILE, checkins);
+    res.json({ success: true, checkin });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to save checkin' });
+  }
+});
+
+app.delete('/api/habits/checkins', requireAuth, (req, res) => {
+  try {
+    const { habitId, date } = req.body;
+    if (!habitId || !date) return res.status(400).json({ error: 'habitId and date required' });
+    let checkins = readJSON(HABIT_CHECKINS_FILE);
+    checkins = checkins.filter(c => !(c.habitId === habitId && c.date === date));
+    writeJSON(HABIT_CHECKINS_FILE, checkins);
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to delete checkin' });
+  }
+});
+
+// ==========================================
+// GOALS ROUTES
+// ==========================================
+
+app.get('/api/goals', requireAuth, (req, res) => {
+  try {
+    const goals = readJSON(GOALS_FILE);
+    res.json({ goals });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to load goals' });
+  }
+});
+
+app.post('/api/goals', requireAuth, (req, res) => {
+  try {
+    const { title, description, targetDate, progress, status } = req.body;
+    if (!title || !title.trim()) return res.status(400).json({ error: 'Title is required' });
+    const goal = {
+      id: uuidv4(),
+      title: title.trim(),
+      description: (description || '').trim(),
+      targetDate: targetDate || '',
+      progress: Math.min(100, Math.max(0, parseInt(progress, 10) || 0)),
+      status: ['active', 'completed', 'paused'].includes(status) ? status : 'active',
+      createdAt: new Date().toISOString()
+    };
+    const goals = readJSON(GOALS_FILE);
+    goals.push(goal);
+    writeJSON(GOALS_FILE, goals);
+    res.json({ success: true, goal });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to save goal' });
+  }
+});
+
+app.put('/api/goals/:id', requireAuth, (req, res) => {
+  try {
+    const { id } = req.params;
+    const { title, description, targetDate, progress, status } = req.body;
+    const goals = readJSON(GOALS_FILE);
+    const idx = goals.findIndex(g => g.id === id);
+    if (idx === -1) return res.status(404).json({ error: 'Goal not found' });
+    if (title !== undefined) goals[idx].title = title.trim();
+    if (description !== undefined) goals[idx].description = description.trim();
+    if (targetDate !== undefined) goals[idx].targetDate = targetDate;
+    if (progress !== undefined) goals[idx].progress = Math.min(100, Math.max(0, parseInt(progress, 10) || 0));
+    if (status !== undefined) goals[idx].status = status;
+    writeJSON(GOALS_FILE, goals);
+    res.json({ success: true, goal: goals[idx] });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to update goal' });
+  }
+});
+
+app.delete('/api/goals/:id', requireAuth, (req, res) => {
+  try {
+    const { id } = req.params;
+    let goals = readJSON(GOALS_FILE);
+    const before = goals.length;
+    goals = goals.filter(g => g.id !== id);
+    if (goals.length === before) return res.status(404).json({ error: 'Goal not found' });
+    writeJSON(GOALS_FILE, goals);
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to delete goal' });
+  }
+});
+
+// ==========================================
 // PUSH NOTIFICATION ROUTES (NEW)
 // ==========================================
 
@@ -662,9 +998,18 @@ function checkAndSendNotifications() {
       (t.date === tomorrowStr || t.date === todayStr)
     );
 
+    // Also check deadlines
+    const deadlines = readJSON(DEADLINES_FILE);
+    const upcomingDeadlines = deadlines.filter(d =>
+      d.notify &&
+      !d.completed &&
+      (d.date === tomorrowStr || d.date === todayStr)
+    );
+
     const allItems = [
       ...upcomingEvents.map(e => ({ ...e, _type: 'Event' })),
-      ...upcomingTodos.map(t => ({ ...t, _type: 'To-Do' }))
+      ...upcomingTodos.map(t => ({ ...t, _type: 'To-Do' })),
+      ...upcomingDeadlines.map(d => ({ ...d, _type: 'Deadline' }))
     ];
 
     allItems.forEach(item => {

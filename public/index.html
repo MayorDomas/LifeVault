@@ -1237,6 +1237,337 @@
       .cat-chip { padding: 4px 10px; font-size: 11px; }
       .filter-chip { padding: 5px 12px; font-size: 12px; }
     }
+
+    /* ==========================================
+       STUDIES SECTION
+       ========================================== */
+    .studies-section .main {
+      padding: 24px;
+      max-width: 1100px;
+      width: 100%;
+      margin: 0 auto;
+    }
+    .sub-tabs {
+      display: flex;
+      gap: 4px;
+      background: rgba(255,255,255,0.03);
+      border-radius: 10px;
+      padding: 4px;
+      border: 1px solid var(--glass-border);
+      margin-bottom: 24px;
+      width: fit-content;
+    }
+    .sub-tab {
+      padding: 8px 20px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-dim);
+      cursor: pointer;
+      transition: all 0.2s;
+      border: none;
+      background: none;
+      white-space: nowrap;
+    }
+    .sub-tab:hover { color: var(--text); }
+    .sub-tab.active {
+      background: rgba(139, 92, 246, 0.15);
+      color: var(--accent);
+    }
+    .sub-content { display: none; }
+    .sub-content.active { display: block; }
+
+    /* Schedule Grid */
+    .schedule-grid-wrapper {
+      overflow-x: auto;
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: 16px;
+      padding: 16px;
+    }
+    .schedule-grid {
+      display: grid;
+      grid-template-columns: 60px repeat(7, 1fr);
+      min-width: 700px;
+      gap: 2px;
+    }
+    .schedule-header {
+      text-align: center;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-dim);
+      padding: 8px 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .schedule-time-label {
+      font-size: 11px;
+      color: var(--text-dim);
+      text-align: right;
+      padding-right: 8px;
+      padding-top: 2px;
+    }
+    .schedule-cell {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.03);
+      min-height: 32px;
+      position: relative;
+      border-radius: 4px;
+    }
+    .schedule-block {
+      position: absolute;
+      left: 2px; right: 2px;
+      border-radius: 6px;
+      padding: 4px 6px;
+      font-size: 11px;
+      font-weight: 500;
+      cursor: pointer;
+      overflow: hidden;
+      z-index: 2;
+      transition: transform 0.15s;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    .schedule-block:hover { transform: scale(1.02); }
+    .schedule-block .block-name { font-weight: 600; }
+    .schedule-block .block-room { font-size: 10px; opacity: 0.8; }
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+    .section-header h2 { font-size: 18px; font-weight: 600; }
+    .btn-add {
+      padding: 8px 18px;
+      background: linear-gradient(135deg, var(--accent), #7c3aed);
+      border: none;
+      border-radius: 10px;
+      color: #fff;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .btn-add:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px var(--accent-glow);
+    }
+
+    /* Deadline Cards */
+    .deadline-list { display: flex; flex-direction: column; gap: 12px; }
+    .deadline-card {
+      background: var(--glass);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius);
+      padding: 18px;
+      transition: all 0.25s;
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+    }
+    .deadline-card:hover {
+      border-color: rgba(139, 92, 246, 0.3);
+      transform: translateY(-1px);
+    }
+    .deadline-card.completed-deadline {
+      opacity: 0.5;
+    }
+    .deadline-type-badge {
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .badge-exam { background: rgba(239,68,68,0.15); color: var(--danger); border: 1px solid rgba(239,68,68,0.3); }
+    .badge-assignment { background: rgba(245,158,11,0.15); color: var(--warning); border: 1px solid rgba(245,158,11,0.3); }
+    .badge-project { background: rgba(6,182,212,0.15); color: var(--accent2); border: 1px solid rgba(6,182,212,0.3); }
+    .badge-other-type { background: rgba(139,92,246,0.15); color: var(--accent); border: 1px solid rgba(139,92,246,0.3); }
+    .deadline-info { flex: 1; min-width: 0; }
+    .deadline-title { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
+    .deadline-title.completed-text { text-decoration: line-through; }
+    .deadline-meta { font-size: 12px; color: var(--text-dim); display: flex; gap: 12px; flex-wrap: wrap; }
+    .deadline-actions { display: flex; gap: 6px; flex-shrink: 0; }
+    .days-left { font-size: 11px; padding: 2px 8px; border-radius: 6px; font-weight: 600; }
+    .days-left.urgent { background: rgba(239,68,68,0.15); color: var(--danger); }
+    .days-left.soon { background: rgba(245,158,11,0.15); color: var(--warning); }
+    .days-left.ok { background: rgba(34,197,94,0.15); color: var(--success); }
+    .days-left.past { background: rgba(113,113,122,0.15); color: var(--text-dim); }
+
+    /* ==========================================
+       HABITS SECTION
+       ========================================== */
+    .habits-section .main {
+      padding: 24px;
+      max-width: 900px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    /* Today Checklist */
+    .habit-checklist { display: flex; flex-direction: column; gap: 10px; }
+    .habit-check-item {
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius);
+      padding: 16px 18px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+    .habit-check-item:hover {
+      border-color: rgba(139, 92, 246, 0.3);
+    }
+    .habit-check-item.checked {
+      border-color: rgba(34,197,94,0.3);
+      background: rgba(34,197,94,0.03);
+    }
+    .habit-checkbox-custom {
+      width: 24px; height: 24px;
+      border-radius: 50%;
+      border: 2px solid var(--glass-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s;
+      flex-shrink: 0;
+      font-size: 14px;
+    }
+    .habit-check-item.checked .habit-checkbox-custom {
+      border-color: var(--success);
+      background: var(--success);
+      color: #fff;
+    }
+    .habit-check-name { font-size: 15px; font-weight: 500; flex: 1; }
+    .streak-badge {
+      font-size: 12px;
+      padding: 3px 10px;
+      border-radius: 20px;
+      background: rgba(245,158,11,0.15);
+      color: var(--warning);
+      border: 1px solid rgba(245,158,11,0.3);
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .habit-color-dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    /* Tracker Grid (GitHub contributions style) */
+    .tracker-habit-section {
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 16px;
+    }
+    .tracker-habit-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+    .tracker-habit-name { font-size: 15px; font-weight: 600; }
+    .tracker-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 3px;
+    }
+    .tracker-cell {
+      aspect-ratio: 1;
+      border-radius: 3px;
+      background: rgba(255,255,255,0.04);
+      transition: all 0.2s;
+    }
+    .tracker-cell.filled {
+      opacity: 1;
+    }
+    .tracker-cell:hover {
+      transform: scale(1.3);
+    }
+    .tracker-legend {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 10px;
+      font-size: 11px;
+      color: var(--text-dim);
+    }
+    .tracker-legend-cell {
+      width: 12px; height: 12px;
+      border-radius: 2px;
+    }
+
+    /* Goal Cards */
+    .goals-list { display: flex; flex-direction: column; gap: 14px; }
+    .goal-card {
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: 16px;
+      padding: 22px;
+      transition: all 0.25s;
+    }
+    .goal-card:hover {
+      border-color: rgba(139, 92, 246, 0.3);
+      transform: translateY(-1px);
+    }
+    .goal-card-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+    .goal-title { font-size: 16px; font-weight: 600; flex: 1; }
+    .goal-status-badge {
+      font-size: 11px;
+      padding: 3px 10px;
+      border-radius: 6px;
+      font-weight: 600;
+    }
+    .goal-status-active { background: rgba(34,197,94,0.15); color: var(--success); border: 1px solid rgba(34,197,94,0.3); }
+    .goal-status-completed { background: rgba(139,92,246,0.15); color: var(--accent); border: 1px solid rgba(139,92,246,0.3); }
+    .goal-status-paused { background: rgba(113,113,122,0.15); color: var(--text-dim); border: 1px solid rgba(113,113,122,0.3); }
+    .goal-desc { font-size: 13px; color: var(--text-dim); margin-bottom: 12px; line-height: 1.5; }
+    .goal-progress-bar {
+      height: 8px;
+      background: rgba(255,255,255,0.06);
+      border-radius: 4px;
+      overflow: hidden;
+      margin-bottom: 8px;
+    }
+    .goal-progress-fill {
+      height: 100%;
+      border-radius: 4px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      transition: width 0.5s ease;
+    }
+    .goal-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12px;
+      color: var(--text-dim);
+    }
+    .goal-actions { display: flex; gap: 6px; }
+
+    /* Studies + Habits responsive */
+    @media (max-width: 768px) {
+      .studies-section .main,
+      .habits-section .main { padding: 12px; }
+      .schedule-grid-wrapper { padding: 10px; }
+      .sub-tabs { width: 100%; }
+      .sub-tab { flex: 1; text-align: center; padding: 7px 10px; font-size: 12px; }
+      .deadline-card { flex-direction: column; }
+      .deadline-actions { width: 100%; justify-content: flex-end; }
+      .tracker-grid { grid-template-columns: repeat(7, 1fr); }
+    }
   </style>
 </head>
 <body>
@@ -1267,6 +1598,8 @@
       <button class="nav-tab active" data-tab="ideas">&#128161; Ideas</button>
       <button class="nav-tab" data-tab="files">&#128193; Files</button>
       <button class="nav-tab" data-tab="timeline">&#128197; Timeline</button>
+      <button class="nav-tab" data-tab="studies">&#127891; Studies</button>
+      <button class="nav-tab" data-tab="habits">&#127919; Habits</button>
     </div>
     <div class="topbar-right">
       <button class="btn-logout" id="logoutBtn">Logout</button>
@@ -1411,6 +1744,89 @@
     </div>
   </div>
 
+  <!-- ==================== STUDIES SECTION ==================== -->
+  <div class="section studies-section" id="sectionStudies">
+    <div class="main">
+      <div class="sub-tabs" id="studiesSubTabs">
+        <button class="sub-tab active" data-subtab="schedule">&#128197; Weekly Schedule</button>
+        <button class="sub-tab" data-subtab="deadlines">&#9200; Deadlines & Exams</button>
+      </div>
+
+      <!-- Schedule Sub-tab -->
+      <div class="sub-content active" id="studiesSchedule">
+        <div class="section-header">
+          <h2>Weekly Schedule</h2>
+          <button class="btn-add" onclick="openCourseModal()">+ Add Course</button>
+        </div>
+        <div class="schedule-grid-wrapper">
+          <div class="schedule-grid" id="scheduleGrid"></div>
+        </div>
+      </div>
+
+      <!-- Deadlines Sub-tab -->
+      <div class="sub-content" id="studiesDeadlines">
+        <div class="section-header">
+          <h2>Deadlines & Exams</h2>
+          <button class="btn-add" onclick="openDeadlineModal()">+ Add Deadline</button>
+        </div>
+        <div class="deadline-list" id="deadlineList"></div>
+        <div class="empty-state" id="deadlinesEmpty" style="display:none;">
+          <div class="empty-icon">&#9200;</div>
+          <p>No deadlines yet. Add your first exam or assignment!</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== HABITS SECTION ==================== -->
+  <div class="section habits-section" id="sectionHabits">
+    <div class="main">
+      <div class="sub-tabs" id="habitsSubTabs">
+        <button class="sub-tab active" data-subtab="today">&#9989; Today</button>
+        <button class="sub-tab" data-subtab="tracker">&#128200; Tracker</button>
+        <button class="sub-tab" data-subtab="goals">&#127919; Goals</button>
+      </div>
+
+      <!-- Today Sub-tab -->
+      <div class="sub-content active" id="habitsToday">
+        <div class="section-header">
+          <h2>Today's Habits</h2>
+          <button class="btn-add" onclick="openHabitModal()">+ Add Habit</button>
+        </div>
+        <div class="habit-checklist" id="habitChecklist"></div>
+        <div class="empty-state" id="habitsEmpty" style="display:none;">
+          <div class="empty-icon">&#9989;</div>
+          <p>No habits yet. Start building your routine!</p>
+        </div>
+      </div>
+
+      <!-- Tracker Sub-tab -->
+      <div class="sub-content" id="habitsTracker">
+        <div class="section-header">
+          <h2>Habit Tracker</h2>
+        </div>
+        <div id="trackerContainer"></div>
+        <div class="empty-state" id="trackerEmpty" style="display:none;">
+          <div class="empty-icon">&#128200;</div>
+          <p>Add habits to see your tracker grid.</p>
+        </div>
+      </div>
+
+      <!-- Goals Sub-tab -->
+      <div class="sub-content" id="habitsGoals">
+        <div class="section-header">
+          <h2>Goals</h2>
+          <button class="btn-add" onclick="openGoalModal()">+ Add Goal</button>
+        </div>
+        <div class="goals-list" id="goalsList"></div>
+        <div class="empty-state" id="goalsEmpty" style="display:none;">
+          <div class="empty-icon">&#127919;</div>
+          <p>No goals yet. Set your first long-term goal!</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Day Detail Panel -->
   <div class="day-panel-overlay" id="dayPanelOverlay">
     <div class="day-panel">
@@ -1481,6 +1897,176 @@
       <div class="modal-actions">
         <button type="button" class="btn-cancel" id="modalCancelBtn">Cancel</button>
         <button type="submit" class="btn-submit" id="modalSubmitBtn">Save Event</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Course Modal -->
+<div class="modal-overlay" id="courseModal">
+  <div class="modal">
+    <h2 id="courseModalTitle">Add Course</h2>
+    <form id="courseForm">
+      <div class="modal-field">
+        <label>Course Name *</label>
+        <input type="text" id="courseNameInput" placeholder="e.g. Mathematics" required />
+      </div>
+      <div class="modal-row">
+        <div class="modal-field">
+          <label>Day *</label>
+          <select id="courseDayInput" required>
+            <option value="1">Monday</option>
+            <option value="2">Tuesday</option>
+            <option value="3">Wednesday</option>
+            <option value="4">Thursday</option>
+            <option value="5">Friday</option>
+            <option value="6">Saturday</option>
+            <option value="7">Sunday</option>
+          </select>
+        </div>
+        <div class="modal-field">
+          <label>Color</label>
+          <input type="color" id="courseColorInput" value="#8b5cf6" style="height:42px;padding:4px;" />
+        </div>
+      </div>
+      <div class="modal-row">
+        <div class="modal-field">
+          <label>Start Time *</label>
+          <input type="time" id="courseStartInput" value="08:00" required />
+        </div>
+        <div class="modal-field">
+          <label>End Time *</label>
+          <input type="time" id="courseEndInput" value="09:30" required />
+        </div>
+      </div>
+      <div class="modal-field">
+        <label>Room</label>
+        <input type="text" id="courseRoomInput" placeholder="e.g. Room 301" />
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn-cancel" onclick="closeCourseModal()">Cancel</button>
+        <button type="submit" class="btn-submit" id="courseSubmitBtn">Save Course</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Deadline Modal -->
+<div class="modal-overlay" id="deadlineModal">
+  <div class="modal">
+    <h2 id="deadlineModalTitle">Add Deadline</h2>
+    <form id="deadlineForm">
+      <div class="modal-field">
+        <label>Title *</label>
+        <input type="text" id="deadlineTitleInput" placeholder="e.g. Final Exam" required />
+      </div>
+      <div class="modal-row">
+        <div class="modal-field">
+          <label>Type</label>
+          <select id="deadlineTypeInput">
+            <option value="exam">Exam</option>
+            <option value="assignment">Assignment</option>
+            <option value="project">Project</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+        <div class="modal-field">
+          <label>Course</label>
+          <select id="deadlineCourseInput">
+            <option value="">-- None --</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-row">
+        <div class="modal-field">
+          <label>Date *</label>
+          <input type="date" id="deadlineDateInput" required />
+        </div>
+        <div class="modal-field">
+          <label>Time</label>
+          <input type="time" id="deadlineTimeInput" />
+        </div>
+      </div>
+      <div class="modal-field">
+        <label>Description</label>
+        <textarea id="deadlineDescInput" placeholder="Optional notes..."></textarea>
+      </div>
+      <label class="modal-checkbox">
+        <input type="checkbox" id="deadlineNotifyInput" checked />
+        <span>Send push notification</span>
+      </label>
+      <div class="modal-actions">
+        <button type="button" class="btn-cancel" onclick="closeDeadlineModal()">Cancel</button>
+        <button type="submit" class="btn-submit" id="deadlineSubmitBtn">Save Deadline</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Habit Modal -->
+<div class="modal-overlay" id="habitModal">
+  <div class="modal">
+    <h2 id="habitModalTitle">Add Habit</h2>
+    <form id="habitForm">
+      <div class="modal-field">
+        <label>Habit Name *</label>
+        <input type="text" id="habitNameInput" placeholder="e.g. Read 30 min" required />
+      </div>
+      <div class="modal-row">
+        <div class="modal-field">
+          <label>Frequency</label>
+          <select id="habitFreqInput">
+            <option value="daily">Daily</option>
+            <option value="weekly">Weekly</option>
+          </select>
+        </div>
+        <div class="modal-field">
+          <label>Color</label>
+          <input type="color" id="habitColorInput" value="#8b5cf6" style="height:42px;padding:4px;" />
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn-cancel" onclick="closeHabitModal()">Cancel</button>
+        <button type="submit" class="btn-submit" id="habitSubmitBtn">Save Habit</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Goal Modal -->
+<div class="modal-overlay" id="goalModal">
+  <div class="modal">
+    <h2 id="goalModalTitle">Add Goal</h2>
+    <form id="goalForm">
+      <div class="modal-field">
+        <label>Goal Title *</label>
+        <input type="text" id="goalTitleInput" placeholder="e.g. Learn Spanish" required />
+      </div>
+      <div class="modal-field">
+        <label>Description</label>
+        <textarea id="goalDescInput" placeholder="Describe your goal..."></textarea>
+      </div>
+      <div class="modal-row">
+        <div class="modal-field">
+          <label>Target Date</label>
+          <input type="date" id="goalDateInput" />
+        </div>
+        <div class="modal-field">
+          <label>Status</label>
+          <select id="goalStatusInput">
+            <option value="active">Active</option>
+            <option value="paused">Paused</option>
+            <option value="completed">Completed</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-field">
+        <label>Progress: <span id="goalProgressLabel">0</span>%</label>
+        <input type="range" id="goalProgressInput" min="0" max="100" value="0" style="width:100%;accent-color:var(--accent);" oninput="document.getElementById('goalProgressLabel').textContent=this.value" />
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn-cancel" onclick="closeGoalModal()">Cancel</button>
+        <button type="submit" class="btn-submit" id="goalSubmitBtn">Save Goal</button>
       </div>
     </form>
   </div>
@@ -1657,6 +2243,8 @@
     loadIdeas();
     loadFiles();
     initTimeline();
+    initStudies();
+    initHabits();
     initPush();
   }
 
@@ -2784,6 +3372,668 @@
       localStorage.setItem('lv_version', serverVersion);
     } catch (e) {}
   })();
+
+  // ==========================================
+  // SUB-TABS (Studies & Habits)
+  // ==========================================
+  function initSubTabs(containerSelector, contentPrefix) {
+    document.querySelectorAll(`${containerSelector} .sub-tab`).forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll(`${containerSelector} .sub-tab`).forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        const parent = tab.closest('.section');
+        parent.querySelectorAll('.sub-content').forEach(c => c.classList.remove('active'));
+        const targetId = contentPrefix + tab.dataset.subtab.charAt(0).toUpperCase() + tab.dataset.subtab.slice(1);
+        const target = document.getElementById(targetId);
+        if (target) target.classList.add('active');
+      });
+    });
+  }
+
+  // ==========================================
+  // STUDIES — COURSES / SCHEDULE
+  // ==========================================
+  let allCourses = [];
+  let allDeadlines = [];
+  let editingCourseId = null;
+  let editingDeadlineId = null;
+
+  const DAY_LABELS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+  const DAY_FULL_LABELS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+  const SCHEDULE_START = 7; // 07:00
+  const SCHEDULE_END = 21;  // 21:00
+
+  async function loadCourses() {
+    try {
+      const res = await api('/api/courses');
+      const data = await res.json();
+      allCourses = data.courses || [];
+      renderSchedule();
+      populateDeadlineCourseSelect();
+    } catch (err) {}
+  }
+
+  async function loadDeadlines() {
+    try {
+      const res = await api('/api/deadlines');
+      const data = await res.json();
+      allDeadlines = data.deadlines || [];
+      renderDeadlines();
+    } catch (err) {}
+  }
+
+  function renderSchedule() {
+    const grid = document.getElementById('scheduleGrid');
+    const hours = SCHEDULE_END - SCHEDULE_START;
+
+    let html = '<div class="schedule-header"></div>';
+    DAY_LABELS.forEach(d => { html += `<div class="schedule-header">${d}</div>`; });
+
+    for (let h = SCHEDULE_START; h < SCHEDULE_END; h++) {
+      html += `<div class="schedule-time-label">${String(h).padStart(2,'0')}:00</div>`;
+      for (let day = 1; day <= 7; day++) {
+        html += `<div class="schedule-cell" data-day="${day}" data-hour="${h}"></div>`;
+      }
+    }
+    grid.innerHTML = html;
+
+    // Place course blocks
+    allCourses.forEach(course => {
+      const startParts = course.startTime.split(':');
+      const endParts = course.endTime.split(':');
+      const startH = parseInt(startParts[0], 10);
+      const startM = parseInt(startParts[1] || '0', 10);
+      const endH = parseInt(endParts[0], 10);
+      const endM = parseInt(endParts[1] || '0', 10);
+
+      if (startH < SCHEDULE_START || startH >= SCHEDULE_END) return;
+
+      const cell = grid.querySelector(`.schedule-cell[data-day="${course.day}"][data-hour="${startH}"]`);
+      if (!cell) return;
+
+      const cellHeight = 32; // min-height of a cell
+      const durationMin = (endH * 60 + endM) - (startH * 60 + startM);
+      const topOffset = (startM / 60) * cellHeight;
+      const blockHeight = (durationMin / 60) * cellHeight;
+
+      const block = document.createElement('div');
+      block.className = 'schedule-block';
+      block.style.cssText = `top:${topOffset}px;height:${blockHeight}px;background:${course.color}22;color:${course.color};border-left:3px solid ${course.color};`;
+      block.innerHTML = `<div class="block-name">${escapeHtml(course.name)}</div>${course.room ? `<div class="block-room">${escapeHtml(course.room)}</div>` : ''}`;
+      block.onclick = () => editCourse(course.id);
+      cell.appendChild(block);
+    });
+  }
+
+  function openCourseModal(courseId) {
+    editingCourseId = courseId || null;
+    const modal = document.getElementById('courseModal');
+    const form = document.getElementById('courseForm');
+    form.reset();
+
+    if (editingCourseId) {
+      const c = allCourses.find(x => x.id === editingCourseId);
+      if (c) {
+        document.getElementById('courseModalTitle').textContent = 'Edit Course';
+        document.getElementById('courseSubmitBtn').textContent = 'Update Course';
+        document.getElementById('courseNameInput').value = c.name;
+        document.getElementById('courseDayInput').value = c.day;
+        document.getElementById('courseStartInput').value = c.startTime;
+        document.getElementById('courseEndInput').value = c.endTime;
+        document.getElementById('courseRoomInput').value = c.room || '';
+        document.getElementById('courseColorInput').value = c.color || '#8b5cf6';
+      }
+    } else {
+      document.getElementById('courseModalTitle').textContent = 'Add Course';
+      document.getElementById('courseSubmitBtn').textContent = 'Save Course';
+    }
+    modal.classList.add('active');
+  }
+
+  function closeCourseModal() {
+    document.getElementById('courseModal').classList.remove('active');
+    editingCourseId = null;
+  }
+
+  function editCourse(id) { openCourseModal(id); }
+
+  document.getElementById('courseModal').addEventListener('click', (e) => {
+    if (e.target.id === 'courseModal') closeCourseModal();
+  });
+
+  document.getElementById('courseForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const payload = {
+      name: document.getElementById('courseNameInput').value.trim(),
+      day: document.getElementById('courseDayInput').value,
+      startTime: document.getElementById('courseStartInput').value,
+      endTime: document.getElementById('courseEndInput').value,
+      room: document.getElementById('courseRoomInput').value.trim(),
+      color: document.getElementById('courseColorInput').value
+    };
+    if (!payload.name) return toast('Course name is required', 'error');
+    try {
+      const url = editingCourseId ? `/api/courses/${editingCourseId}` : '/api/courses';
+      const method = editingCourseId ? 'PUT' : 'POST';
+      const res = await api(url, { method, body: JSON.stringify(payload) });
+      const data = await res.json();
+      if (data.success) {
+        toast(editingCourseId ? 'Course updated' : 'Course added', 'success');
+        closeCourseModal();
+        loadCourses();
+      } else toast(data.error || 'Failed to save', 'error');
+    } catch (err) { toast('Error saving course', 'error'); }
+  });
+
+  async function deleteCourse(id) {
+    if (!confirm('Delete this course?')) return;
+    try {
+      const res = await api(`/api/courses/${id}`, { method: 'DELETE' });
+      const data = await res.json();
+      if (data.success) { toast('Course deleted', 'success'); loadCourses(); }
+      else toast(data.error, 'error');
+    } catch (err) { toast('Error deleting course', 'error'); }
+  }
+
+  // ==========================================
+  // STUDIES — DEADLINES
+  // ==========================================
+  function populateDeadlineCourseSelect() {
+    const sel = document.getElementById('deadlineCourseInput');
+    sel.innerHTML = '<option value="">-- None --</option>' +
+      allCourses.map(c => `<option value="${c.id}" data-name="${escapeHtml(c.name)}">${escapeHtml(c.name)}</option>`).join('');
+  }
+
+  function renderDeadlines() {
+    const list = document.getElementById('deadlineList');
+    const empty = document.getElementById('deadlinesEmpty');
+    const todayStr = new Date().toISOString().split('T')[0];
+
+    if (allDeadlines.length === 0) {
+      list.innerHTML = '';
+      empty.style.display = 'block';
+      return;
+    }
+    empty.style.display = 'none';
+
+    list.innerHTML = allDeadlines.map(dl => {
+      const badgeClass = dl.type === 'exam' ? 'badge-exam' : dl.type === 'assignment' ? 'badge-assignment' : dl.type === 'project' ? 'badge-project' : 'badge-other-type';
+      const typeName = dl.type.charAt(0).toUpperCase() + dl.type.slice(1);
+
+      // Days left calculation
+      const dlDate = new Date(dl.date + 'T00:00:00');
+      const today = new Date(todayStr + 'T00:00:00');
+      const diffDays = Math.ceil((dlDate - today) / (1000 * 60 * 60 * 24));
+      let daysLabel = '', daysClass = '';
+      if (dl.completed) { daysLabel = 'Done'; daysClass = 'past'; }
+      else if (diffDays < 0) { daysLabel = 'Past due'; daysClass = 'past'; }
+      else if (diffDays === 0) { daysLabel = 'Today!'; daysClass = 'urgent'; }
+      else if (diffDays === 1) { daysLabel = 'Tomorrow'; daysClass = 'urgent'; }
+      else if (diffDays <= 3) { daysLabel = `${diffDays} days`; daysClass = 'soon'; }
+      else if (diffDays <= 7) { daysLabel = `${diffDays} days`; daysClass = 'soon'; }
+      else { daysLabel = `${diffDays} days`; daysClass = 'ok'; }
+
+      return `
+        <div class="deadline-card ${dl.completed ? 'completed-deadline' : ''}">
+          <span class="deadline-type-badge ${badgeClass}">${typeName}</span>
+          <div class="deadline-info">
+            <div class="deadline-title ${dl.completed ? 'completed-text' : ''}">${escapeHtml(dl.title)}</div>
+            <div class="deadline-meta">
+              <span>${dl.date}${dl.time ? ' ' + dl.time : ''}</span>
+              ${dl.courseName ? `<span>${escapeHtml(dl.courseName)}</span>` : ''}
+              <span class="days-left ${daysClass}">${daysLabel}</span>
+            </div>
+            ${dl.description ? `<div style="font-size:12px;color:var(--text-dim);margin-top:6px;">${escapeHtml(dl.description)}</div>` : ''}
+          </div>
+          <div class="deadline-actions">
+            <button class="btn-action" onclick="toggleDeadlineComplete('${dl.id}', ${!dl.completed})" title="${dl.completed ? 'Undo' : 'Complete'}">${dl.completed ? '&#8634;' : '&#10003;'}</button>
+            <button class="btn-action edit" onclick="editDeadline('${dl.id}')">&#9998;</button>
+            <button class="btn-action delete" onclick="deleteDeadline('${dl.id}')">&#10006;</button>
+          </div>
+        </div>`;
+    }).join('');
+  }
+
+  function openDeadlineModal(deadlineId) {
+    editingDeadlineId = deadlineId || null;
+    const modal = document.getElementById('deadlineModal');
+    const form = document.getElementById('deadlineForm');
+    form.reset();
+    document.getElementById('deadlineNotifyInput').checked = true;
+    populateDeadlineCourseSelect();
+
+    if (editingDeadlineId) {
+      const dl = allDeadlines.find(x => x.id === editingDeadlineId);
+      if (dl) {
+        document.getElementById('deadlineModalTitle').textContent = 'Edit Deadline';
+        document.getElementById('deadlineSubmitBtn').textContent = 'Update Deadline';
+        document.getElementById('deadlineTitleInput').value = dl.title;
+        document.getElementById('deadlineTypeInput').value = dl.type;
+        document.getElementById('deadlineCourseInput').value = dl.courseId || '';
+        document.getElementById('deadlineDateInput').value = dl.date;
+        document.getElementById('deadlineTimeInput').value = dl.time || '';
+        document.getElementById('deadlineDescInput').value = dl.description || '';
+        document.getElementById('deadlineNotifyInput').checked = dl.notify;
+      }
+    } else {
+      document.getElementById('deadlineModalTitle').textContent = 'Add Deadline';
+      document.getElementById('deadlineSubmitBtn').textContent = 'Save Deadline';
+    }
+    modal.classList.add('active');
+  }
+
+  function closeDeadlineModal() {
+    document.getElementById('deadlineModal').classList.remove('active');
+    editingDeadlineId = null;
+  }
+
+  function editDeadline(id) { openDeadlineModal(id); }
+
+  document.getElementById('deadlineModal').addEventListener('click', (e) => {
+    if (e.target.id === 'deadlineModal') closeDeadlineModal();
+  });
+
+  document.getElementById('deadlineForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const courseSelect = document.getElementById('deadlineCourseInput');
+    const selectedOpt = courseSelect.options[courseSelect.selectedIndex];
+    const payload = {
+      title: document.getElementById('deadlineTitleInput').value.trim(),
+      type: document.getElementById('deadlineTypeInput').value,
+      courseId: courseSelect.value,
+      courseName: selectedOpt && selectedOpt.dataset.name ? selectedOpt.dataset.name : '',
+      date: document.getElementById('deadlineDateInput').value,
+      time: document.getElementById('deadlineTimeInput').value,
+      description: document.getElementById('deadlineDescInput').value.trim(),
+      notify: document.getElementById('deadlineNotifyInput').checked
+    };
+    if (!payload.title) return toast('Title is required', 'error');
+    if (!payload.date) return toast('Date is required', 'error');
+    try {
+      const url = editingDeadlineId ? `/api/deadlines/${editingDeadlineId}` : '/api/deadlines';
+      const method = editingDeadlineId ? 'PUT' : 'POST';
+      const res = await api(url, { method, body: JSON.stringify(payload) });
+      const data = await res.json();
+      if (data.success) {
+        toast(editingDeadlineId ? 'Deadline updated' : 'Deadline added', 'success');
+        closeDeadlineModal();
+        loadDeadlines();
+      } else toast(data.error || 'Failed to save', 'error');
+    } catch (err) { toast('Error saving deadline', 'error'); }
+  });
+
+  async function toggleDeadlineComplete(id, completed) {
+    try {
+      const res = await api(`/api/deadlines/${id}`, { method: 'PUT', body: JSON.stringify({ completed }) });
+      const data = await res.json();
+      if (data.success) loadDeadlines();
+    } catch (err) { toast('Error updating deadline', 'error'); }
+  }
+
+  async function deleteDeadline(id) {
+    if (!confirm('Delete this deadline?')) return;
+    try {
+      const res = await api(`/api/deadlines/${id}`, { method: 'DELETE' });
+      const data = await res.json();
+      if (data.success) { toast('Deadline deleted', 'success'); loadDeadlines(); }
+      else toast(data.error, 'error');
+    } catch (err) { toast('Error deleting deadline', 'error'); }
+  }
+
+  function initStudies() {
+    initSubTabs('#studiesSubTabs', 'studies');
+    loadCourses();
+    loadDeadlines();
+  }
+
+  // ==========================================
+  // HABITS — TODAY / TRACKER / GOALS
+  // ==========================================
+  let allHabits = [];
+  let allCheckins = [];
+  let allGoals = [];
+  let editingHabitId = null;
+  let editingGoalId = null;
+
+  async function loadHabits() {
+    try {
+      const res = await api('/api/habits');
+      const data = await res.json();
+      allHabits = data.habits || [];
+    } catch (err) {}
+  }
+
+  async function loadCheckins() {
+    try {
+      // Load last 84 days of checkins (12 weeks)
+      const from = new Date();
+      from.setDate(from.getDate() - 84);
+      const fromStr = from.toISOString().split('T')[0];
+      const res = await api(`/api/habits/checkins?from=${fromStr}`);
+      const data = await res.json();
+      allCheckins = data.checkins || [];
+    } catch (err) {}
+  }
+
+  async function loadGoals() {
+    try {
+      const res = await api('/api/goals');
+      const data = await res.json();
+      allGoals = data.goals || [];
+      renderGoals();
+    } catch (err) {}
+  }
+
+  function getTodayStr() {
+    return new Date().toISOString().split('T')[0];
+  }
+
+  function calcStreak(habitId) {
+    const checkinDates = allCheckins
+      .filter(c => c.habitId === habitId)
+      .map(c => c.date)
+      .sort()
+      .reverse();
+    if (checkinDates.length === 0) return 0;
+
+    let streak = 0;
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    for (let i = 0; i <= 365; i++) {
+      const checkDate = new Date(today);
+      checkDate.setDate(checkDate.getDate() - i);
+      const dateStr = checkDate.toISOString().split('T')[0];
+      if (checkinDates.includes(dateStr)) {
+        streak++;
+      } else {
+        // Allow skipping today if not checked yet
+        if (i === 0) continue;
+        break;
+      }
+    }
+    return streak;
+  }
+
+  function renderHabitsToday() {
+    const list = document.getElementById('habitChecklist');
+    const empty = document.getElementById('habitsEmpty');
+    const todayStr = getTodayStr();
+
+    if (allHabits.length === 0) {
+      list.innerHTML = '';
+      empty.style.display = 'block';
+      return;
+    }
+    empty.style.display = 'none';
+
+    list.innerHTML = allHabits.map(h => {
+      const isChecked = allCheckins.some(c => c.habitId === h.id && c.date === todayStr);
+      const streak = calcStreak(h.id);
+      return `
+        <div class="habit-check-item ${isChecked ? 'checked' : ''}" onclick="toggleHabitCheckin('${h.id}', ${isChecked ? 'true' : 'false'})">
+          <div class="habit-color-dot" style="background:${h.color}"></div>
+          <div class="habit-checkbox-custom">${isChecked ? '&#10003;' : ''}</div>
+          <span class="habit-check-name">${escapeHtml(h.name)}</span>
+          ${streak > 0 ? `<span class="streak-badge">${streak} day${streak !== 1 ? 's' : ''}</span>` : ''}
+          <button class="btn-action edit" onclick="event.stopPropagation();editHabit('${h.id}')" style="flex-shrink:0;">&#9998;</button>
+          <button class="btn-action delete" onclick="event.stopPropagation();deleteHabit('${h.id}')" style="flex-shrink:0;">&#10006;</button>
+        </div>`;
+    }).join('');
+  }
+
+  async function toggleHabitCheckin(habitId, isChecked) {
+    try {
+      const todayStr = getTodayStr();
+      if (isChecked) {
+        await api('/api/habits/checkins', { method: 'DELETE', body: JSON.stringify({ habitId, date: todayStr }) });
+      } else {
+        await api('/api/habits/checkins', { method: 'POST', body: JSON.stringify({ habitId, date: todayStr }) });
+      }
+      await loadCheckins();
+      renderHabitsToday();
+      renderTracker();
+    } catch (err) { toast('Error updating checkin', 'error'); }
+  }
+
+  function renderTracker() {
+    const container = document.getElementById('trackerContainer');
+    const empty = document.getElementById('trackerEmpty');
+
+    if (allHabits.length === 0) {
+      container.innerHTML = '';
+      empty.style.display = 'block';
+      return;
+    }
+    empty.style.display = 'none';
+
+    // Generate last 84 days (12 weeks)
+    const days = [];
+    const today = new Date();
+    for (let i = 83; i >= 0; i--) {
+      const d = new Date(today);
+      d.setDate(d.getDate() - i);
+      days.push(d.toISOString().split('T')[0]);
+    }
+
+    container.innerHTML = allHabits.map(h => {
+      const habitCheckins = new Set(allCheckins.filter(c => c.habitId === h.id).map(c => c.date));
+      const streak = calcStreak(h.id);
+
+      const cells = days.map(dateStr => {
+        const filled = habitCheckins.has(dateStr);
+        const bg = filled ? h.color : '';
+        const opacity = filled ? '0.8' : '';
+        return `<div class="tracker-cell ${filled ? 'filled' : ''}" style="${filled ? `background:${h.color};opacity:${opacity}` : ''}" title="${dateStr}${filled ? ' &#10003;' : ''}"></div>`;
+      }).join('');
+
+      return `
+        <div class="tracker-habit-section">
+          <div class="tracker-habit-header">
+            <div style="display:flex;align-items:center;gap:10px;">
+              <div class="habit-color-dot" style="background:${h.color}"></div>
+              <span class="tracker-habit-name">${escapeHtml(h.name)}</span>
+            </div>
+            <span class="streak-badge">${streak} day streak</span>
+          </div>
+          <div class="tracker-grid">${cells}</div>
+          <div class="tracker-legend">
+            <span>12 weeks ago</span>
+            <div style="flex:1"></div>
+            <span>Today</span>
+          </div>
+        </div>`;
+    }).join('');
+  }
+
+  // Habit Modal
+  function openHabitModal(habitId) {
+    editingHabitId = habitId || null;
+    const form = document.getElementById('habitForm');
+    form.reset();
+
+    if (editingHabitId) {
+      const h = allHabits.find(x => x.id === editingHabitId);
+      if (h) {
+        document.getElementById('habitModalTitle').textContent = 'Edit Habit';
+        document.getElementById('habitSubmitBtn').textContent = 'Update Habit';
+        document.getElementById('habitNameInput').value = h.name;
+        document.getElementById('habitFreqInput').value = h.frequency;
+        document.getElementById('habitColorInput').value = h.color || '#8b5cf6';
+      }
+    } else {
+      document.getElementById('habitModalTitle').textContent = 'Add Habit';
+      document.getElementById('habitSubmitBtn').textContent = 'Save Habit';
+    }
+    document.getElementById('habitModal').classList.add('active');
+  }
+
+  function closeHabitModal() {
+    document.getElementById('habitModal').classList.remove('active');
+    editingHabitId = null;
+  }
+
+  function editHabit(id) { openHabitModal(id); }
+
+  document.getElementById('habitModal').addEventListener('click', (e) => {
+    if (e.target.id === 'habitModal') closeHabitModal();
+  });
+
+  document.getElementById('habitForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const payload = {
+      name: document.getElementById('habitNameInput').value.trim(),
+      frequency: document.getElementById('habitFreqInput').value,
+      color: document.getElementById('habitColorInput').value
+    };
+    if (!payload.name) return toast('Habit name is required', 'error');
+    try {
+      const url = editingHabitId ? `/api/habits/${editingHabitId}` : '/api/habits';
+      const method = editingHabitId ? 'PUT' : 'POST';
+      const res = await api(url, { method, body: JSON.stringify(payload) });
+      const data = await res.json();
+      if (data.success) {
+        toast(editingHabitId ? 'Habit updated' : 'Habit added', 'success');
+        closeHabitModal();
+        await loadHabits();
+        await loadCheckins();
+        renderHabitsToday();
+        renderTracker();
+      } else toast(data.error || 'Failed to save', 'error');
+    } catch (err) { toast('Error saving habit', 'error'); }
+  });
+
+  async function deleteHabit(id) {
+    if (!confirm('Delete this habit and all its check-ins?')) return;
+    try {
+      const res = await api(`/api/habits/${id}`, { method: 'DELETE' });
+      const data = await res.json();
+      if (data.success) {
+        toast('Habit deleted', 'success');
+        await loadHabits();
+        await loadCheckins();
+        renderHabitsToday();
+        renderTracker();
+      } else toast(data.error, 'error');
+    } catch (err) { toast('Error deleting habit', 'error'); }
+  }
+
+  // ==========================================
+  // GOALS
+  // ==========================================
+  function renderGoals() {
+    const list = document.getElementById('goalsList');
+    const empty = document.getElementById('goalsEmpty');
+
+    if (allGoals.length === 0) {
+      list.innerHTML = '';
+      empty.style.display = 'block';
+      return;
+    }
+    empty.style.display = 'none';
+
+    list.innerHTML = allGoals.map(g => {
+      const statusClass = g.status === 'active' ? 'goal-status-active' : g.status === 'completed' ? 'goal-status-completed' : 'goal-status-paused';
+      const statusLabel = g.status.charAt(0).toUpperCase() + g.status.slice(1);
+      return `
+        <div class="goal-card">
+          <div class="goal-card-top">
+            <div class="goal-title">${escapeHtml(g.title)}</div>
+            <span class="goal-status-badge ${statusClass}">${statusLabel}</span>
+          </div>
+          ${g.description ? `<div class="goal-desc">${escapeHtml(g.description)}</div>` : ''}
+          <div class="goal-progress-bar">
+            <div class="goal-progress-fill" style="width:${g.progress}%"></div>
+          </div>
+          <div class="goal-meta">
+            <span>${g.progress}% complete${g.targetDate ? ' &middot; Target: ' + g.targetDate : ''}</span>
+            <div class="goal-actions">
+              <button class="btn-action edit" onclick="editGoal('${g.id}')">&#9998;</button>
+              <button class="btn-action delete" onclick="deleteGoal('${g.id}')">&#10006;</button>
+            </div>
+          </div>
+        </div>`;
+    }).join('');
+  }
+
+  function openGoalModal(goalId) {
+    editingGoalId = goalId || null;
+    const form = document.getElementById('goalForm');
+    form.reset();
+    document.getElementById('goalProgressLabel').textContent = '0';
+    document.getElementById('goalProgressInput').value = 0;
+
+    if (editingGoalId) {
+      const g = allGoals.find(x => x.id === editingGoalId);
+      if (g) {
+        document.getElementById('goalModalTitle').textContent = 'Edit Goal';
+        document.getElementById('goalSubmitBtn').textContent = 'Update Goal';
+        document.getElementById('goalTitleInput').value = g.title;
+        document.getElementById('goalDescInput').value = g.description || '';
+        document.getElementById('goalDateInput').value = g.targetDate || '';
+        document.getElementById('goalStatusInput').value = g.status;
+        document.getElementById('goalProgressInput').value = g.progress;
+        document.getElementById('goalProgressLabel').textContent = g.progress;
+      }
+    } else {
+      document.getElementById('goalModalTitle').textContent = 'Add Goal';
+      document.getElementById('goalSubmitBtn').textContent = 'Save Goal';
+    }
+    document.getElementById('goalModal').classList.add('active');
+  }
+
+  function closeGoalModal() {
+    document.getElementById('goalModal').classList.remove('active');
+    editingGoalId = null;
+  }
+
+  function editGoal(id) { openGoalModal(id); }
+
+  document.getElementById('goalModal').addEventListener('click', (e) => {
+    if (e.target.id === 'goalModal') closeGoalModal();
+  });
+
+  document.getElementById('goalForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const payload = {
+      title: document.getElementById('goalTitleInput').value.trim(),
+      description: document.getElementById('goalDescInput').value.trim(),
+      targetDate: document.getElementById('goalDateInput').value,
+      status: document.getElementById('goalStatusInput').value,
+      progress: document.getElementById('goalProgressInput').value
+    };
+    if (!payload.title) return toast('Goal title is required', 'error');
+    try {
+      const url = editingGoalId ? `/api/goals/${editingGoalId}` : '/api/goals';
+      const method = editingGoalId ? 'PUT' : 'POST';
+      const res = await api(url, { method, body: JSON.stringify(payload) });
+      const data = await res.json();
+      if (data.success) {
+        toast(editingGoalId ? 'Goal updated' : 'Goal added', 'success');
+        closeGoalModal();
+        loadGoals();
+      } else toast(data.error || 'Failed to save', 'error');
+    } catch (err) { toast('Error saving goal', 'error'); }
+  });
+
+  async function deleteGoal(id) {
+    if (!confirm('Delete this goal?')) return;
+    try {
+      const res = await api(`/api/goals/${id}`, { method: 'DELETE' });
+      const data = await res.json();
+      if (data.success) { toast('Goal deleted', 'success'); loadGoals(); }
+      else toast(data.error, 'error');
+    } catch (err) { toast('Error deleting goal', 'error'); }
+  }
+
+  async function initHabits() {
+    initSubTabs('#habitsSubTabs', 'habits');
+    await loadHabits();
+    await loadCheckins();
+    renderHabitsToday();
+    renderTracker();
+    loadGoals();
+  }
 
   // ==========================================
   // INIT
