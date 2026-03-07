@@ -30,6 +30,7 @@ const DEADLINES_FILE = path.join(DATA_DIR, 'deadlines.json');
 const HABITS_FILE = path.join(DATA_DIR, 'habits.json');
 const HABIT_CHECKINS_FILE = path.join(DATA_DIR, 'habit-checkins.json');
 const GOALS_FILE = path.join(DATA_DIR, 'goals.json');
+const LISTS_FILE = path.join(DATA_DIR, 'lists.json');
 const UPLOAD_DIR = path.join(__dirname, 'uploads');
 const MAX_FILE_SIZE = 100 * 1024 * 1024; // 100MB
 
@@ -122,15 +123,9 @@ function writeJSON(file, data) {
   fs.writeFileSync(file, JSON.stringify(data, null, 2), 'utf8');
 }
 
-// --- Auth Middleware (dual: session OR API key) ---
+// --- Auth Middleware (no password required) ---
 function requireAuth(req, res, next) {
-  if (req.session && req.session.authenticated) return next();
-  const authHeader = req.headers.authorization;
-  if (authHeader && authHeader.startsWith('Bearer ')) {
-    const token = authHeader.slice(7);
-    if (token === process.env.API_KEY) return next();
-  }
-  res.status(401).json({ error: 'Unauthorized' });
+  return next();
 }
 
 // --- Multer setup (from FileVault) ---
@@ -899,6 +894,70 @@ app.delete('/api/goals/:id', requireAuth, (req, res) => {
     res.json({ success: true });
   } catch (err) {
     res.status(500).json({ error: 'Failed to delete goal' });
+  }
+});
+
+// ==========================================
+// LISTS (To Buy / To Do) ROUTES
+// ==========================================
+
+app.get('/api/lists', requireAuth, (req, res) => {
+  try {
+    const items = readJSON(LISTS_FILE);
+    res.json({ items });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to load lists' });
+  }
+});
+
+app.post('/api/lists', requireAuth, (req, res) => {
+  try {
+    const { text, type } = req.body;
+    if (!text || !text.trim()) return res.status(400).json({ error: 'Text is required' });
+    const item = {
+      id: uuidv4(),
+      text: text.trim(),
+      type: type === 'buy' ? 'buy' : 'do',
+      completed: false,
+      createdAt: new Date().toISOString()
+    };
+    const items = readJSON(LISTS_FILE);
+    items.unshift(item);
+    writeJSON(LISTS_FILE, items);
+    res.json({ success: true, item });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to save item' });
+  }
+});
+
+app.put('/api/lists/:id', requireAuth, (req, res) => {
+  try {
+    const { id } = req.params;
+    const { text, type, completed } = req.body;
+    const items = readJSON(LISTS_FILE);
+    const idx = items.findIndex(i => i.id === id);
+    if (idx === -1) return res.status(404).json({ error: 'Item not found' });
+    if (text !== undefined) items[idx].text = text.trim();
+    if (type !== undefined) items[idx].type = type;
+    if (completed !== undefined) items[idx].completed = !!completed;
+    writeJSON(LISTS_FILE, items);
+    res.json({ success: true, item: items[idx] });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to update item' });
+  }
+});
+
+app.delete('/api/lists/:id', requireAuth, (req, res) => {
+  try {
+    const { id } = req.params;
+    let items = readJSON(LISTS_FILE);
+    const before = items.length;
+    items = items.filter(i => i.id !== id);
+    if (items.length === before) return res.status(404).json({ error: 'Item not found' });
+    writeJSON(LISTS_FILE, items);
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to delete item' });
   }
 });
 
