@@ -1,9 +1,7 @@
 require('dotenv').config();
 const express = require('express');
-const session = require('express-session');
 const helmet = require('helmet');
 const cors = require('cors');
-const bcrypt = require('bcrypt');
 const multer = require('multer');
 const { v4: uuidv4 } = require('uuid');
 const path = require('path');
@@ -50,40 +48,14 @@ if (process.env.VAPID_PUBLIC_KEY && process.env.VAPID_PRIVATE_KEY) {
   );
 }
 
-// --- Hash password on startup ---
-let hashedPassword = null;
-(async () => {
-  const raw = process.env.PASSWORD || 'vault2024';
-  hashedPassword = await bcrypt.hash(raw, 10);
-})();
-
 // --- Middleware ---
 app.use(helmet({
   contentSecurityPolicy: false,
   crossOriginEmbedderPolicy: false
 }));
-app.use(cors({
-  origin: true,
-  credentials: true
-}));
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(session({
-  secret: process.env.SESSION_SECRET || 'fallback-secret-change-me',
-  resave: false,
-  saveUninitialized: false,
-  cookie: {
-    secure: process.env.NODE_ENV === 'production' ? true : false,
-    httpOnly: true,
-    maxAge: 24 * 60 * 60 * 1000,
-    sameSite: 'lax'
-  },
-  proxy: process.env.NODE_ENV === 'production'
-}));
-
-if (process.env.NODE_ENV === 'production') {
-  app.set('trust proxy', 1);
-}
 
 // --- No-cache headers for all static files ---
 app.use((req, res, next) => {
@@ -163,35 +135,11 @@ app.get('/api/health', (req, res) => {
 });
 
 // ==========================================
-// AUTH ROUTES
+// AUTH ROUTES (no auth required)
 // ==========================================
 
-app.post('/api/login', async (req, res) => {
-  try {
-    const { password } = req.body;
-    if (!password || !hashedPassword) {
-      return res.status(400).json({ error: 'Password required' });
-    }
-    const match = await bcrypt.compare(password, hashedPassword);
-    if (match) {
-      req.session.authenticated = true;
-      res.json({ success: true });
-    } else {
-      res.status(401).json({ error: 'Wrong password' });
-    }
-  } catch (err) {
-    res.status(500).json({ error: 'Server error' });
-  }
-});
-
-app.post('/api/logout', (req, res) => {
-  req.session.destroy(() => {
-    res.json({ success: true });
-  });
-});
-
 app.get('/api/auth', (req, res) => {
-  res.json({ authenticated: !!(req.session && req.session.authenticated) });
+  res.json({ authenticated: true });
 });
 
 // ==========================================

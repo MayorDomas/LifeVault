@@ -1041,7 +1041,9 @@
 
   // ===== UTILS =====
   async function api(url, opts = {}) {
-    return await fetch(url, { credentials: 'include', headers: { 'Content-Type': 'application/json', ...opts.headers }, ...opts });
+    const headers = { ...opts.headers };
+    if (opts.body) headers['Content-Type'] = 'application/json';
+    return await fetch(url, { ...opts, headers });
   }
   function toast(msg, type = 'info') {
     const c = document.getElementById('toastContainer'), el = document.createElement('div');
@@ -1180,7 +1182,7 @@
     let done=0;const total=files.length;
     for(const[cat,catFiles]of Object.entries(groups)){
       const fd=new FormData();fd.append('category',cat);catFiles.forEach(f=>fd.append('files',f));
-      try{await new Promise((res,rej)=>{const x=new XMLHttpRequest();x.open('POST','/api/upload');x.withCredentials=true;x.upload.onprogress=e=>{if(e.lengthComputable){const p=Math.round(((done/total)+(e.loaded/e.total/total))*100);bar.style.width=p+'%';txt.textContent=`Uploading... ${p}%`;}};x.onload=()=>{done+=catFiles.length;x.status===200?res():rej(new Error(x.responseText));};x.onerror=()=>rej(new Error('Upload failed'));x.send(fd);});}catch(e){toast('Upload failed','error');}
+      try{await new Promise((res,rej)=>{const x=new XMLHttpRequest();x.open('POST','/api/upload');x.upload.onprogress=e=>{if(e.lengthComputable){const p=Math.round(((done/total)+(e.loaded/e.total/total))*100);bar.style.width=p+'%';txt.textContent=`Uploading... ${p}%`;}};x.onload=()=>{done+=catFiles.length;x.status===200?res():rej(new Error(x.responseText));};x.onerror=()=>rej(new Error('Upload failed'));x.send(fd);});}catch(e){toast('Upload failed','error');}
     }
     bar.style.width='100%';txt.textContent='Done!';setTimeout(()=>prog.classList.remove('active'),1500);toast(`${total} file(s) uploaded`,'success');loadFiles();
   }
