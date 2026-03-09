@@ -197,6 +197,10 @@
       transform: translateY(-1px);
       box-shadow: 0 6px 20px var(--accent-glow);
     }
+    .btn-accent:active {
+      transform: translateY(0);
+      box-shadow: 0 2px 8px var(--accent-glow);
+    }
     .btn-ghost {
       background: var(--surface);
       border: 1px solid var(--glass-border);
@@ -241,7 +245,9 @@
     }
     .input::placeholder, .textarea::placeholder { color: var(--text-dim); }
     .textarea { min-height: 70px; resize: vertical; }
-    .select option { background: #fff; }
+    .select { appearance: auto; -webkit-appearance: menulist; }
+    .select option { background: #fff; color: var(--text); }
+    input[type="date"], input[type="time"] { color-scheme: light; }
 
     .chip {
       padding: 6px 14px;
@@ -477,7 +483,7 @@
     .year-btn:hover { border-color: var(--accent); color: var(--text); }
     .year-btn.active { background: rgba(232, 93, 74, 0.1); border-color: var(--accent); color: var(--accent); }
     .month-nav { display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; }
-    .month-pill.has-events { border-color: rgba(232, 93, 74, 0.3); color: var(--text); }
+    .chip.has-events { border-color: rgba(232, 93, 74, 0.3); color: var(--text); background: rgba(232, 93, 74, 0.05); }
 
     /* Timeline horizontal bar */
     .timeline-bar {
@@ -824,6 +830,7 @@
       .idea-card-meta { flex-direction: column; align-items: flex-start; gap: 8px; }
 
       .files-sidebar-panel { display: none; }
+      .mobile-file-cats { display: flex !important; }
       .files-main { padding: 16px 12px; }
       .file-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
       .dropzone { padding: 20px 14px; }
@@ -955,6 +962,14 @@
       </div>
       <div class="files-main">
         <div class="page-title">&#128193; <span>Files</span></div>
+        <div class="chip-group mobile-file-cats" id="mobileFileCats" style="margin-bottom:16px;display:none;">
+          <span class="chip active" data-category="all">All</span>
+          <span class="chip" data-category="documents">Docs</span>
+          <span class="chip" data-category="images">Images</span>
+          <span class="chip" data-category="code">Code</span>
+          <span class="chip" data-category="3d-models">3D</span>
+          <span class="chip" data-category="other">Other</span>
+        </div>
         <div class="file-search-bar">
           <input type="text" class="input" id="fileSearchInput" placeholder="Search files by name..." />
         </div>
@@ -1296,7 +1311,10 @@
   function getFileIcon(t){const m={'.pdf':'\uD83D\uDCC4','.doc':'\uD83D\uDCC4','.docx':'\uD83D\uDCC4','.txt':'\uD83D\uDCC4','.xls':'\uD83D\uDCCA','.xlsx':'\uD83D\uDCCA','.csv':'\uD83D\uDCCA','.jpg':'\uD83D\uDDBC\uFE0F','.jpeg':'\uD83D\uDDBC\uFE0F','.png':'\uD83D\uDDBC\uFE0F','.gif':'\uD83D\uDDBC\uFE0F','.svg':'\uD83D\uDDBC\uFE0F','.webp':'\uD83D\uDDBC\uFE0F','.js':'\uD83D\uDCBB','.ts':'\uD83D\uDCBB','.py':'\uD83D\uDCBB','.html':'\uD83C\uDF10','.css':'\uD83C\uDFA8','.json':'\uD83D\uDCBB','.skp':'\uD83D\uDDBD','.obj':'\uD83D\uDDBD','.fbx':'\uD83D\uDDBD','.stl':'\uD83D\uDDBD','.blend':'\uD83D\uDDBD','.glb':'\uD83D\uDDBD','.zip':'\uD83D\uDCE6','.rar':'\uD83D\uDCE6','.mp4':'\uD83C\uDFAC','.mp3':'\uD83C\uDFB5'};return m[t]||'\uD83D\uDCC1';}
   function detectCategory(f){const e=f.substring(f.lastIndexOf('.')).toLowerCase(),m={documents:['.pdf','.doc','.docx','.txt','.rtf','.xls','.xlsx','.ppt','.pptx','.csv'],images:['.jpg','.jpeg','.png','.gif','.bmp','.svg','.webp','.ico'],code:['.js','.ts','.py','.html','.css','.json','.xml','.java','.cpp','.c','.rb','.php','.sh'],'3d-models':['.skp','.obj','.fbx','.stl','.blend','.3ds','.glb','.gltf','.step']};for(const[c,exts]of Object.entries(m))if(exts.includes(e))return c;return'other';}
 
-  document.querySelectorAll('.sidebar-file-item').forEach(i=>{i.addEventListener('click',()=>{document.querySelectorAll('.sidebar-file-item').forEach(x=>x.classList.remove('active'));i.classList.add('active');currentFileCategory=i.dataset.category;document.getElementById('filesTitle').textContent=fileCatName(currentFileCategory);renderFiles();});});
+  document.querySelectorAll('.sidebar-file-item').forEach(i=>{i.addEventListener('click',()=>{document.querySelectorAll('.sidebar-file-item').forEach(x=>x.classList.remove('active'));i.classList.add('active');currentFileCategory=i.dataset.category;document.getElementById('filesTitle').textContent=fileCatName(currentFileCategory);syncMobileFileCats();renderFiles();});});
+  // Mobile file category chips
+  document.querySelectorAll('#mobileFileCats .chip').forEach(c=>{c.addEventListener('click',()=>{document.querySelectorAll('#mobileFileCats .chip').forEach(x=>x.classList.remove('active'));c.classList.add('active');currentFileCategory=c.dataset.category;document.getElementById('filesTitle').textContent=fileCatName(currentFileCategory);renderFiles();});});
+  function syncMobileFileCats(){document.querySelectorAll('#mobileFileCats .chip').forEach(c=>{c.classList.toggle('active',c.dataset.category===currentFileCategory);});}
   document.querySelectorAll('#uploadCategory .chip').forEach(c=>{c.addEventListener('click',e=>{e.stopPropagation();document.querySelectorAll('#uploadCategory .chip').forEach(x=>x.classList.remove('active'));c.classList.add('active');selectedUploadCategory=c.dataset.cat;});});
   document.querySelector('#uploadCategory .chip[data-cat="auto"]').classList.add('active');
 
