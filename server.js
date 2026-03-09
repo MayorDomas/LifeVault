@@ -1072,6 +1072,11 @@ function checkAndSendNotifications() {
 // Check every 30 minutes
 setInterval(checkAndSendNotifications, 30 * 60 * 1000);
 
+// Keep-alive: ping own health endpoint every 10 minutes to prevent Render cold starts
+setInterval(() => {
+  require('http').get(`http://localhost:${PORT}/api/health`, () => {}).on('error', () => {});
+}, 10 * 60 * 1000);
+
 // ==========================================
 // START
 // ==========================================
