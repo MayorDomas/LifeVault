@@ -22,4 +22,4 @@ services:
     disk:
       name: life-vault-data
       mountPath: /opt/render/project/src/data
-      sizeGB: 1
+      sizeGB: 5

@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Life Vault</title>
   <link rel="manifest" href="/manifest.json">
-  <meta name="theme-color" content="#0a0a0f">
+  <meta name="theme-color" content="#fef9f4">
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
@@ -13,21 +13,21 @@
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
     :root {
-      --bg: #06060b;
-      --bg2: #0c0c14;
-      --surface: rgba(255, 255, 255, 0.03);
-      --surface-hover: rgba(255, 255, 255, 0.06);
-      --glass: rgba(255, 255, 255, 0.04);
-      --glass-border: rgba(255, 255, 255, 0.07);
-      --text: #e4e4e7;
-      --text-dim: #71717a;
-      --accent: #8b5cf6;
-      --accent-glow: rgba(139, 92, 246, 0.25);
-      --accent2: #06b6d4;
+      --bg: #fef9f4;
+      --bg2: #fff5eb;
+      --surface: rgba(0, 0, 0, 0.025);
+      --surface-hover: rgba(0, 0, 0, 0.045);
+      --glass: rgba(255, 255, 255, 0.75);
+      --glass-border: rgba(0, 0, 0, 0.07);
+      --text: #2d2926;
+      --text-dim: #9a918a;
+      --accent: #e85d4a;
+      --accent-glow: rgba(232, 93, 74, 0.18);
+      --accent2: #14b8a6;
       --danger: #ef4444;
       --success: #22c55e;
       --warning: #f59e0b;
-      --radius: 14px;
+      --radius: 16px;
       --sidebar-w: 72px;
     }
 
@@ -39,13 +39,17 @@
       overflow-x: hidden;
     }
 
-    canvas#particles {
+    /* Decorative blobs */
+    .deco-blob {
       position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      z-index: 0;
+      border-radius: 50%;
       pointer-events: none;
+      z-index: 0;
+      filter: blur(80px);
     }
+    .blob1 { width: 500px; height: 500px; top: -100px; left: -100px; background: rgba(232, 93, 74, 0.08); }
+    .blob2 { width: 400px; height: 400px; bottom: -80px; right: -80px; background: rgba(20, 184, 166, 0.08); }
+    .blob3 { width: 350px; height: 350px; top: 40%; left: 60%; background: rgba(251, 191, 36, 0.06); }
 
     /* ===== SIDEBAR NAV ===== */
     .sidebar {
@@ -53,7 +57,7 @@
       top: 0; left: 0;
       width: var(--sidebar-w);
       height: 100vh;
-      background: rgba(8, 8, 16, 0.9);
+      background: rgba(255, 255, 255, 0.85);
       backdrop-filter: blur(20px);
       border-right: 1px solid var(--glass-border);
       display: flex;
@@ -85,13 +89,13 @@
       background: none;
     }
     .nav-item:hover {
-      background: rgba(139, 92, 246, 0.08);
+      background: rgba(232, 93, 74, 0.08);
       color: var(--text);
     }
     .nav-item.active {
-      background: rgba(139, 92, 246, 0.15);
+      background: rgba(232, 93, 74, 0.12);
       color: var(--accent);
-      box-shadow: 0 0 20px rgba(139, 92, 246, 0.1);
+      box-shadow: 0 0 20px rgba(232, 93, 74, 0.08);
     }
     .nav-item.active::before {
       content: '';
@@ -105,7 +109,7 @@
     .nav-item .tooltip {
       position: absolute;
       left: 60px;
-      background: rgba(20, 20, 35, 0.95);
+      background: rgba(255, 255, 255, 0.95);
       border: 1px solid var(--glass-border);
       color: var(--text);
       font-size: 12px;
@@ -116,6 +120,7 @@
       pointer-events: none;
       transition: opacity 0.2s;
       z-index: 100;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
     }
     .nav-item:hover .tooltip { opacity: 1; }
 
@@ -170,7 +175,8 @@
       transition: all 0.25s;
     }
     .card:hover {
-      border-color: rgba(139, 92, 246, 0.2);
+      border-color: rgba(232, 93, 74, 0.15);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.04);
     }
 
     .btn {
@@ -184,7 +190,7 @@
       font-family: inherit;
     }
     .btn-accent {
-      background: linear-gradient(135deg, var(--accent), #7c3aed);
+      background: linear-gradient(135deg, var(--accent), #d94a38);
       color: #fff;
     }
     .btn-accent:hover {
@@ -214,14 +220,14 @@
     }
     .btn-action:hover { background: var(--surface-hover); color: var(--text); }
     .btn-action.delete:hover { border-color: rgba(239,68,68,0.4); color: var(--danger); }
-    .btn-action.edit:hover { border-color: rgba(139,92,246,0.4); color: var(--accent); }
+    .btn-action.edit:hover { border-color: rgba(232,93,74,0.4); color: var(--accent); }
     .btn-action.download:hover { border-color: rgba(34,197,94,0.4); color: var(--success); }
 
     .input, .textarea, .select {
       width: 100%;
       padding: 12px 16px;
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.6);
+      border: 1px solid rgba(0,0,0,0.08);
       border-radius: 10px;
       color: var(--text);
       font-size: 14px;
@@ -235,13 +241,13 @@
     }
     .input::placeholder, .textarea::placeholder { color: var(--text-dim); }
     .textarea { min-height: 70px; resize: vertical; }
-    .select option { background: #1a1a2e; }
+    .select option { background: #fff; }
 
     .chip {
       padding: 6px 14px;
       border-radius: 20px;
       font-size: 12px;
-      background: var(--surface);
+      background: rgba(255,255,255,0.6);
       border: 1px solid var(--glass-border);
       color: var(--text-dim);
       cursor: pointer;
@@ -249,7 +255,7 @@
     }
     .chip:hover { border-color: var(--accent); color: var(--text); }
     .chip.active {
-      background: rgba(139, 92, 246, 0.15);
+      background: rgba(232, 93, 74, 0.1);
       border-color: var(--accent);
       color: var(--accent);
     }
@@ -258,9 +264,9 @@
       font-size: 11px;
       padding: 3px 10px;
       border-radius: 8px;
-      background: rgba(139, 92, 246, 0.1);
+      background: rgba(232, 93, 74, 0.08);
       color: var(--accent);
-      border: 1px solid rgba(139, 92, 246, 0.2);
+      border: 1px solid rgba(232, 93, 74, 0.15);
     }
 
     .empty-state {
@@ -291,10 +297,11 @@
       display: flex;
       align-items: center;
       gap: 8px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.08);
     }
     .toast.success { background: rgba(34, 197, 94, 0.1); border-color: rgba(34, 197, 94, 0.3); color: var(--success); }
     .toast.error { background: rgba(239, 68, 68, 0.1); border-color: rgba(239, 68, 68, 0.3); color: var(--danger); }
-    .toast.info { background: rgba(139, 92, 246, 0.1); border-color: rgba(139, 92, 246, 0.3); color: var(--accent); }
+    .toast.info { background: rgba(232, 93, 74, 0.1); border-color: rgba(232, 93, 74, 0.3); color: var(--accent); }
     @keyframes toastIn { from { opacity: 0; transform: translateX(40px); } to { opacity: 1; transform: translateX(0); } }
     @keyframes toastOut { from { opacity: 1; } to { opacity: 0; } }
 
@@ -303,7 +310,7 @@
       position: fixed;
       inset: 0;
       z-index: 90;
-      background: rgba(0,0,0,0.6);
+      background: rgba(0,0,0,0.3);
       backdrop-filter: blur(4px);
       display: none;
       align-items: center;
@@ -311,7 +318,7 @@
     }
     .modal-overlay.active { display: flex; }
     .modal {
-      background: rgba(16, 16, 28, 0.97);
+      background: rgba(255, 255, 255, 0.97);
       backdrop-filter: blur(20px);
       border: 1px solid var(--glass-border);
       border-radius: 20px;
@@ -320,6 +327,7 @@
       max-width: 90vw;
       max-height: 90vh;
       overflow-y: auto;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.1);
     }
     .modal h2 {
       font-size: 20px;
@@ -364,8 +372,8 @@
     /* Scrollbar */
     ::-webkit-scrollbar { width: 6px; }
     ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 3px; }
-    ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.15); }
+    ::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.08); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(0,0,0,0.15); }
 
     /* ===== IDEAS SECTION ===== */
     .search-bar { margin-bottom: 20px; }
@@ -377,7 +385,7 @@
     .chip-group { display: flex; gap: 6px; flex-wrap: wrap; }
     .ideas-list { display: flex; flex-direction: column; gap: 12px; }
     .idea-card { transition: all 0.25s; }
-    .idea-card:hover { border-color: rgba(139, 92, 246, 0.3); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(0,0,0,0.3); }
+    .idea-card:hover { border-color: rgba(232, 93, 74, 0.2); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(0,0,0,0.06); }
     .idea-card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 10px; }
     .idea-text { font-size: 14px; line-height: 1.6; flex: 1; white-space: pre-wrap; word-break: break-word; }
     .idea-card-meta { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
@@ -399,7 +407,7 @@
     .files-layout { display: flex; gap: 0; }
     .files-sidebar-panel {
       width: 200px;
-      background: rgba(10, 10, 18, 0.5);
+      background: rgba(255, 255, 255, 0.5);
       border-right: 1px solid var(--glass-border);
       padding: 20px 10px;
       flex-shrink: 0;
@@ -414,22 +422,24 @@
       border-radius: 8px; color: var(--text-dim); font-size: 13px; cursor: pointer; transition: all 0.2s; margin-bottom: 2px;
     }
     .sidebar-file-item:hover { background: var(--surface-hover); color: var(--text); }
-    .sidebar-file-item.active { background: rgba(139, 92, 246, 0.1); color: var(--accent); }
+    .sidebar-file-item.active { background: rgba(232, 93, 74, 0.08); color: var(--accent); }
     .sidebar-file-item .icon { font-size: 16px; width: 22px; text-align: center; }
     .sidebar-file-item .count { margin-left: auto; font-size: 11px; background: var(--surface); padding: 2px 8px; border-radius: 10px; }
     .files-main { flex: 1; padding: 32px 28px; min-height: 100vh; }
 
+    .file-search-bar { margin-bottom: 16px; }
+
     .dropzone {
-      border: 2px dashed rgba(139, 92, 246, 0.25);
+      border: 2px dashed rgba(232, 93, 74, 0.25);
       border-radius: 16px;
       padding: 36px;
       text-align: center;
-      background: var(--surface);
+      background: rgba(255,255,255,0.5);
       transition: all 0.3s;
       margin-bottom: 24px;
       cursor: pointer;
     }
-    .dropzone:hover, .dropzone.dragover { border-color: var(--accent); background: rgba(139, 92, 246, 0.04); }
+    .dropzone:hover, .dropzone.dragover { border-color: var(--accent); background: rgba(232, 93, 74, 0.03); }
     .dropzone-icon { font-size: 36px; margin-bottom: 10px; }
     .dropzone-title { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
     .dropzone-sub { font-size: 12px; color: var(--text-dim); }
@@ -448,7 +458,7 @@
 
     .file-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px; }
     .file-card { position: relative; overflow: hidden; }
-    .file-card:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,0,0,0.3); }
+    .file-card:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,0,0,0.06); }
     .file-card .file-icon { font-size: 30px; margin-bottom: 10px; }
     .file-card .file-name { font-size: 13px; font-weight: 500; word-break: break-all; margin-bottom: 6px; line-height: 1.4; }
     .file-card .file-meta { font-size: 11px; color: var(--text-dim); margin-bottom: 12px; }
@@ -461,25 +471,107 @@
     .year-nav { display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 16px; }
     .year-btn {
       padding: 8px 20px; border-radius: 10px; font-size: 14px; font-weight: 600;
-      background: var(--surface); border: 1px solid var(--glass-border); color: var(--text-dim);
+      background: rgba(255,255,255,0.5); border: 1px solid var(--glass-border); color: var(--text-dim);
       cursor: pointer; transition: all 0.2s;
     }
     .year-btn:hover { border-color: var(--accent); color: var(--text); }
-    .year-btn.active { background: rgba(139, 92, 246, 0.15); border-color: var(--accent); color: var(--accent); }
+    .year-btn.active { background: rgba(232, 93, 74, 0.1); border-color: var(--accent); color: var(--accent); }
     .month-nav { display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; }
-    .month-pill.has-events { border-color: rgba(139, 92, 246, 0.3); color: var(--text); }
+    .month-pill.has-events { border-color: rgba(232, 93, 74, 0.3); color: var(--text); }
+
+    /* Timeline horizontal bar */
+    .timeline-bar {
+      margin-bottom: 28px;
+      padding: 16px 0;
+    }
+    .timeline-bar-inner {
+      position: relative;
+      height: 60px;
+      display: flex;
+      align-items: center;
+    }
+    .timeline-line {
+      position: absolute;
+      left: 0; right: 0;
+      top: 50%;
+      height: 4px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2), var(--warning));
+      border-radius: 2px;
+      transform: translateY(-50%);
+    }
+    .timeline-label-start, .timeline-label-end {
+      position: absolute;
+      top: -18px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .timeline-label-start { left: 0; }
+    .timeline-label-end { right: 0; }
+    .timeline-marker {
+      position: absolute;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      border: 3px solid #fff;
+      cursor: pointer;
+      transition: all 0.2s;
+      z-index: 2;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+    }
+    .timeline-marker:hover {
+      transform: translate(-50%, -50%) scale(1.4);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+    .timeline-marker.event-marker { background: var(--accent); }
+    .timeline-marker.todo-marker { background: var(--accent2); }
+    .timeline-marker-tooltip {
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(255,255,255,0.95);
+      border: 1px solid var(--glass-border);
+      padding: 6px 10px;
+      border-radius: 8px;
+      font-size: 11px;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      margin-bottom: 8px;
+      color: var(--text);
+    }
+    .timeline-marker:hover .timeline-marker-tooltip { opacity: 1; }
+    .timeline-today-marker {
+      position: absolute;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--warning);
+      border: 3px solid #fff;
+      box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.3), 0 2px 8px rgba(0,0,0,0.15);
+      z-index: 3;
+    }
 
     .calendar-header { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin-bottom: 4px; }
     .calendar-header-cell { text-align: center; font-size: 11px; font-weight: 600; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; padding: 8px 0; }
     .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
     .calendar-day {
-      position: relative; background: var(--surface); border: 1px solid var(--glass-border);
+      position: relative; background: rgba(255,255,255,0.5); border: 1px solid var(--glass-border);
       border-radius: 12px; min-height: 72px; padding: 8px; cursor: pointer; transition: all 0.2s;
     }
-    .calendar-day:hover { border-color: rgba(139, 92, 246, 0.4); background: var(--surface-hover); transform: translateY(-1px); }
+    .calendar-day:hover { border-color: rgba(232, 93, 74, 0.3); background: rgba(255,255,255,0.8); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.04); }
     .calendar-day .day-number { font-size: 14px; font-weight: 600; color: var(--text); }
     .calendar-day.other-month { opacity: 0.3; }
-    .calendar-day.today { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent-glow), inset 0 0 20px rgba(139, 92, 246, 0.05); }
+    .calendar-day.today { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent-glow); }
     .calendar-day.today .day-number {
       background: var(--accent); color: #fff; width: 26px; height: 26px;
       display: flex; align-items: center; justify-content: center; border-radius: 50%; font-size: 13px;
@@ -487,18 +579,19 @@
     .calendar-day .day-dot { position: absolute; bottom: 6px; left: 50%; transform: translateX(-50%); display: flex; gap: 3px; }
     .dot { width: 6px; height: 6px; border-radius: 50%; }
     .dot.event-dot { background: var(--accent); }
-    .dot.todo-dot { background: var(--danger); }
+    .dot.todo-dot { background: var(--accent2); }
 
     /* Day Panel */
     .day-panel-overlay {
-      position: fixed; inset: 0; z-index: 85; background: rgba(0,0,0,0.5);
+      position: fixed; inset: 0; z-index: 85; background: rgba(0,0,0,0.25);
       backdrop-filter: blur(4px); display: none; align-items: center; justify-content: center;
     }
     .day-panel-overlay.active { display: flex; }
     .day-panel {
-      background: rgba(16, 16, 28, 0.97); backdrop-filter: blur(20px);
+      background: rgba(255, 255, 255, 0.97); backdrop-filter: blur(20px);
       border: 1px solid var(--glass-border); border-radius: 20px; padding: 28px;
       width: 500px; max-width: 92vw; max-height: 85vh; overflow-y: auto;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.1);
     }
     .day-panel-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
     .day-panel-date {
@@ -513,7 +606,7 @@
     }
     .day-panel-close:hover { border-color: var(--danger); color: var(--danger); }
     .day-panel-tabs {
-      display: flex; gap: 4px; margin-bottom: 16px; background: rgba(255,255,255,0.03);
+      display: flex; gap: 4px; margin-bottom: 16px; background: rgba(0,0,0,0.02);
       border-radius: 10px; padding: 4px; border: 1px solid var(--glass-border);
     }
     .day-panel-tab {
@@ -521,10 +614,10 @@
       color: var(--text-dim); cursor: pointer; transition: all 0.2s; border: none; background: none; text-align: center;
     }
     .day-panel-tab:hover { color: var(--text); }
-    .day-panel-tab.active { background: rgba(139, 92, 246, 0.15); color: var(--accent); }
+    .day-panel-tab.active { background: rgba(232, 93, 74, 0.1); color: var(--accent); }
     .day-panel-content { min-height: 80px; }
-    .day-panel-item { background: var(--surface); border: 1px solid var(--glass-border); border-radius: 10px; padding: 14px; margin-bottom: 8px; transition: all 0.2s; }
-    .day-panel-item:hover { border-color: rgba(139, 92, 246, 0.3); }
+    .day-panel-item { background: rgba(255,255,255,0.5); border: 1px solid var(--glass-border); border-radius: 10px; padding: 14px; margin-bottom: 8px; transition: all 0.2s; }
+    .day-panel-item:hover { border-color: rgba(232, 93, 74, 0.2); }
     .day-panel-item-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 4px; }
     .day-panel-item-title { font-size: 14px; font-weight: 600; flex: 1; }
     .day-panel-item-title.completed { text-decoration: line-through; opacity: 0.5; }
@@ -537,16 +630,16 @@
     .day-panel-empty { text-align: center; padding: 32px 16px; color: var(--text-dim); }
     .day-panel-empty .empty-icon { font-size: 36px; margin-bottom: 10px; }
     .day-panel-add-btn {
-      width: 100%; padding: 12px; margin-top: 8px; background: var(--surface);
+      width: 100%; padding: 12px; margin-top: 8px; background: rgba(255,255,255,0.5);
       border: 1px dashed var(--glass-border); border-radius: 10px; color: var(--text-dim);
       font-size: 14px; cursor: pointer; transition: all 0.2s;
     }
-    .day-panel-add-btn:hover { border-color: var(--accent); color: var(--accent); background: rgba(139, 92, 246, 0.05); }
+    .day-panel-add-btn:hover { border-color: var(--accent); color: var(--accent); background: rgba(232, 93, 74, 0.03); }
 
     /* FAB + Today button */
     .fab {
       position: fixed; bottom: 32px; right: 32px; width: 56px; height: 56px; border-radius: 50%;
-      background: linear-gradient(135deg, var(--accent), #7c3aed); border: none; color: #fff; font-size: 28px;
+      background: linear-gradient(135deg, var(--accent), #d94a38); border: none; color: #fff; font-size: 28px;
       cursor: pointer; box-shadow: 0 6px 20px var(--accent-glow); transition: transform 0.2s, box-shadow 0.2s;
       z-index: 40; display: none; align-items: center; justify-content: center;
     }
@@ -554,10 +647,11 @@
     .fab.visible { display: flex; }
     .btn-today {
       position: fixed; bottom: 100px; right: 32px; padding: 10px 18px; border-radius: 25px;
-      background: var(--glass); backdrop-filter: blur(10px); border: 1px solid var(--glass-border);
+      background: rgba(255,255,255,0.8); backdrop-filter: blur(10px); border: 1px solid var(--glass-border);
       color: var(--text); font-size: 13px; cursor: pointer; z-index: 40; transition: all 0.2s; display: none;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.06);
     }
-    .btn-today:hover { border-color: var(--accent); background: rgba(139, 92, 246, 0.1); }
+    .btn-today:hover { border-color: var(--accent); background: rgba(232, 93, 74, 0.05); }
     .btn-today.visible { display: block; }
 
     /* Notif area in timeline */
@@ -565,7 +659,7 @@
 
     /* ===== STUDIES ===== */
     .sub-tabs {
-      display: flex; gap: 4px; background: rgba(255,255,255,0.03); border-radius: 10px;
+      display: flex; gap: 4px; background: rgba(0,0,0,0.02); border-radius: 10px;
       padding: 4px; border: 1px solid var(--glass-border); margin-bottom: 24px; width: fit-content;
     }
     .sub-tab {
@@ -573,55 +667,104 @@
       color: var(--text-dim); cursor: pointer; transition: all 0.2s; border: none; background: none; white-space: nowrap;
     }
     .sub-tab:hover { color: var(--text); }
-    .sub-tab.active { background: rgba(139, 92, 246, 0.15); color: var(--accent); }
+    .sub-tab.active { background: rgba(232, 93, 74, 0.1); color: var(--accent); }
     .sub-content { display: none; }
     .sub-content.active { display: block; }
 
     .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
     .section-header h2 { font-size: 18px; font-weight: 600; }
 
-    .schedule-grid-wrapper {
-      overflow-x: auto; background: var(--glass); border: 1px solid var(--glass-border);
-      border-radius: 16px; padding: 16px;
+    /* Schedule table - new clean design */
+    .schedule-table-wrapper {
+      overflow-x: auto;
+      background: rgba(255,255,255,0.7);
+      border: 1px solid var(--glass-border);
+      border-radius: 16px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.03);
     }
-    .schedule-grid { display: grid; grid-template-columns: 60px repeat(7, 1fr); min-width: 700px; gap: 2px; }
-    .schedule-header { text-align: center; font-size: 12px; font-weight: 600; color: var(--text-dim); padding: 8px 4px; text-transform: uppercase; letter-spacing: 0.5px; }
-    .schedule-time-label { font-size: 11px; color: var(--text-dim); text-align: right; padding-right: 8px; padding-top: 2px; }
-    .schedule-cell { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.03); min-height: 32px; position: relative; border-radius: 4px; }
+    .schedule-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      min-width: 700px;
+    }
+    .schedule-table th {
+      padding: 14px 8px;
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-dim);
+      background: rgba(0,0,0,0.02);
+      border-bottom: 2px solid var(--glass-border);
+      text-align: center;
+    }
+    .schedule-table th:first-child {
+      width: 70px;
+      border-right: 1px solid var(--glass-border);
+    }
+    .schedule-table td {
+      padding: 4px;
+      border-bottom: 1px solid rgba(0,0,0,0.03);
+      border-right: 1px solid rgba(0,0,0,0.03);
+      vertical-align: top;
+      min-height: 48px;
+      height: 48px;
+      position: relative;
+    }
+    .schedule-table td:first-child {
+      text-align: right;
+      padding-right: 10px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-dim);
+      border-right: 1px solid var(--glass-border);
+      background: rgba(0,0,0,0.01);
+      vertical-align: middle;
+    }
+    .schedule-table tr:last-child td { border-bottom: none; }
+    .schedule-table td:last-child { border-right: none; }
     .schedule-block {
-      position: absolute; left: 2px; right: 2px; border-radius: 6px; padding: 4px 6px;
-      font-size: 11px; font-weight: 500; cursor: pointer; overflow: hidden; z-index: 2;
-      transition: transform 0.15s; border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 8px;
+      padding: 6px 8px;
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      overflow: hidden;
+      transition: transform 0.15s;
+      border-left: 4px solid;
+      margin: 2px;
     }
-    .schedule-block:hover { transform: scale(1.02); }
-    .schedule-block .block-name { font-weight: 600; }
-    .schedule-block .block-room { font-size: 10px; opacity: 0.8; }
+    .schedule-block:hover { transform: scale(1.02); box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+    .schedule-block .block-name { font-weight: 700; font-size: 12px; }
+    .schedule-block .block-time { font-size: 10px; opacity: 0.7; }
+    .schedule-block .block-room { font-size: 10px; opacity: 0.7; }
 
     .deadline-list { display: flex; flex-direction: column; gap: 12px; }
     .deadline-card {
       display: flex; align-items: flex-start; gap: 14px; transition: all 0.25s;
     }
-    .deadline-card:hover { border-color: rgba(139, 92, 246, 0.3); transform: translateY(-1px); }
+    .deadline-card:hover { border-color: rgba(232, 93, 74, 0.2); transform: translateY(-1px); box-shadow: 0 4px 16px rgba(0,0,0,0.04); }
     .deadline-card.completed-deadline { opacity: 0.5; }
     .deadline-type-badge { padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 600; white-space: nowrap; flex-shrink: 0; }
-    .badge-exam { background: rgba(239,68,68,0.15); color: var(--danger); border: 1px solid rgba(239,68,68,0.3); }
-    .badge-assignment { background: rgba(245,158,11,0.15); color: var(--warning); border: 1px solid rgba(245,158,11,0.3); }
-    .badge-project { background: rgba(6,182,212,0.15); color: var(--accent2); border: 1px solid rgba(6,182,212,0.3); }
-    .badge-other-type { background: rgba(139,92,246,0.15); color: var(--accent); border: 1px solid rgba(139,92,246,0.3); }
+    .badge-exam { background: rgba(239,68,68,0.1); color: var(--danger); border: 1px solid rgba(239,68,68,0.2); }
+    .badge-assignment { background: rgba(245,158,11,0.1); color: var(--warning); border: 1px solid rgba(245,158,11,0.2); }
+    .badge-project { background: rgba(6,182,212,0.1); color: var(--accent2); border: 1px solid rgba(6,182,212,0.2); }
+    .badge-other-type { background: rgba(232,93,74,0.1); color: var(--accent); border: 1px solid rgba(232,93,74,0.2); }
     .deadline-info { flex: 1; min-width: 0; }
     .deadline-title { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
     .deadline-title.completed-text { text-decoration: line-through; }
     .deadline-meta { font-size: 12px; color: var(--text-dim); display: flex; gap: 12px; flex-wrap: wrap; }
     .deadline-actions { display: flex; gap: 6px; flex-shrink: 0; }
     .days-left { font-size: 11px; padding: 2px 8px; border-radius: 6px; font-weight: 600; }
-    .days-left.urgent { background: rgba(239,68,68,0.15); color: var(--danger); }
-    .days-left.soon { background: rgba(245,158,11,0.15); color: var(--warning); }
-    .days-left.ok { background: rgba(34,197,94,0.15); color: var(--success); }
-    .days-left.past { background: rgba(113,113,122,0.15); color: var(--text-dim); }
+    .days-left.urgent { background: rgba(239,68,68,0.1); color: var(--danger); }
+    .days-left.soon { background: rgba(245,158,11,0.1); color: var(--warning); }
+    .days-left.ok { background: rgba(34,197,94,0.1); color: var(--success); }
+    .days-left.past { background: rgba(113,113,122,0.1); color: var(--text-dim); }
 
     /* ===== LISTS (To Buy / To Do) ===== */
     .lists-tabs {
-      display: flex; gap: 4px; background: rgba(255,255,255,0.03); border-radius: 10px;
+      display: flex; gap: 4px; background: rgba(0,0,0,0.02); border-radius: 10px;
       padding: 4px; border: 1px solid var(--glass-border); margin-bottom: 24px; width: fit-content;
     }
     .lists-tab {
@@ -629,7 +772,7 @@
       color: var(--text-dim); cursor: pointer; transition: all 0.2s; border: none; background: none;
     }
     .lists-tab:hover { color: var(--text); }
-    .lists-tab.active { background: rgba(139, 92, 246, 0.15); color: var(--accent); }
+    .lists-tab.active { background: rgba(232, 93, 74, 0.1); color: var(--accent); }
 
     .list-add-form {
       display: flex; gap: 10px; margin-bottom: 24px;
@@ -642,7 +785,7 @@
       background: var(--glass); border: 1px solid var(--glass-border); border-radius: var(--radius);
       transition: all 0.2s; cursor: pointer;
     }
-    .list-item:hover { border-color: rgba(139, 92, 246, 0.25); }
+    .list-item:hover { border-color: rgba(232, 93, 74, 0.15); }
     .list-item.checked { opacity: 0.5; }
     .list-item.checked .list-item-text { text-decoration: line-through; }
     .list-check {
@@ -702,7 +845,7 @@
       .modal { padding: 20px; margin: 10px; }
       .modal-row { flex-direction: column; gap: 0; }
 
-      .schedule-grid-wrapper { padding: 10px; }
+      .schedule-table-wrapper { padding: 0; }
       .sub-tabs, .lists-tabs { width: 100%; }
       .sub-tab, .lists-tab { flex: 1; text-align: center; padding: 7px 10px; font-size: 12px; }
       .deadline-card { flex-direction: column; }
@@ -710,6 +853,8 @@
 
       .list-add-form { flex-direction: column; }
       .list-item-actions { opacity: 1; }
+
+      .timeline-bar { display: none; }
     }
     @media (max-width: 400px) {
       .chip { padding: 4px 10px; font-size: 11px; }
@@ -719,11 +864,13 @@
 </head>
 <body>
 
-<canvas id="particles"></canvas>
+<div class="deco-blob blob1"></div>
+<div class="deco-blob blob2"></div>
+<div class="deco-blob blob3"></div>
 
 <!-- ===== SIDEBAR NAV ===== -->
 <nav class="sidebar">
-  <div class="sidebar-logo">&#128272;</div>
+  <div class="sidebar-logo">&#127968;</div>
   <button class="nav-item active" data-tab="ideas">
     &#128161;
     <div class="tooltip">Ideas</div>
@@ -808,6 +955,9 @@
       </div>
       <div class="files-main">
         <div class="page-title">&#128193; <span>Files</span></div>
+        <div class="file-search-bar">
+          <input type="text" class="input" id="fileSearchInput" placeholder="Search files by name..." />
+        </div>
         <div class="dropzone" id="dropzone">
           <div class="dropzone-icon">&#9729;&#65039;</div>
           <div class="dropzone-title">Drop files here or click to browse</div>
@@ -844,6 +994,13 @@
         <div class="year-nav" id="yearNav"></div>
         <div class="month-nav" id="monthNav"></div>
       </div>
+      <div class="timeline-bar" id="timelineBar">
+        <div class="timeline-bar-inner" id="timelineBarInner">
+          <div class="timeline-line"></div>
+          <div class="timeline-label-start" id="timelineLabelStart"></div>
+          <div class="timeline-label-end" id="timelineLabelEnd"></div>
+        </div>
+      </div>
       <div class="calendar-header" id="calendarHeader"></div>
       <div class="calendar-grid" id="calendarGrid"></div>
       <div class="notif-area">
@@ -866,7 +1023,9 @@
           <h2>Weekly Schedule</h2>
           <button class="btn btn-accent" onclick="openCourseModal()">+ Add Course</button>
         </div>
-        <div class="schedule-grid-wrapper"><div class="schedule-grid" id="scheduleGrid"></div></div>
+        <div class="schedule-table-wrapper">
+          <table class="schedule-table" id="scheduleTable"></table>
+        </div>
       </div>
       <div class="sub-content" id="studiesDeadlines">
         <div class="section-header">
@@ -968,7 +1127,7 @@
             <option value="4">Thursday</option><option value="5">Friday</option><option value="6">Saturday</option><option value="7">Sunday</option>
           </select>
         </div>
-        <div class="modal-field"><label>Color</label><input type="color" id="courseColorInput" value="#8b5cf6" style="height:42px;padding:4px;width:100%;border-radius:10px;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.04);" /></div>
+        <div class="modal-field"><label>Color</label><input type="color" id="courseColorInput" value="#e85d4a" style="height:42px;padding:4px;width:100%;border-radius:10px;border:1px solid rgba(0,0,0,0.08);background:rgba(255,255,255,0.6);" /></div>
       </div>
       <div class="modal-row">
         <div class="modal-field"><label>Start Time *</label><input type="time" class="input" id="courseStartInput" value="08:00" required /></div>
@@ -1012,33 +1171,6 @@
 <div class="toast-container" id="toastContainer"></div>
 
 <script>
-  // ===== PARTICLES =====
-  (function() {
-    const canvas = document.getElementById('particles');
-    const ctx = canvas.getContext('2d');
-    let particles = [];
-    const COUNT = 50;
-    function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
-    window.addEventListener('resize', resize); resize();
-    class P {
-      constructor() { this.reset(); }
-      reset() { this.x = Math.random()*canvas.width; this.y = Math.random()*canvas.height; this.s = Math.random()*1.5+0.5; this.vx = (Math.random()-0.5)*0.3; this.vy = (Math.random()-0.5)*0.3; this.o = Math.random()*0.3+0.1; }
-      update() { this.x += this.vx; this.y += this.vy; if(this.x<0||this.x>canvas.width) this.vx*=-1; if(this.y<0||this.y>canvas.height) this.vy*=-1; }
-      draw() { ctx.beginPath(); ctx.arc(this.x,this.y,this.s,0,Math.PI*2); ctx.fillStyle=`rgba(139,92,246,${this.o})`; ctx.fill(); }
-    }
-    for(let i=0;i<COUNT;i++) particles.push(new P());
-    function loop() {
-      ctx.clearRect(0,0,canvas.width,canvas.height);
-      particles.forEach(p=>{p.update();p.draw();});
-      for(let i=0;i<particles.length;i++) for(let j=i+1;j<particles.length;j++) {
-        const dx=particles[i].x-particles[j].x, dy=particles[i].y-particles[j].y, d=Math.sqrt(dx*dx+dy*dy);
-        if(d<120){ctx.beginPath();ctx.moveTo(particles[i].x,particles[i].y);ctx.lineTo(particles[j].x,particles[j].y);ctx.strokeStyle=`rgba(139,92,246,${0.04*(1-d/120)})`;ctx.lineWidth=0.5;ctx.stroke();}
-      }
-      requestAnimationFrame(loop);
-    }
-    loop();
-  })();
-
   // ===== UTILS =====
   async function api(url, opts = {}) {
     const headers = { ...opts.headers };
@@ -1157,7 +1289,7 @@
   async function restoreIdea(id){try{const r=await api(`/api/ideas/history/${id}/restore`,{method:'POST'}),d=await r.json();if(d.success){toast('Restored!','success');loadIdeas();loadHistory();}else toast(d.error,'error');}catch(e){toast('Error','error');}}
 
   // ===== FILES =====
-  let currentFileCategory='all',selectedUploadCategory='auto',allFiles=[];
+  let currentFileCategory='all',selectedUploadCategory='auto',allFiles=[],fileSearchQuery='';
   function fileCatName(c){return{all:'All Files',documents:'Documents',images:'Images',code:'Code','3d-models':'3D Models',other:'Other'}[c]||c;}
   function formatSize(b){if(b===0)return'0 B';const k=1024,s=['B','KB','MB','GB'],i=Math.floor(Math.log(b)/Math.log(k));return parseFloat((b/Math.pow(k,i)).toFixed(1))+' '+s[i];}
   function formatShortDate(d){return new Date(d).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});}
@@ -1167,6 +1299,16 @@
   document.querySelectorAll('.sidebar-file-item').forEach(i=>{i.addEventListener('click',()=>{document.querySelectorAll('.sidebar-file-item').forEach(x=>x.classList.remove('active'));i.classList.add('active');currentFileCategory=i.dataset.category;document.getElementById('filesTitle').textContent=fileCatName(currentFileCategory);renderFiles();});});
   document.querySelectorAll('#uploadCategory .chip').forEach(c=>{c.addEventListener('click',e=>{e.stopPropagation();document.querySelectorAll('#uploadCategory .chip').forEach(x=>x.classList.remove('active'));c.classList.add('active');selectedUploadCategory=c.dataset.cat;});});
   document.querySelector('#uploadCategory .chip[data-cat="auto"]').classList.add('active');
+
+  // File search
+  let fileSearchTimeout;
+  document.getElementById('fileSearchInput').addEventListener('input', e => {
+    clearTimeout(fileSearchTimeout);
+    fileSearchTimeout = setTimeout(() => {
+      fileSearchQuery = e.target.value.trim().toLowerCase();
+      renderFiles();
+    }, 200);
+  });
 
   const dropzone=document.getElementById('dropzone'),fileInput=document.getElementById('fileInput');
   dropzone.addEventListener('click',e=>{if(!e.target.closest('.chip'))fileInput.click();});
@@ -1190,7 +1332,9 @@
   function updateFileCounts(){const c={all:allFiles.length};allFiles.forEach(f=>{c[f.category]=(c[f.category]||0)+1;});document.getElementById('count-all').textContent=c.all||0;['documents','images','code','3d-models','other'].forEach(cat=>{const el=document.getElementById('count-'+cat);if(el)el.textContent=c[cat]||0;});}
   function renderFiles(){
     const grid=document.getElementById('fileGrid'),empty=document.getElementById('filesEmpty'),cnt=document.getElementById('fileCount');
-    const f=currentFileCategory==='all'?allFiles:allFiles.filter(x=>x.category===currentFileCategory);cnt.textContent=`${f.length} file(s)`;
+    let f=currentFileCategory==='all'?allFiles:allFiles.filter(x=>x.category===currentFileCategory);
+    if(fileSearchQuery) f=f.filter(x=>x.name.toLowerCase().includes(fileSearchQuery));
+    cnt.textContent=`${f.length} file(s)`;
     if(f.length===0){grid.innerHTML='';empty.style.display='block';return;}
     empty.style.display='none';
     grid.innerHTML=f.map(x=>`<div class="card file-card"><span class="badge file-category-badge">${fileCatName(x.category)}</span><div class="file-icon">${getFileIcon(x.type)}</div><div class="file-name">${escapeHtml(x.name)}</div><div class="file-meta">${formatSize(x.size)} \u00B7 ${formatShortDate(x.modified)}</div><div class="file-actions"><button class="btn-action download" onclick="downloadFile('${escapeAttr(x.category)}','${escapeAttr(x.name)}')">&#11015; Download</button><button class="btn-action delete" onclick="deleteFile('${escapeAttr(x.category)}','${escapeAttr(x.name)}')">&#10006; Delete</button></div></div>`).join('');
@@ -1201,6 +1345,7 @@
   // ===== TIMELINE / CALENDAR =====
   let timelineYear=new Date().getFullYear(),timelineMonth=new Date().getMonth()+1,allEvents=[],allTodos=[],editingEventId=null,editingTodoId=null,modalType='event',selectedDayDate=null,dayPanelTab='events';
   const MONTH_NAMES=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const MONTH_FULL=['January','February','March','April','May','June','July','August','September','October','November','December'];
   const DAY_NAMES=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
 
   (function(){const h=document.getElementById('eventHourInput'),m=document.getElementById('eventMinInput');for(let i=0;i<24;i++)h.innerHTML+=`<option value="${String(i).padStart(2,'0')}">${String(i).padStart(2,'0')}</option>`;for(let i=0;i<60;i++)m.innerHTML+=`<option value="${String(i).padStart(2,'0')}">${String(i).padStart(2,'0')}</option>`;})();
@@ -1216,11 +1361,60 @@
   function setTimelineMonth(m){timelineMonth=m;renderMonthNav();loadCalendarData();}
 
   async function loadCalendarData(){
-    try{const[er,tr]=await Promise.all([api(`/api/timeline?year=${timelineYear}&month=${timelineMonth}`),api(`/api/todos?year=${timelineYear}&month=${timelineMonth}`)]);const ed=await er.json(),td=await tr.json();allEvents=ed.events||[];allTodos=td.todos||[];renderCalendar();highlightMonthsWithEvents();}catch(e){toast('Failed to load calendar','error');}
+    try{const[er,tr]=await Promise.all([api(`/api/timeline?year=${timelineYear}&month=${timelineMonth}`),api(`/api/todos?year=${timelineYear}&month=${timelineMonth}`)]);const ed=await er.json(),td=await tr.json();allEvents=ed.events||[];allTodos=td.todos||[];renderCalendar();renderTimelineBar();highlightMonthsWithEvents();}catch(e){toast('Failed to load calendar','error');}
   }
   async function highlightMonthsWithEvents(){
     try{const[er,tr]=await Promise.all([api(`/api/timeline?year=${timelineYear}`),api(`/api/todos?year=${timelineYear}`)]);const ed=await er.json(),td=await tr.json();const ms=new Set();(ed.events||[]).forEach(e=>{if(e.date)ms.add(parseInt(e.date.split('-')[1],10));});(td.todos||[]).forEach(t=>{if(t.date)ms.add(parseInt(t.date.split('-')[1],10));});document.querySelectorAll('#monthNav .chip').forEach((p,i)=>{if(ms.has(i+1)&&(i+1)!==timelineMonth)p.classList.add('has-events');});}catch(e){}
   }
+
+  function renderTimelineBar(){
+    const bar=document.getElementById('timelineBarInner');
+    const y=timelineYear,m=timelineMonth;
+    const dim=new Date(y,m,0).getDate();
+    const today=new Date();
+    const todayStr=today.toISOString().split('T')[0];
+
+    document.getElementById('timelineLabelStart').textContent=`${timelineYear} ${MONTH_FULL[timelineMonth-1]} 1`;
+    document.getElementById('timelineLabelEnd').textContent=`${MONTH_FULL[timelineMonth-1]} ${dim}`;
+
+    // Remove old markers
+    bar.querySelectorAll('.timeline-marker, .timeline-today-marker').forEach(e=>e.remove());
+
+    // Add today marker if in this month
+    if(today.getFullYear()===y && today.getMonth()+1===m){
+      const pct=((today.getDate()-1)/(dim-1))*100;
+      const tm=document.createElement('div');
+      tm.className='timeline-today-marker';
+      tm.style.left=Math.min(Math.max(pct,2),98)+'%';
+      tm.title='Today';
+      bar.appendChild(tm);
+    }
+
+    // Add event markers
+    allEvents.forEach(ev=>{
+      const d=parseInt(ev.date.split('-')[2],10);
+      const pct=((d-1)/(dim-1))*100;
+      const mk=document.createElement('div');
+      mk.className='timeline-marker event-marker';
+      mk.style.left=Math.min(Math.max(pct,2),98)+'%';
+      mk.innerHTML=`<div class="timeline-marker-tooltip">${escapeHtml(ev.title)}${ev.time?' '+ev.time:''}</div>`;
+      mk.addEventListener('click',()=>openDayPanel(ev.date));
+      bar.appendChild(mk);
+    });
+
+    // Add todo markers
+    allTodos.forEach(t=>{
+      const d=parseInt(t.date.split('-')[2],10);
+      const pct=((d-1)/(dim-1))*100;
+      const mk=document.createElement('div');
+      mk.className='timeline-marker todo-marker';
+      mk.style.left=Math.min(Math.max(pct,2),98)+'%';
+      mk.innerHTML=`<div class="timeline-marker-tooltip">${escapeHtml(t.title)}${t.time?' '+t.time:''}</div>`;
+      mk.addEventListener('click',()=>openDayPanel(t.date));
+      bar.appendChild(mk);
+    });
+  }
+
   function renderCalendar(){
     const grid=document.getElementById('calendarGrid'),y=timelineYear,m=timelineMonth;
     const fd=new Date(y,m-1,1),ld=new Date(y,m,0),dim=ld.getDate();let sd=fd.getDay()-1;if(sd<0)sd=6;
@@ -1246,10 +1440,10 @@
     const c=document.getElementById('dayPanelContent'),ds=selectedDayDate;
     if(dayPanelTab==='events'){
       const de=allEvents.filter(e=>e.date===ds);if(de.length===0){c.innerHTML=`<div class="day-panel-empty"><div class="empty-icon">&#128197;</div><p>No events</p></div>`;return;}
-      c.innerHTML=de.map(ev=>`<div class="day-panel-item"><div class="day-panel-item-top"><div class="day-panel-item-title ${ev.completed?'completed':''}">${ev.completed?'&#10003; ':''}${escapeHtml(ev.title)}</div>${ev.time?`<span class="day-panel-item-time">${ev.time}</span>`:''}</div>${ev.description?`<div class="day-panel-item-desc">${escapeHtml(ev.description)}</div>`:''}<div class="day-panel-item-meta"><div style="display:flex;gap:6px;align-items:center;"><span class="badge">${tlCatName(ev.category)}</span>${ev.notify?'<span class="badge" style="background:rgba(245,158,11,0.1);color:var(--warning);border-color:rgba(245,158,11,0.2);">&#128276;</span>':''}</div><div class="day-panel-item-actions"><button class="btn-action" onclick="toggleComplete('${ev.id}',${!ev.completed})">${ev.completed?'&#8634;':'&#10003;'}</button><button class="btn-action edit" onclick="editEvent('${ev.id}')">&#9998;</button><button class="btn-action delete" onclick="deleteEvent('${ev.id}')">&#10006;</button></div></div></div>`).join('');
+      c.innerHTML=de.map(ev=>`<div class="day-panel-item"><div class="day-panel-item-top"><div class="day-panel-item-title ${ev.completed?'completed':''}">${ev.completed?'&#10003; ':''}${escapeHtml(ev.title)}</div>${ev.time?`<span class="day-panel-item-time">${ev.time}</span>`:''}</div>${ev.description?`<div class="day-panel-item-desc">${escapeHtml(ev.description)}</div>`:''}<div class="day-panel-item-meta"><div style="display:flex;gap:6px;align-items:center;"><span class="badge">${tlCatName(ev.category)}</span>${ev.notify?'<span class="badge" style="background:rgba(245,158,11,0.08);color:var(--warning);border-color:rgba(245,158,11,0.15);">&#128276;</span>':''}</div><div class="day-panel-item-actions"><button class="btn-action" onclick="toggleComplete('${ev.id}',${!ev.completed})">${ev.completed?'&#8634;':'&#10003;'}</button><button class="btn-action edit" onclick="editEvent('${ev.id}')">&#9998;</button><button class="btn-action delete" onclick="deleteEvent('${ev.id}')">&#10006;</button></div></div></div>`).join('');
     } else {
       const dt=allTodos.filter(t=>t.date===ds);if(dt.length===0){c.innerHTML=`<div class="day-panel-empty"><div class="empty-icon">&#9745;</div><p>No to-dos</p></div>`;return;}
-      c.innerHTML=dt.map(t=>`<div class="day-panel-item"><div class="day-panel-item-top"><input type="checkbox" class="todo-checkbox" ${t.completed?'checked':''} onchange="toggleTodoComplete('${t.id}',this.checked)" /><div class="day-panel-item-title ${t.completed?'completed':''}">${escapeHtml(t.title)}</div>${t.time?`<span class="day-panel-item-time">${t.time}</span>`:''}</div>${t.description?`<div class="day-panel-item-desc">${escapeHtml(t.description)}</div>`:''}<div class="day-panel-item-meta"><span class="badge" style="background:rgba(239,68,68,0.1);color:var(--danger);border-color:rgba(239,68,68,0.2);">To-Do</span><div class="day-panel-item-actions"><button class="btn-action edit" onclick="editTodo('${t.id}')">&#9998;</button><button class="btn-action delete" onclick="deleteTodo('${t.id}')">&#10006;</button></div></div></div>`).join('');
+      c.innerHTML=dt.map(t=>`<div class="day-panel-item"><div class="day-panel-item-top"><input type="checkbox" class="todo-checkbox" ${t.completed?'checked':''} onchange="toggleTodoComplete('${t.id}',this.checked)" /><div class="day-panel-item-title ${t.completed?'completed':''}">${escapeHtml(t.title)}</div>${t.time?`<span class="day-panel-item-time">${t.time}</span>`:''}</div>${t.description?`<div class="day-panel-item-desc">${escapeHtml(t.description)}</div>`:''}<div class="day-panel-item-meta"><span class="badge" style="background:rgba(20,184,166,0.08);color:var(--accent2);border-color:rgba(20,184,166,0.15);">To-Do</span><div class="day-panel-item-actions"><button class="btn-action edit" onclick="editTodo('${t.id}')">&#9998;</button><button class="btn-action delete" onclick="deleteTodo('${t.id}')">&#10006;</button></div></div></div>`).join('');
     }
   }
 
@@ -1323,21 +1517,51 @@
   // ===== STUDIES =====
   let allCourses=[],allDeadlines=[],editingCourseId=null,editingDeadlineId=null;
   const DAY_LABELS=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
-  const SCHEDULE_START=6,SCHEDULE_END=24;
+  const SCHEDULE_START=7,SCHEDULE_END=20;
 
   async function loadCourses(){try{const r=await api('/api/courses'),d=await r.json();allCourses=d.courses||[];renderSchedule();populateDeadlineCourseSelect();}catch(e){}}
   async function loadDeadlines(){try{const r=await api('/api/deadlines'),d=await r.json();allDeadlines=d.deadlines||[];renderDeadlines();}catch(e){}}
 
   function renderSchedule(){
-    const grid=document.getElementById('scheduleGrid');let html='<div class="schedule-header"></div>';
-    DAY_LABELS.forEach(d=>{html+=`<div class="schedule-header">${d}</div>`;});
-    for(let h=SCHEDULE_START;h<SCHEDULE_END;h++){html+=`<div class="schedule-time-label">${String(h).padStart(2,'0')}:00</div>`;for(let d=1;d<=7;d++)html+=`<div class="schedule-cell" data-day="${d}" data-hour="${h}"></div>`;}
-    grid.innerHTML=html;
-    allCourses.forEach(c=>{const sp=c.startTime.split(':'),ep=c.endTime.split(':'),sh=parseInt(sp[0]),sm=parseInt(sp[1]||'0'),eh=parseInt(ep[0]),em=parseInt(ep[1]||'0');if(sh<SCHEDULE_START||sh>=SCHEDULE_END)return;const cell=grid.querySelector(`.schedule-cell[data-day="${c.day}"][data-hour="${sh}"]`);if(!cell)return;const ch=32,dur=(eh*60+em)-(sh*60+sm),top=(sm/60)*ch,h=(dur/60)*ch;const bl=document.createElement('div');bl.className='schedule-block';bl.style.cssText=`top:${top}px;height:${h}px;background:${c.color}22;color:${c.color};border-left:3px solid ${c.color};`;bl.innerHTML=`<div class="block-name">${escapeHtml(c.name)}</div>${c.room?`<div class="block-room">${escapeHtml(c.room)}</div>`:''}`;bl.onclick=()=>editCourse(c.id);cell.appendChild(bl);});
+    const table=document.getElementById('scheduleTable');
+    // Build header
+    let html='<thead><tr><th>Time</th>';
+    DAY_LABELS.forEach(d=>{html+=`<th>${d}</th>`;});
+    html+='</tr></thead><tbody>';
+    // Build rows for each hour
+    for(let h=SCHEDULE_START;h<SCHEDULE_END;h++){
+      html+=`<tr><td>${String(h).padStart(2,'0')}:00</td>`;
+      for(let d=1;d<=7;d++){
+        html+=`<td data-day="${d}" data-hour="${h}">`;
+        // Find courses that start at this hour on this day
+        const coursesHere=allCourses.filter(c=>{
+          if(c.day!==d) return false;
+          const sh=parseInt(c.startTime.split(':')[0],10);
+          return sh===h;
+        });
+        coursesHere.forEach(c=>{
+          const sp=c.startTime.split(':'),ep=c.endTime.split(':');
+          const sh=parseInt(sp[0]),sm=parseInt(sp[1]||'0');
+          const eh=parseInt(ep[0]),em=parseInt(ep[1]||'0');
+          const dur=(eh*60+em)-(sh*60+sm);
+          const rows=Math.max(1,Math.round(dur/60));
+          html+=`<div class="schedule-block" onclick="editCourse('${c.id}')" style="background:${c.color}15;color:${c.color};border-left-color:${c.color};${rows>1?`min-height:${rows*48-8}px;`:''}">
+            <div class="block-name">${escapeHtml(c.name)}</div>
+            <div class="block-time">${c.startTime} - ${c.endTime}</div>
+            ${c.room?`<div class="block-room">${escapeHtml(c.room)}</div>`:''}
+          </div>`;
+        });
+        html+='</td>';
+      }
+      html+='</tr>';
+    }
+    html+='</tbody>';
+    table.innerHTML=html;
   }
+
   function openCourseModal(id){
     editingCourseId=id||null;const form=document.getElementById('courseForm');form.reset();
-    if(editingCourseId){const c=allCourses.find(x=>x.id===editingCourseId);if(c){document.getElementById('courseModalTitle').textContent='Edit Course';document.getElementById('courseSubmitBtn').textContent='Update';document.getElementById('courseNameInput').value=c.name;document.getElementById('courseDayInput').value=c.day;document.getElementById('courseStartInput').value=c.startTime;document.getElementById('courseEndInput').value=c.endTime;document.getElementById('courseRoomInput').value=c.room||'';document.getElementById('courseColorInput').value=c.color||'#8b5cf6';}}
+    if(editingCourseId){const c=allCourses.find(x=>x.id===editingCourseId);if(c){document.getElementById('courseModalTitle').textContent='Edit Course';document.getElementById('courseSubmitBtn').textContent='Update';document.getElementById('courseNameInput').value=c.name;document.getElementById('courseDayInput').value=c.day;document.getElementById('courseStartInput').value=c.startTime;document.getElementById('courseEndInput').value=c.endTime;document.getElementById('courseRoomInput').value=c.room||'';document.getElementById('courseColorInput').value=c.color||'#e85d4a';}}
     else{document.getElementById('courseModalTitle').textContent='Add Course';document.getElementById('courseSubmitBtn').textContent='Save';}
     document.getElementById('courseModal').classList.add('active');
   }

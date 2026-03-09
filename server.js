@@ -29,7 +29,7 @@ const HABITS_FILE = path.join(DATA_DIR, 'habits.json');
 const HABIT_CHECKINS_FILE = path.join(DATA_DIR, 'habit-checkins.json');
 const GOALS_FILE = path.join(DATA_DIR, 'goals.json');
 const LISTS_FILE = path.join(DATA_DIR, 'lists.json');
-const UPLOAD_DIR = path.join(__dirname, 'uploads');
+const UPLOAD_DIR = path.join(DATA_DIR, 'uploads');
 const MAX_FILE_SIZE = 100 * 1024 * 1024; // 100MB
 
 // Ensure directories exist
@@ -273,6 +273,7 @@ app.post('/api/upload', requireAuth, upload.array('files', 20), (req, res) => {
 app.get('/api/files', requireAuth, (req, res) => {
   try {
     const category = req.query.category;
+    const search = req.query.search;
     const cats = category && category !== 'all' ? [category] : FILE_CATEGORIES;
     const allFiles = [];
 
@@ -294,8 +295,14 @@ app.get('/api/files', requireAuth, (req, res) => {
       });
     });
 
-    allFiles.sort((a, b) => new Date(b.modified) - new Date(a.modified));
-    res.json({ files: allFiles, categories: FILE_CATEGORIES });
+    let result = allFiles;
+    if (search) {
+      const q = search.toLowerCase();
+      result = result.filter(f => f.name.toLowerCase().includes(q));
+    }
+
+    result.sort((a, b) => new Date(b.modified) - new Date(a.modified));
+    res.json({ files: result, categories: FILE_CATEGORIES });
   } catch (err) {
     res.status(500).json({ error: 'Failed to list files' });
   }
@@ -990,11 +997,16 @@ function checkAndSendNotifications() {
     tomorrow.setDate(tomorrow.getDate() + 1);
     const tomorrowStr = tomorrow.toISOString().split('T')[0];
     const todayStr = now.toISOString().split('T')[0];
+    const inOneWeek = new Date(now);
+    inOneWeek.setDate(inOneWeek.getDate() + 7);
+    const inOneWeekStr = inOneWeek.toISOString().split('T')[0];
+
+    const checkDates = [todayStr, tomorrowStr, inOneWeekStr];
 
     const upcomingEvents = events.filter(e =>
       e.notify &&
       !e.completed &&
-      (e.date === tomorrowStr || e.date === todayStr)
+      checkDates.includes(e.date)
     );
 
     // Also check todos
@@ -1002,7 +1014,7 @@ function checkAndSendNotifications() {
     const upcomingTodos = todos.filter(t =>
       t.notify !== false &&
       !t.completed &&
-      (t.date === tomorrowStr || t.date === todayStr)
+      checkDates.includes(t.date)
     );
 
     // Also check deadlines
@@ -1010,7 +1022,7 @@ function checkAndSendNotifications() {
     const upcomingDeadlines = deadlines.filter(d =>
       d.notify &&
       !d.completed &&
-      (d.date === tomorrowStr || d.date === todayStr)
+      checkDates.includes(d.date)
     );
 
     const allItems = [
@@ -1020,15 +1032,18 @@ function checkAndSendNotifications() {
     ];
 
     allItems.forEach(item => {
-      const notifKey = `${item.id}_${item.date}`;
+      const isToday = item.date === todayStr;
+      const isTomorrow = item.date === tomorrowStr;
+      const isInWeek = item.date === inOneWeekStr;
+      const timingLabel = isToday ? 'Today' : isTomorrow ? 'Tomorrow' : 'In 1 Week';
+      const notifKey = `${item.id}_${item.date}_${timingLabel}`;
       if (sent.includes(notifKey)) return;
 
-      const isToday = item.date === todayStr;
       const payload = JSON.stringify({
-        title: `Life Vault - ${item._type} ${isToday ? 'Today' : 'Tomorrow'}`,
+        title: `Life Vault - ${item._type} ${timingLabel}`,
         body: `${item.title}${item.time ? ' at ' + item.time : ''}`,
         icon: '/manifest-icon-192.png',
-        tag: item.id
+        tag: item.id + '_' + timingLabel
       });
 
       const deadSubs = [];
