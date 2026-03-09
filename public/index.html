@@ -473,99 +473,37 @@
     .file-category-badge { position: absolute; top: 12px; right: 12px; }
 
     /* ===== TIMELINE / CALENDAR ===== */
-    .timeline-nav { margin-bottom: 24px; }
-    .year-nav { display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 16px; }
-    .year-btn {
-      padding: 8px 20px; border-radius: 10px; font-size: 14px; font-weight: 600;
-      background: rgba(255,255,255,0.5); border: 1px solid var(--glass-border); color: var(--text-dim);
-      cursor: pointer; transition: all 0.2s;
+    .tl-header { display: flex; align-items: center; justify-content: center; gap: 16px; margin-bottom: 24px; }
+    .tl-header-title { font-size: 20px; font-weight: 700; min-width: 200px; text-align: center; }
+    .tl-arrow {
+      width: 40px; height: 40px; border-radius: 12px; border: 1px solid var(--glass-border);
+      background: rgba(255,255,255,0.6); color: var(--text); font-size: 18px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; transition: all 0.2s;
     }
-    .year-btn:hover { border-color: var(--accent); color: var(--text); }
-    .year-btn.active { background: rgba(232, 93, 74, 0.1); border-color: var(--accent); color: var(--accent); }
-    .month-nav { display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; }
-    .chip.has-events { border-color: rgba(232, 93, 74, 0.3); color: var(--text); background: rgba(232, 93, 74, 0.05); }
+    .tl-arrow:hover { border-color: var(--accent); color: var(--accent); background: rgba(232,93,74,0.04); }
 
-    /* Timeline horizontal bar */
-    .timeline-bar {
-      margin-bottom: 28px;
-      padding: 16px 0;
+    .upcoming-card { margin-bottom: 28px; }
+    .upcoming-title { font-size: 14px; font-weight: 600; color: var(--text-dim); margin-bottom: 14px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .upcoming-list { display: flex; flex-direction: column; gap: 8px; }
+    .upcoming-item {
+      display: flex; align-items: center; gap: 14px; padding: 12px 16px;
+      background: rgba(255,255,255,0.5); border: 1px solid var(--glass-border);
+      border-radius: 12px; transition: all 0.2s; cursor: pointer;
     }
-    .timeline-bar-inner {
-      position: relative;
-      height: 60px;
-      display: flex;
-      align-items: center;
-    }
-    .timeline-line {
-      position: absolute;
-      left: 0; right: 0;
-      top: 50%;
-      height: 4px;
-      background: linear-gradient(90deg, var(--accent), var(--accent2), var(--warning));
-      border-radius: 2px;
-      transform: translateY(-50%);
-    }
-    .timeline-label-start, .timeline-label-end {
-      position: absolute;
-      top: -18px;
-      font-size: 11px;
-      font-weight: 600;
-      color: var(--text-dim);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-    .timeline-label-start { left: 0; }
-    .timeline-label-end { right: 0; }
-    .timeline-marker {
-      position: absolute;
-      top: 50%;
-      transform: translate(-50%, -50%);
-      width: 14px;
-      height: 14px;
-      border-radius: 50%;
-      border: 3px solid #fff;
-      cursor: pointer;
-      transition: all 0.2s;
-      z-index: 2;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.12);
-    }
-    .timeline-marker:hover {
-      transform: translate(-50%, -50%) scale(1.4);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-    }
-    .timeline-marker.event-marker { background: var(--accent); }
-    .timeline-marker.todo-marker { background: var(--accent2); }
-    .timeline-marker-tooltip {
-      position: absolute;
-      bottom: 100%;
-      left: 50%;
-      transform: translateX(-50%);
-      background: rgba(255,255,255,0.95);
-      border: 1px solid var(--glass-border);
-      padding: 6px 10px;
-      border-radius: 8px;
-      font-size: 11px;
-      white-space: nowrap;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.2s;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-      margin-bottom: 8px;
-      color: var(--text);
-    }
-    .timeline-marker:hover .timeline-marker-tooltip { opacity: 1; }
-    .timeline-today-marker {
-      position: absolute;
-      top: 50%;
-      transform: translate(-50%, -50%);
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      background: var(--warning);
-      border: 3px solid #fff;
-      box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.3), 0 2px 8px rgba(0,0,0,0.15);
-      z-index: 3;
-    }
+    .upcoming-item:hover { border-color: rgba(232,93,74,0.2); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.04); }
+    .upcoming-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+    .upcoming-dot.event { background: var(--accent); }
+    .upcoming-dot.todo { background: var(--accent2); }
+    .upcoming-info { flex: 1; min-width: 0; }
+    .upcoming-info-title { font-size: 14px; font-weight: 600; }
+    .upcoming-info-title.completed { text-decoration: line-through; opacity: 0.5; }
+    .upcoming-info-date { font-size: 12px; color: var(--text-dim); }
+    .upcoming-badge { font-size: 11px; padding: 3px 10px; border-radius: 8px; white-space: nowrap; }
+    .upcoming-badge.today-badge { background: rgba(239,68,68,0.1); color: var(--danger); }
+    .upcoming-badge.tomorrow-badge { background: rgba(245,158,11,0.1); color: var(--warning); }
+    .upcoming-badge.soon-badge { background: rgba(20,184,166,0.1); color: var(--accent2); }
+    .upcoming-badge.later-badge { background: var(--surface); color: var(--text-dim); }
+    .upcoming-empty { text-align: center; padding: 20px; color: var(--text-dim); font-size: 13px; }
 
     .calendar-header { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin-bottom: 4px; }
     .calendar-header-cell { text-align: center; font-size: 11px; font-weight: 600; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; padding: 8px 0; }
@@ -677,7 +615,14 @@
     .sub-content { display: none; }
     .sub-content.active { display: block; }
 
-    .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
     .section-header h2 { font-size: 18px; font-weight: 600; }
 
     /* Schedule table - new clean design */
@@ -835,10 +780,8 @@
       .file-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
       .dropzone { padding: 20px 14px; }
 
-      .timeline-nav { padding: 14px; }
-      .year-nav { gap: 4px; flex-wrap: wrap; }
-      .year-btn { padding: 6px 14px; font-size: 13px; }
-      .month-nav { gap: 4px; }
+      .tl-header-title { font-size: 17px; min-width: 160px; }
+      .tl-arrow { width: 36px; height: 36px; }
       .calendar-day { min-height: 52px; padding: 5px; }
       .calendar-day .day-number { font-size: 12px; }
       .calendar-day.today .day-number { width: 22px; height: 22px; font-size: 11px; }
@@ -860,8 +803,6 @@
 
       .list-add-form { flex-direction: column; }
       .list-item-actions { opacity: 1; }
-
-      .timeline-bar { display: none; }
     }
     @media (max-width: 400px) {
       .chip { padding: 4px 10px; font-size: 11px; }
@@ -1005,16 +946,14 @@
   <div class="section" id="sectionTimeline">
     <div class="section-inner">
       <div class="page-title">&#128197; <span>Timeline</span></div>
-      <div class="card timeline-nav">
-        <div class="year-nav" id="yearNav"></div>
-        <div class="month-nav" id="monthNav"></div>
+      <div class="tl-header">
+        <button class="tl-arrow" id="tlPrev">&#9664;</button>
+        <div class="tl-header-title" id="tlHeaderTitle"></div>
+        <button class="tl-arrow" id="tlNext">&#9654;</button>
       </div>
-      <div class="timeline-bar" id="timelineBar">
-        <div class="timeline-bar-inner" id="timelineBarInner">
-          <div class="timeline-line"></div>
-          <div class="timeline-label-start" id="timelineLabelStart"></div>
-          <div class="timeline-label-end" id="timelineLabelEnd"></div>
-        </div>
+      <div class="card upcoming-card">
+        <div class="upcoming-title">&#128293; Upcoming</div>
+        <div id="upcomingList"></div>
       </div>
       <div class="calendar-header" id="calendarHeader"></div>
       <div class="calendar-grid" id="calendarGrid"></div>
@@ -1278,21 +1217,33 @@
         <div class="idea-card-meta">
           <div class="idea-meta-left"><span class="badge">${ideaCatName(i.category)}</span><span class="idea-date">${formatDate(i.createdAt)}</span></div>
           <div class="idea-actions">
-            <button class="btn-action edit" onclick="startEdit('${i.id}')">&#9998; Edit</button>
-            <button class="btn-action delete" onclick="deleteIdea('${i.id}')">&#10006; Delete</button>
+            <button class="btn-action edit" data-action="startEdit" data-id="${i.id}">&#9998; Edit</button>
+            <button class="btn-action delete" data-action="deleteIdea" data-id="${i.id}">&#10006; Delete</button>
           </div>
         </div>
         <div class="idea-edit-area" id="edit-${i.id}">
           <textarea class="textarea" id="edittext-${i.id}">${escapeHtml(i.text)}</textarea>
           <div class="edit-cat-chips" id="editcats-${i.id}">
-            ${['general','project','work','personal','shopping'].map(c=>`<span class="chip ${i.category===c?'active':''}" data-cat="${c}" onclick="selectEditCat('${i.id}','${c}')">${ideaCatName(c)}</span>`).join('')}
+            ${['general','project','work','personal','shopping'].map(c=>`<span class="chip ${i.category===c?'active':''}" data-cat="${c}" data-action="selectEditCat" data-idea-id="${i.id}" data-catval="${c}">${ideaCatName(c)}</span>`).join('')}
           </div>
           <div class="edit-actions">
-            <button class="btn btn-accent" onclick="saveEdit('${i.id}')">Save</button>
-            <button class="btn btn-ghost" onclick="cancelEdit('${i.id}')">Cancel</button>
+            <button class="btn btn-accent" data-action="saveEdit" data-id="${i.id}">Save</button>
+            <button class="btn btn-ghost" data-action="cancelEdit" data-id="${i.id}">Cancel</button>
           </div>
         </div>
       </div>`).join('');
+    // Event delegation for ideas list
+    list.querySelectorAll('[data-action]').forEach(el=>{
+      el.addEventListener('click',function(e){
+        e.stopPropagation();
+        const action=this.dataset.action,id=this.dataset.id;
+        if(action==='startEdit')startEdit(id);
+        else if(action==='deleteIdea')deleteIdea(id);
+        else if(action==='saveEdit')saveEdit(id);
+        else if(action==='cancelEdit')cancelEdit(id);
+        else if(action==='selectEditCat')selectEditCat(this.dataset.ideaId,this.dataset.catval);
+      });
+    });
   }
   function startEdit(id){document.getElementById('edit-'+id).classList.add('active');}
   function cancelEdit(id){document.getElementById('edit-'+id).classList.remove('active');}
@@ -1317,7 +1268,11 @@
     const list=document.getElementById('historyList'),empty=document.getElementById('historyEmpty');
     if(ideas.length===0){list.innerHTML='';empty.style.display='block';return;}
     empty.style.display='none';
-    list.innerHTML=ideas.map(i=>`<div class="card idea-card history-card"><div class="idea-card-top"><div class="idea-text">${escapeHtml(i.text)}</div></div><div class="idea-card-meta"><div class="idea-meta-left"><span class="badge">${ideaCatName(i.category)}</span><span class="idea-date">${formatDate(i.createdAt)}</span><span class="history-date">Deleted ${formatDate(i.deletedAt)}</span></div><div class="idea-actions"><button class="btn-action edit" onclick="restoreIdea('${i.id}')">&#8634; Restore</button></div></div></div>`).join('');
+    list.innerHTML=ideas.map(i=>`<div class="card idea-card history-card"><div class="idea-card-top"><div class="idea-text">${escapeHtml(i.text)}</div></div><div class="idea-card-meta"><div class="idea-meta-left"><span class="badge">${ideaCatName(i.category)}</span><span class="idea-date">${formatDate(i.createdAt)}</span><span class="history-date">Deleted ${formatDate(i.deletedAt)}</span></div><div class="idea-actions"><button class="btn-action edit" data-action="restoreIdea" data-id="${i.id}">&#8634; Restore</button></div></div></div>`).join('');
+    // Event delegation for history actions
+    list.querySelectorAll('[data-action="restoreIdea"]').forEach(el=>{
+      el.addEventListener('click',function(){restoreIdea(this.dataset.id);});
+    });
   }
   async function restoreIdea(id){try{const r=await api(`/api/ideas/history/${id}/restore`,{method:'POST'}),d=await r.json();if(d.success){toast('Restored!','success');loadIdeas();loadHistory();}else toast(d.error,'error');}catch(e){toast('Error','error');}}
 
@@ -1373,7 +1328,15 @@
     cnt.textContent=`${f.length} file(s)`;
     if(f.length===0){grid.innerHTML='';empty.style.display='block';return;}
     empty.style.display='none';
-    grid.innerHTML=f.map(x=>`<div class="card file-card"><span class="badge file-category-badge">${fileCatName(x.category)}</span><div class="file-icon">${getFileIcon(x.type)}</div><div class="file-name">${escapeHtml(x.name)}</div><div class="file-meta">${formatSize(x.size)} \u00B7 ${formatShortDate(x.modified)}</div><div class="file-actions"><button class="btn-action download" onclick="downloadFile('${escapeAttr(x.category)}','${escapeAttr(x.name)}')">&#11015; Download</button><button class="btn-action delete" onclick="deleteFile('${escapeAttr(x.category)}','${escapeAttr(x.name)}')">&#10006; Delete</button></div></div>`).join('');
+    grid.innerHTML=f.map(x=>`<div class="card file-card"><span class="badge file-category-badge">${fileCatName(x.category)}</span><div class="file-icon">${getFileIcon(x.type)}</div><div class="file-name">${escapeHtml(x.name)}</div><div class="file-meta">${formatSize(x.size)} \u00B7 ${formatShortDate(x.modified)}</div><div class="file-actions"><button class="btn-action download" data-action="downloadFile" data-cat="${escapeAttr(x.category)}" data-name="${escapeAttr(x.name)}">&#11015; Download</button><button class="btn-action delete" data-action="deleteFile" data-cat="${escapeAttr(x.category)}" data-name="${escapeAttr(x.name)}">&#10006; Delete</button></div></div>`).join('');
+    // Event delegation for file actions
+    grid.querySelectorAll('[data-action]').forEach(el=>{
+      el.addEventListener('click',function(e){
+        e.stopPropagation();
+        if(this.dataset.action==='downloadFile')downloadFile(this.dataset.cat,this.dataset.name);
+        else if(this.dataset.action==='deleteFile')deleteFile(this.dataset.cat,this.dataset.name);
+      });
+    });
   }
   function downloadFile(c,f){const a=document.createElement('a');a.href=`/api/download/${encodeURIComponent(c)}/${encodeURIComponent(f)}`;a.download=f;document.body.appendChild(a);a.click();a.remove();}
   async function deleteFile(c,f){if(!confirm(`Delete "${f}"?`))return;try{const r=await api(`/api/files/${encodeURIComponent(c)}/${encodeURIComponent(f)}`,{method:'DELETE'}),d=await r.json();if(d.success){toast('Deleted','success');loadFiles();}else toast(d.error,'error');}catch(e){toast('Error','error');}}
@@ -1389,65 +1352,49 @@
   function setTimeValue(t){if(!t){document.getElementById('eventHourInput').value='';document.getElementById('eventMinInput').value='';return;}const p=t.split(':');document.getElementById('eventHourInput').value=p[0]||'';document.getElementById('eventMinInput').value=p[1]||'00';}
   function tlCatName(c){return{personal:'Personal',work:'Work',health:'Health',finance:'Finance',milestone:'Milestone',other:'Other'}[c]||c;}
 
-  function initTimeline(){renderCalendarHeader();renderYearNav();renderMonthNav();loadCalendarData();initDayPanel();initModalTypeToggle();}
+  // Navigation
+  document.getElementById('tlPrev').addEventListener('click',()=>{timelineMonth--;if(timelineMonth<1){timelineMonth=12;timelineYear--;}updateTimeline();});
+  document.getElementById('tlNext').addEventListener('click',()=>{timelineMonth++;if(timelineMonth>12){timelineMonth=1;timelineYear++;}updateTimeline();});
+
+  function updateTimelineHeader(){
+    document.getElementById('tlHeaderTitle').textContent=MONTH_FULL[timelineMonth-1]+' '+timelineYear;
+  }
+  function initTimeline(){renderCalendarHeader();updateTimelineHeader();loadCalendarData();initDayPanel();initModalTypeToggle();}
   function renderCalendarHeader(){document.getElementById('calendarHeader').innerHTML=DAY_NAMES.map(d=>`<div class="calendar-header-cell">${d}</div>`).join('');}
-  function renderYearNav(){const c=document.getElementById('yearNav'),y=new Date().getFullYear(),ys=[y-1,y,y+1,y+2];c.innerHTML=ys.map(yr=>`<button class="year-btn ${yr===timelineYear?'active':''}" onclick="setTimelineYear(${yr})">${yr}</button>`).join('');}
-  function renderMonthNav(){document.getElementById('monthNav').innerHTML=MONTH_NAMES.map((n,i)=>`<span class="chip ${(i+1)===timelineMonth?'active':''}" onclick="setTimelineMonth(${i+1})">${n}</span>`).join('');}
-  function setTimelineYear(y){timelineYear=y;renderYearNav();loadCalendarData();}
-  function setTimelineMonth(m){timelineMonth=m;renderMonthNav();loadCalendarData();}
+  function updateTimeline(){updateTimelineHeader();loadCalendarData();}
 
   async function loadCalendarData(){
-    try{const[er,tr]=await Promise.all([api(`/api/timeline?year=${timelineYear}&month=${timelineMonth}`),api(`/api/todos?year=${timelineYear}&month=${timelineMonth}`)]);const ed=await er.json(),td=await tr.json();allEvents=ed.events||[];allTodos=td.todos||[];renderCalendar();renderTimelineBar();highlightMonthsWithEvents();}catch(e){toast('Failed to load calendar','error');}
-  }
-  async function highlightMonthsWithEvents(){
-    try{const[er,tr]=await Promise.all([api(`/api/timeline?year=${timelineYear}`),api(`/api/todos?year=${timelineYear}`)]);const ed=await er.json(),td=await tr.json();const ms=new Set();(ed.events||[]).forEach(e=>{if(e.date)ms.add(parseInt(e.date.split('-')[1],10));});(td.todos||[]).forEach(t=>{if(t.date)ms.add(parseInt(t.date.split('-')[1],10));});document.querySelectorAll('#monthNav .chip').forEach((p,i)=>{if(ms.has(i+1)&&(i+1)!==timelineMonth)p.classList.add('has-events');});}catch(e){}
+    try{const[er,tr]=await Promise.all([api(`/api/timeline?year=${timelineYear}&month=${timelineMonth}`),api(`/api/todos?year=${timelineYear}&month=${timelineMonth}`)]);const ed=await er.json(),td=await tr.json();allEvents=ed.events||[];allTodos=td.todos||[];renderCalendar();renderUpcoming();}catch(e){toast('Failed to load calendar','error');}
   }
 
-  function renderTimelineBar(){
-    const bar=document.getElementById('timelineBarInner');
-    const y=timelineYear,m=timelineMonth;
-    const dim=new Date(y,m,0).getDate();
-    const today=new Date();
+  function renderUpcoming(){
+    const container=document.getElementById('upcomingList');
+    const today=new Date();today.setHours(0,0,0,0);
     const todayStr=today.toISOString().split('T')[0];
-
-    document.getElementById('timelineLabelStart').textContent=`${timelineYear} ${MONTH_FULL[timelineMonth-1]} 1`;
-    document.getElementById('timelineLabelEnd').textContent=`${MONTH_FULL[timelineMonth-1]} ${dim}`;
-
-    // Remove old markers
-    bar.querySelectorAll('.timeline-marker, .timeline-today-marker').forEach(e=>e.remove());
-
-    // Add today marker if in this month
-    if(today.getFullYear()===y && today.getMonth()+1===m){
-      const pct=((today.getDate()-1)/(dim-1))*100;
-      const tm=document.createElement('div');
-      tm.className='timeline-today-marker';
-      tm.style.left=Math.min(Math.max(pct,2),98)+'%';
-      tm.title='Today';
-      bar.appendChild(tm);
-    }
-
-    // Add event markers
-    allEvents.forEach(ev=>{
-      const d=parseInt(ev.date.split('-')[2],10);
-      const pct=((d-1)/(dim-1))*100;
-      const mk=document.createElement('div');
-      mk.className='timeline-marker event-marker';
-      mk.style.left=Math.min(Math.max(pct,2),98)+'%';
-      mk.innerHTML=`<div class="timeline-marker-tooltip">${escapeHtml(ev.title)}${ev.time?' '+ev.time:''}</div>`;
-      mk.addEventListener('click',()=>openDayPanel(ev.date));
-      bar.appendChild(mk);
-    });
-
-    // Add todo markers
-    allTodos.forEach(t=>{
-      const d=parseInt(t.date.split('-')[2],10);
-      const pct=((d-1)/(dim-1))*100;
-      const mk=document.createElement('div');
-      mk.className='timeline-marker todo-marker';
-      mk.style.left=Math.min(Math.max(pct,2),98)+'%';
-      mk.innerHTML=`<div class="timeline-marker-tooltip">${escapeHtml(t.title)}${t.time?' '+t.time:''}</div>`;
-      mk.addEventListener('click',()=>openDayPanel(t.date));
-      bar.appendChild(mk);
+    // Combine events and todos, add type info
+    const items=[];
+    allEvents.forEach(e=>{if(!e.completed)items.push({...e,itemType:'event'});});
+    allTodos.forEach(t=>{if(!t.completed)items.push({...t,itemType:'todo'});});
+    // Sort by date then time
+    items.sort((a,b)=>{const dc=a.date.localeCompare(b.date);if(dc!==0)return dc;return(a.time||'').localeCompare(b.time||'');});
+    // Show up to 7
+    const show=items.slice(0,7);
+    if(show.length===0){container.innerHTML='<div class="upcoming-empty">No upcoming events or to-dos this month</div>';return;}
+    container.innerHTML=show.map(item=>{
+      const d=new Date(item.date+'T00:00:00');d.setHours(0,0,0,0);
+      const diff=Math.ceil((d-today)/(1e3*60*60*24));
+      let badge='',cls='';
+      if(diff===0){badge='Today';cls='today-badge';}
+      else if(diff===1){badge='Tomorrow';cls='tomorrow-badge';}
+      else if(diff<=7){badge=`In ${diff} days`;cls='soon-badge';}
+      else if(diff<0){badge=`${Math.abs(diff)}d ago`;cls='later-badge';}
+      else{badge=item.date.substring(5);cls='later-badge';}
+      const timeStr=item.time?' at '+item.time:'';
+      return`<div class="upcoming-item" data-action="openDay" data-date="${item.date}"><div class="upcoming-dot ${item.itemType}"></div><div class="upcoming-info"><div class="upcoming-info-title">${escapeHtml(item.title)}</div><div class="upcoming-info-date">${MONTH_FULL[parseInt(item.date.split('-')[1],10)-1]} ${parseInt(item.date.split('-')[2],10)}${timeStr}</div></div><span class="upcoming-badge ${cls}">${badge}</span></div>`;
+    }).join('');
+    // Event delegation for upcoming items
+    container.querySelectorAll('[data-action="openDay"]').forEach(el=>{
+      el.addEventListener('click',()=>openDayPanel(el.dataset.date));
     });
   }
 
@@ -1476,11 +1423,27 @@
     const c=document.getElementById('dayPanelContent'),ds=selectedDayDate;
     if(dayPanelTab==='events'){
       const de=allEvents.filter(e=>e.date===ds);if(de.length===0){c.innerHTML=`<div class="day-panel-empty"><div class="empty-icon">&#128197;</div><p>No events</p></div>`;return;}
-      c.innerHTML=de.map(ev=>`<div class="day-panel-item"><div class="day-panel-item-top"><div class="day-panel-item-title ${ev.completed?'completed':''}">${ev.completed?'&#10003; ':''}${escapeHtml(ev.title)}</div>${ev.time?`<span class="day-panel-item-time">${ev.time}</span>`:''}</div>${ev.description?`<div class="day-panel-item-desc">${escapeHtml(ev.description)}</div>`:''}<div class="day-panel-item-meta"><div style="display:flex;gap:6px;align-items:center;"><span class="badge">${tlCatName(ev.category)}</span>${ev.notify?'<span class="badge" style="background:rgba(245,158,11,0.08);color:var(--warning);border-color:rgba(245,158,11,0.15);">&#128276;</span>':''}</div><div class="day-panel-item-actions"><button class="btn-action" onclick="toggleComplete('${ev.id}',${!ev.completed})">${ev.completed?'&#8634;':'&#10003;'}</button><button class="btn-action edit" onclick="editEvent('${ev.id}')">&#9998;</button><button class="btn-action delete" onclick="deleteEvent('${ev.id}')">&#10006;</button></div></div></div>`).join('');
+      c.innerHTML=de.map(ev=>`<div class="day-panel-item"><div class="day-panel-item-top"><div class="day-panel-item-title ${ev.completed?'completed':''}">${ev.completed?'&#10003; ':''}${escapeHtml(ev.title)}</div>${ev.time?`<span class="day-panel-item-time">${ev.time}</span>`:''}</div>${ev.description?`<div class="day-panel-item-desc">${escapeHtml(ev.description)}</div>`:''}<div class="day-panel-item-meta"><div style="display:flex;gap:6px;align-items:center;"><span class="badge">${tlCatName(ev.category)}</span>${ev.notify?'<span class="badge" style="background:rgba(245,158,11,0.08);color:var(--warning);border-color:rgba(245,158,11,0.15);">&#128276;</span>':''}</div><div class="day-panel-item-actions"><button class="btn-action" data-action="toggleEvent" data-id="${ev.id}" data-val="${!ev.completed}">${ev.completed?'&#8634;':'&#10003;'}</button><button class="btn-action edit" data-action="editEvent" data-id="${ev.id}">&#9998;</button><button class="btn-action delete" data-action="deleteEvent" data-id="${ev.id}">&#10006;</button></div></div></div>`).join('');
     } else {
       const dt=allTodos.filter(t=>t.date===ds);if(dt.length===0){c.innerHTML=`<div class="day-panel-empty"><div class="empty-icon">&#9745;</div><p>No to-dos</p></div>`;return;}
-      c.innerHTML=dt.map(t=>`<div class="day-panel-item"><div class="day-panel-item-top"><input type="checkbox" class="todo-checkbox" ${t.completed?'checked':''} onchange="toggleTodoComplete('${t.id}',this.checked)" /><div class="day-panel-item-title ${t.completed?'completed':''}">${escapeHtml(t.title)}</div>${t.time?`<span class="day-panel-item-time">${t.time}</span>`:''}</div>${t.description?`<div class="day-panel-item-desc">${escapeHtml(t.description)}</div>`:''}<div class="day-panel-item-meta"><span class="badge" style="background:rgba(20,184,166,0.08);color:var(--accent2);border-color:rgba(20,184,166,0.15);">To-Do</span><div class="day-panel-item-actions"><button class="btn-action edit" onclick="editTodo('${t.id}')">&#9998;</button><button class="btn-action delete" onclick="deleteTodo('${t.id}')">&#10006;</button></div></div></div>`).join('');
+      c.innerHTML=dt.map(t=>`<div class="day-panel-item"><div class="day-panel-item-top"><input type="checkbox" class="todo-checkbox" ${t.completed?'checked':''} data-action="toggleTodo" data-id="${t.id}" /><div class="day-panel-item-title ${t.completed?'completed':''}">${escapeHtml(t.title)}</div>${t.time?`<span class="day-panel-item-time">${t.time}</span>`:''}</div>${t.description?`<div class="day-panel-item-desc">${escapeHtml(t.description)}</div>`:''}<div class="day-panel-item-meta"><span class="badge" style="background:rgba(20,184,166,0.08);color:var(--accent2);border-color:rgba(20,184,166,0.15);">To-Do</span><div class="day-panel-item-actions"><button class="btn-action edit" data-action="editTodo" data-id="${t.id}">&#9998;</button><button class="btn-action delete" data-action="deleteTodo" data-id="${t.id}">&#10006;</button></div></div></div>`).join('');
     }
+    // Event delegation for day panel actions
+    c.querySelectorAll('[data-action]').forEach(el=>{
+      el.addEventListener('click',async function(e){
+        e.stopPropagation();
+        const action=this.dataset.action,id=this.dataset.id;
+        if(action==='toggleEvent')await toggleComplete(id,this.dataset.val==='true');
+        else if(action==='editEvent')editEvent(id);
+        else if(action==='deleteEvent')await deleteEvent(id);
+        else if(action==='toggleTodo')await toggleTodoComplete(id,this.checked);
+        else if(action==='editTodo')editTodo(id);
+        else if(action==='deleteTodo')await deleteTodo(id);
+      });
+      if(el.dataset.action==='toggleTodo'){
+        el.addEventListener('change',async function(){await toggleTodoComplete(this.dataset.id,this.checked);});
+      }
+    });
   }
 
   async function toggleComplete(id,c){try{const r=await api(`/api/timeline/${id}`,{method:'PUT',body:JSON.stringify({completed:c})}),d=await r.json();if(d.success){await loadCalendarData();renderDayPanelContent();}}catch(e){toast('Error','error');}}
@@ -1523,12 +1486,12 @@
     e.preventDefault();const title=document.getElementById('eventTitleInput').value.trim(),desc=document.getElementById('eventDescInput').value.trim(),date=document.getElementById('eventDateInput').value,time=getTimeValue(),notify=document.getElementById('eventNotifyInput').checked;
     if(!title)return toast('Title required','error');if(!date)return toast('Date required','error');
     try{
-      if(modalType==='todo'||editingTodoId){const p={title,description:desc,date,time},url=editingTodoId?`/api/todos/${editingTodoId}`:'/api/todos',mt=editingTodoId?'PUT':'POST';const r=await api(url,{method:mt,body:JSON.stringify(p)}),d=await r.json();if(d.success){toast(editingTodoId?'Updated':'Created','success');eventModal.classList.remove('active');editingTodoId=null;const[y,m]=date.split('-');timelineYear=parseInt(y);timelineMonth=parseInt(m);renderYearNav();renderMonthNav();await loadCalendarData();if(selectedDayDate)renderDayPanelContent();}else toast(d.error,'error');}
-      else{const p={title,description:desc,date,time,category:document.getElementById('eventCatInput').value,notify},url=editingEventId?`/api/timeline/${editingEventId}`:'/api/timeline',mt=editingEventId?'PUT':'POST';const r=await api(url,{method:mt,body:JSON.stringify(p)}),d=await r.json();if(d.success){toast(editingEventId?'Updated':'Created','success');eventModal.classList.remove('active');editingEventId=null;const[y,m]=date.split('-');timelineYear=parseInt(y);timelineMonth=parseInt(m);renderYearNav();renderMonthNav();await loadCalendarData();if(selectedDayDate)renderDayPanelContent();}else toast(d.error,'error');}
+      if(modalType==='todo'||editingTodoId){const p={title,description:desc,date,time},url=editingTodoId?`/api/todos/${editingTodoId}`:'/api/todos',mt=editingTodoId?'PUT':'POST';const r=await api(url,{method:mt,body:JSON.stringify(p)}),d=await r.json();if(d.success){toast(editingTodoId?'Updated':'Created','success');eventModal.classList.remove('active');editingTodoId=null;const[y,mo]=date.split('-');timelineYear=parseInt(y);timelineMonth=parseInt(mo);updateTimeline();}else toast(d.error,'error');}
+      else{const p={title,description:desc,date,time,category:document.getElementById('eventCatInput').value,notify},url=editingEventId?`/api/timeline/${editingEventId}`:'/api/timeline',mt=editingEventId?'PUT':'POST';const r=await api(url,{method:mt,body:JSON.stringify(p)}),d=await r.json();if(d.success){toast(editingEventId?'Updated':'Created','success');eventModal.classList.remove('active');editingEventId=null;const[y,mo]=date.split('-');timelineYear=parseInt(y);timelineMonth=parseInt(mo);updateTimeline();}else toast(d.error,'error');}
     }catch(e){toast('Error','error');}
   });
 
-  document.getElementById('todayBtn').addEventListener('click',()=>{const n=new Date();timelineYear=n.getFullYear();timelineMonth=n.getMonth()+1;renderYearNav();renderMonthNav();loadCalendarData();});
+  document.getElementById('todayBtn').addEventListener('click',()=>{const n=new Date();timelineYear=n.getFullYear();timelineMonth=n.getMonth()+1;updateTimeline();});
 
   // ===== PUSH NOTIFICATIONS =====
   async function initPush(){if(!('serviceWorker' in navigator))return;try{await navigator.serviceWorker.register('/sw.js');checkNotifStatus();}catch(e){}}
@@ -1619,7 +1582,17 @@
     if(allDeadlines.length===0){list.innerHTML='';empty.style.display='block';return;}
     empty.style.display='none';
     list.innerHTML=allDeadlines.map(dl=>{const bc=dl.type==='exam'?'badge-exam':dl.type==='assignment'?'badge-assignment':dl.type==='project'?'badge-project':'badge-other-type';const tn=dl.type.charAt(0).toUpperCase()+dl.type.slice(1);const dd=new Date(dl.date+'T00:00:00'),td=new Date(today+'T00:00:00'),diff=Math.ceil((dd-td)/(1e3*60*60*24));let lbl='',cls='';if(dl.completed){lbl='Done';cls='past';}else if(diff<0){lbl='Past due';cls='past';}else if(diff===0){lbl='Today!';cls='urgent';}else if(diff===1){lbl='Tomorrow';cls='urgent';}else if(diff<=7){lbl=`${diff} days`;cls='soon';}else{lbl=`${diff} days`;cls='ok';}
-    return`<div class="card deadline-card ${dl.completed?'completed-deadline':''}"><span class="deadline-type-badge ${bc}">${tn}</span><div class="deadline-info"><div class="deadline-title ${dl.completed?'completed-text':''}">${escapeHtml(dl.title)}</div><div class="deadline-meta"><span>${dl.date}${dl.time?' '+dl.time:''}</span>${dl.courseName?`<span>${escapeHtml(dl.courseName)}</span>`:''}<span class="days-left ${cls}">${lbl}</span></div>${dl.description?`<div style="font-size:12px;color:var(--text-dim);margin-top:6px;">${escapeHtml(dl.description)}</div>`:''}</div><div class="deadline-actions"><button class="btn-action" onclick="toggleDeadlineComplete('${dl.id}',${!dl.completed})">${dl.completed?'&#8634;':'&#10003;'}</button><button class="btn-action edit" onclick="editDeadline('${dl.id}')">&#9998;</button><button class="btn-action delete" onclick="deleteDeadline('${dl.id}')">&#10006;</button></div></div>`;}).join('');
+    return`<div class="card deadline-card ${dl.completed?'completed-deadline':''}"><span class="deadline-type-badge ${bc}">${tn}</span><div class="deadline-info"><div class="deadline-title ${dl.completed?'completed-text':''}">${escapeHtml(dl.title)}</div><div class="deadline-meta"><span>${dl.date}${dl.time?' '+dl.time:''}</span>${dl.courseName?`<span>${escapeHtml(dl.courseName)}</span>`:''}<span class="days-left ${cls}">${lbl}</span></div>${dl.description?`<div style="font-size:12px;color:var(--text-dim);margin-top:6px;">${escapeHtml(dl.description)}</div>`:''}</div><div class="deadline-actions"><button class="btn-action" data-action="toggleDeadline" data-id="${dl.id}" data-val="${!dl.completed}">${dl.completed?'&#8634;':'&#10003;'}</button><button class="btn-action edit" data-action="editDeadline" data-id="${dl.id}">&#9998;</button><button class="btn-action delete" data-action="deleteDeadline" data-id="${dl.id}">&#10006;</button></div></div>`;}).join('');
+    // Event delegation for deadline actions
+    list.querySelectorAll('[data-action]').forEach(el=>{
+      el.addEventListener('click',function(e){
+        e.stopPropagation();
+        const action=this.dataset.action,id=this.dataset.id;
+        if(action==='toggleDeadline')toggleDeadlineComplete(id,this.dataset.val==='true');
+        else if(action==='editDeadline')editDeadline(id);
+        else if(action==='deleteDeadline')deleteDeadline(id);
+      });
+    });
   }
   function openDeadlineModal(id){
     editingDeadlineId=id||null;const form=document.getElementById('deadlineForm');form.reset();document.getElementById('deadlineNotifyInput').checked=true;populateDeadlineCourseSelect();
