@@ -1186,6 +1186,19 @@
 <div class="toast-container" id="toastContainer"></div>
 
 <script>
+  // ===== ERROR HANDLER =====
+  window.onerror = function(msg, url, line, col, err) {
+    console.error('JS Error:', msg, 'at line', line, col, err);
+    const d = document.createElement('div');
+    d.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:9999;background:#fee;color:#c00;padding:12px;font-size:13px;border-bottom:2px solid #c00;';
+    d.textContent = 'Error: ' + msg + ' (line ' + line + ')';
+    document.body.appendChild(d);
+    setTimeout(() => d.remove(), 8000);
+  };
+  window.addEventListener('unhandledrejection', function(e) {
+    console.error('Unhandled rejection:', e.reason);
+  });
+
   // ===== UTILS =====
   async function api(url, opts = {}) {
     const headers = { ...opts.headers };
@@ -1216,7 +1229,12 @@
 
   // ===== INIT =====
   function init() {
-    loadIdeas(); loadFiles(); initTimeline(); initStudies(); initLists(); initPush();
+    try { loadIdeas(); } catch(e) { console.error('loadIdeas failed:', e); }
+    try { loadFiles(); } catch(e) { console.error('loadFiles failed:', e); }
+    try { initTimeline(); } catch(e) { console.error('initTimeline failed:', e); }
+    try { initStudies(); } catch(e) { console.error('initStudies failed:', e); }
+    try { initLists(); } catch(e) { console.error('initLists failed:', e); }
+    try { initPush(); } catch(e) { console.error('initPush failed:', e); }
   }
   init();
 
@@ -1553,11 +1571,13 @@
         html+=`<td data-day="${d}" data-hour="${h}">`;
         // Find courses that start at this hour on this day
         const coursesHere=allCourses.filter(c=>{
-          if(c.day!==d) return false;
+          if(parseInt(c.day,10)!==d) return false;
+          if(!c.startTime) return false;
           const sh=parseInt(c.startTime.split(':')[0],10);
           return sh===h;
         });
         coursesHere.forEach(c=>{
+          if(!c.endTime) return;
           const sp=c.startTime.split(':'),ep=c.endTime.split(':');
           const sh=parseInt(sp[0]),sm=parseInt(sp[1]||'0');
           const eh=parseInt(ep[0]),em=parseInt(ep[1]||'0');
@@ -1587,7 +1607,7 @@
   function editCourse(id){openCourseModal(id);}
   document.getElementById('courseModal').addEventListener('click',e=>{if(e.target.id==='courseModal')closeCourseModal();});
   document.getElementById('courseForm').addEventListener('submit',async e=>{
-    e.preventDefault();const p={name:document.getElementById('courseNameInput').value.trim(),day:document.getElementById('courseDayInput').value,startTime:document.getElementById('courseStartInput').value,endTime:document.getElementById('courseEndInput').value,room:document.getElementById('courseRoomInput').value.trim(),color:document.getElementById('courseColorInput').value};
+    e.preventDefault();const p={name:document.getElementById('courseNameInput').value.trim(),day:parseInt(document.getElementById('courseDayInput').value,10),startTime:document.getElementById('courseStartInput').value,endTime:document.getElementById('courseEndInput').value,room:document.getElementById('courseRoomInput').value.trim(),color:document.getElementById('courseColorInput').value};
     if(!p.name)return toast('Name required','error');
     try{const url=editingCourseId?`/api/courses/${editingCourseId}`:'/api/courses',mt=editingCourseId?'PUT':'POST';const r=await api(url,{method:mt,body:JSON.stringify(p)}),d=await r.json();if(d.success){toast(editingCourseId?'Updated':'Added','success');closeCourseModal();loadCourses();}else toast(d.error,'error');}catch(e){toast('Error','error');}
   });
