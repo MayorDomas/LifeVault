@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>LifeVault</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:'Space Grotesk',sans-serif;background:#06070b;color:#e0dcd4;min-height:100vh;overflow:hidden;user-select:none;-webkit-user-select:none}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-thumb{background:rgba(255,255,255,.08);border-radius:4px}
+.bg{position:fixed;inset:0;z-index:0;overflow:hidden}
+.bg::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 110%,#1a0a2e 0%,transparent 55%),radial-gradient(ellipse at 20% 50%,rgba(30,50,120,.18) 0%,transparent 45%),radial-gradient(ellipse at 80% 40%,rgba(80,30,100,.14) 0%,transparent 40%),#06070b}
+.aurora{position:absolute;top:-50%;left:-30%;width:160%;height:100%;background:linear-gradient(135deg,transparent 15%,rgba(80,50,200,.07) 30%,rgba(30,130,220,.06) 45%,rgba(200,50,130,.04) 60%,transparent 75%);animation:au 15s ease-in-out infinite alternate;filter:blur(50px)}
+.aurora2{position:absolute;top:-30%;right:-20%;width:120%;height:80%;background:linear-gradient(200deg,transparent 20%,rgba(50,180,200,.05) 40%,rgba(130,50,200,.04) 60%,transparent 80%);animation:au 18s ease-in-out infinite alternate-reverse;filter:blur(60px)}
+@keyframes au{0%{transform:translateX(-3%) rotate(-2deg)}100%{transform:translateX(3%) rotate(2deg) scale(1.05)}}
+.stars{position:absolute;inset:0}.star{position:absolute;width:2px;height:2px;background:#fff;border-radius:50%;animation:tw var(--d,3s) ease-in-out infinite alternate}.star.big{width:3px;height:3px;box-shadow:0 0 6px rgba(180,200,255,.3)}
+@keyframes tw{0%{opacity:.1}100%{opacity:.7}}
+.gorb{position:absolute;border-radius:50%;filter:blur(90px);animation:od 25s ease-in-out infinite alternate;pointer-events:none}
+@keyframes od{0%{transform:translate(0,0)}33%{transform:translate(20px,-30px)}66%{transform:translate(-15px,20px)}100%{transform:translate(10px,-10px)}}
+
+#dashboard{position:fixed;inset:0;z-index:1;transition:opacity .35s}
+.title{position:absolute;top:14px;left:50%;transform:translateX(-50%);font-size:22px;font-weight:700;letter-spacing:3px;z-index:5;background:linear-gradient(135deg,#e0e0ff,#c0c0ff,#e8d0ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 0 20px rgba(120,140,255,.4))}
+.cal-wrap{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:2;width:min(360px,66vw);background:rgba(255,255,255,.03);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.06);border-radius:18px;padding:14px;box-shadow:0 8px 40px rgba(0,0,0,.3)}
+.cal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.cal-title{font-size:14px;font-weight:700}.cal-nav{width:28px;height:28px;border-radius:9px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.06);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:12px;color:#fff}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;text-align:center}
+.cal-day{font-size:8px;font-weight:700;color:rgba(255,255,255,.2);padding:3px 0;text-transform:uppercase}
+.cal-cell{aspect-ratio:1;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;color:rgba(255,255,255,.4);cursor:pointer;position:relative;transition:all .15s}
+.cal-cell:hover{background:rgba(255,255,255,.06)}.cal-cell.today{background:rgba(108,92,231,.15);color:#a78bfa;font-weight:700;border:1px solid rgba(108,92,231,.3)}
+.cal-cell.has-ev::after{content:'';position:absolute;bottom:2px;width:4px;height:4px;border-radius:50%;background:#a78bfa}
+.cal-cell.other{color:rgba(255,255,255,.1)}.cal-cell.sel{background:rgba(108,92,231,.22);color:#fff}
+.cal-evs{margin-top:8px;max-height:80px;overflow-y:auto}.cal-ev{display:flex;align-items:center;justify-content:space-between;padding:5px 7px;background:rgba(108,92,231,.08);border-radius:7px;margin-bottom:3px;font-size:10px}
+.cal-add{display:flex;gap:5px;margin-top:6px}.cal-add input{flex:1;padding:6px 9px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:7px;color:#fff;font-family:inherit;font-size:10px;outline:none}.cal-add button{padding:6px 10px;background:rgba(108,92,231,.2);border:1px solid rgba(108,92,231,.3);border-radius:7px;color:#a78bfa;font-family:inherit;font-size:10px;font-weight:600;cursor:pointer;white-space:nowrap}
+
+.cube{position:absolute;width:76px;height:76px;border-radius:20px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;z-index:10;background:linear-gradient(145deg,rgba(255,255,255,.07),rgba(255,255,255,.02));backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.08);box-shadow:0 8px 32px rgba(0,0,0,.25),inset 0 0 0 1px rgba(255,255,255,.05);transition:transform .25s cubic-bezier(.34,1.56,.64,1),box-shadow .25s;touch-action:none}
+.cube::before{content:'';position:absolute;inset:0;border-radius:20px;background:linear-gradient(135deg,rgba(255,255,255,.1),transparent 50%);pointer-events:none}
+.cube:hover{transform:scale(1.08)}.cube .emoji{font-size:22px;margin-bottom:2px}.cube .label{font-size:8px;font-weight:600;color:rgba(255,255,255,.7);letter-spacing:.5px;text-transform:uppercase}
+.cube.dragging{transform:scale(1.15)!important;box-shadow:0 20px 60px rgba(0,0,0,.5);z-index:99;opacity:.9}
+.cube.spawning{animation:cs .5s cubic-bezier(.34,1.56,.64,1)}
+@keyframes cs{0%{transform:scale(0) rotate(-15deg);opacity:0}60%{transform:scale(1.1)}100%{transform:scale(1);opacity:1}}
+.cube .glow{position:absolute;inset:-8px;border-radius:26px;opacity:0;transition:opacity .3s;pointer-events:none;filter:blur(15px)}.cube:hover .glow{opacity:.15}
+.trash-zone{position:fixed;bottom:14px;left:14px;width:36px;height:36px;border-radius:11px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;font-size:14px;z-index:20;transition:all .35s cubic-bezier(.34,1.56,.64,1)}
+.trash-zone.active{width:64px;height:64px;border-radius:18px;background:rgba(255,60,60,.2);border:2px dashed rgba(255,80,80,.6);font-size:24px;bottom:8px;left:8px}
+.hbtn{position:fixed;bottom:14px;left:58px;width:36px;height:36px;border-radius:11px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;font-size:14px;cursor:pointer;z-index:20}
+.hpanel{position:fixed;bottom:56px;left:14px;width:210px;max-height:250px;overflow-y:auto;background:rgba(14,12,28,.97);backdrop-filter:blur(20px);border-radius:14px;border:1px solid rgba(255,255,255,.08);padding:10px;z-index:25;display:none;box-shadow:0 12px 40px rgba(0,0,0,.5)}
+.hpanel.open{display:block}.hitem{display:flex;align-items:center;justify-content:space-between;padding:7px;margin-bottom:3px;background:rgba(255,255,255,.04);border-radius:9px;font-size:11px;cursor:pointer}
+
+/* PAGES */
+.page{position:fixed;inset:0;z-index:50;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .3s;overflow-y:auto;background:#07081a}.page.open{opacity:1;visibility:visible;pointer-events:auto}
+.ph{display:flex;align-items:center;gap:12px;padding:14px 16px 8px;position:sticky;top:0;z-index:5;background:linear-gradient(180deg,#07081a,rgba(7,8,26,.96) 85%,transparent)}
+.pb{width:38px;height:38px;border-radius:12px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;color:#fff;flex-shrink:0}
+.pt{font-size:18px;font-weight:700}.px{padding:4px 16px 40px}
+.sec{font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.18);margin:16px 0 8px}
+.card{background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.055);border-radius:13px;padding:13px;margin-bottom:6px;transition:background .15s}.card:hover{background:rgba(255,255,255,.05)}
+.add-btn{display:inline-flex;align-items:center;gap:5px;padding:9px 14px;background:linear-gradient(135deg,rgba(108,92,231,.12),rgba(168,85,247,.08));border:1px solid rgba(108,92,231,.2);border-radius:11px;color:#a78bfa;font-family:inherit;font-weight:600;font-size:11px;cursor:pointer;margin-bottom:10px}
+.del-btn{width:26px;height:26px;border-radius:8px;background:rgba(255,60,60,.06);border:1px solid rgba(255,60,60,.1);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:12px;flex-shrink:0;color:rgba(255,100,100,.5)}
+.edit-btn{width:26px;height:26px;border-radius:8px;background:rgba(108,92,231,.08);border:1px solid rgba(108,92,231,.12);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:11px;flex-shrink:0;color:#a78bfa}
+.empty-msg{text-align:center;padding:36px 16px;color:rgba(255,255,255,.12);font-size:12px}
+.tabs{display:flex;gap:4px;margin-bottom:10px;flex-wrap:wrap}
+.tab{padding:6px 12px;border-radius:9px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.05);font-family:inherit;font-size:10px;font-weight:600;color:rgba(255,255,255,.3);cursor:pointer;transition:all .15s}
+.tab.active{background:rgba(108,92,231,.12);border-color:rgba(108,92,231,.22);color:#a78bfa}
+.search-wrap{position:relative;margin-bottom:10px}.search-wrap::before{content:'🔍';position:absolute;left:10px;top:50%;transform:translateY(-50%);font-size:12px}
+.search-bar{width:100%;padding:9px 12px 9px 30px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);border-radius:10px;color:#fff;font-family:inherit;font-size:12px;outline:none}
+.search-bar:focus{border-color:rgba(108,92,231,.3)}
+
+/* Modal */
+.mbg{position:fixed;inset:0;background:rgba(0,0,0,.55);backdrop-filter:blur(8px);z-index:100;display:none;align-items:center;justify-content:center}.mbg.open{display:flex}
+.modal{background:rgba(14,12,28,.98);border:1px solid rgba(255,255,255,.08);border-radius:18px;padding:22px;width:min(360px,92vw);max-height:85vh;overflow-y:auto;box-shadow:0 24px 80px rgba(0,0,0,.6)}
+.modal h3{font-size:16px;margin-bottom:14px;font-weight:700;background:linear-gradient(135deg,#e0e0ff,#c8b0ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.modal input,.modal textarea,.modal select{width:100%;padding:11px 13px;margin-bottom:8px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:11px;color:#fff;font-family:inherit;font-size:12px;outline:none}
+.modal select{appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23888' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:30px}
+.modal select option{background:#14122a;color:#fff}
+.modal textarea{min-height:60px;resize:vertical}
+.modal input:focus,.modal textarea:focus,.modal select:focus{border-color:rgba(108,92,231,.4)}
+.mbtn{display:flex;gap:7px;margin-top:6px}.mbtn button{flex:1;padding:11px;border:none;border-radius:11px;font-family:inherit;font-weight:600;font-size:12px;cursor:pointer}
+.mbtn .sv{background:linear-gradient(135deg,#6c5ce7,#a855f7);color:#fff}.mbtn .cn{background:rgba(255,255,255,.06);color:rgba(255,255,255,.6)}
+
+/* MYSELF */
+.my-layout{display:flex;gap:16px;min-height:calc(100vh - 60px);padding:0 16px 30px}
+.my-left{flex:1;min-width:0;overflow-y:auto}.my-right{width:130px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.my-field{margin-bottom:10px}.my-label{font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.18);margin-bottom:4px}
+.my-input{width:100%;padding:9px 11px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.05);border-radius:9px;color:#fff;font-family:inherit;font-size:12px;outline:none;resize:vertical}.my-input:focus{border-color:rgba(108,92,231,.3)}
+.body-svg .lm{stroke:rgba(168,139,250,.4);stroke-width:1.5;fill:none;stroke-linecap:round;stroke-linejoin:round}.body-svg .tf{fill:rgba(108,92,231,.02)}.body-svg .jt{fill:none;stroke:rgba(168,139,250,.15);stroke-width:1}
+@keyframes bp{0%,100%{filter:drop-shadow(0 0 25px rgba(108,92,231,.1))}50%{filter:drop-shadow(0 0 35px rgba(108,92,231,.18))}}.body-svg{animation:bp 4s ease-in-out infinite}
+
+/* IDEAS */
+.idea-card{cursor:pointer;position:relative;padding-left:16px;overflow:hidden}
+.idea-card::before{content:'';position:absolute;top:0;left:0;width:4px;height:100%;border-radius:4px 0 0 4px}
+.idea-card[data-c="Personal"]::before{background:#a78bfa}.idea-card[data-c="Work"]::before{background:#38bdf8}.idea-card[data-c="Creative"]::before{background:#fb923c}.idea-card[data-c="Other"]::before{background:#4ade80}
+.idea-cat{font-size:9px;font-weight:700;letter-spacing:.3px;text-transform:uppercase;margin-top:2px}
+.idea-cat.Personal{color:#a78bfa}.idea-cat.Work{color:#38bdf8}.idea-cat.Creative{color:#fb923c}.idea-cat.Other{color:#4ade80}
+.idea-detail{display:none;margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,.05)}.idea-card.expanded .idea-detail{display:block}
+
+/* FILES */
+.upload-zone{border:2px dashed rgba(108,92,231,.18);border-radius:14px;padding:22px;text-align:center;cursor:pointer;transition:all .2s;margin-bottom:10px;background:rgba(108,92,231,.02)}.upload-zone:hover{border-color:rgba(108,92,231,.5);background:rgba(108,92,231,.05)}
+.file-card{display:flex;align-items:center;gap:10px;padding:10px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.05);border-radius:11px;margin-bottom:4px}
+.file-ic{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.file-ic.img{background:rgba(168,139,250,.1)}.file-ic.doc{background:rgba(56,189,248,.1)}.file-ic.zip{background:rgba(251,146,60,.1)}.file-ic.aud{background:rgba(74,222,128,.1)}.file-ic.def{background:rgba(255,255,255,.05)}
+.file-info{flex:1;min-width:0}.file-name{font-size:11px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.file-meta{font-size:9px;color:rgba(255,255,255,.2);margin-top:1px}
+.dl-btn{width:26px;height:26px;border-radius:8px;background:rgba(108,92,231,.08);border:1px solid rgba(108,92,231,.12);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:11px;color:#a78bfa;flex-shrink:0}
+
+/* TIMETABLE (shared routine) */
+.tt-wrap{overflow-x:auto;margin-bottom:12px}
+.tt{display:grid;gap:2px;min-width:500px}
+.tt-corner{background:transparent}.tt-dayh{background:rgba(108,92,231,.08);border-radius:7px;padding:5px 2px;text-align:center;font-size:9px;font-weight:700;color:#a78bfa}
+.tt-timeh{background:rgba(255,255,255,.025);border-radius:7px;padding:5px 2px;text-align:center;font-size:8px;font-weight:600;color:rgba(255,255,255,.18);white-space:nowrap}
+.tt-cell{background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.03);border-radius:7px;padding:3px 2px;min-height:30px;text-align:center;font-size:9px;color:rgba(255,255,255,.5);cursor:pointer;transition:all .15s;word-break:break-word;display:flex;align-items:center;justify-content:center}
+.tt-cell:hover{background:rgba(108,92,231,.08);border-color:rgba(108,92,231,.15)}.tt-cell.filled{background:rgba(108,92,231,.1);border-color:rgba(108,92,231,.18);color:#c4b5fd;font-weight:600}
+
+/* NOTES */
+.note-card{position:relative;overflow:hidden;cursor:pointer;border-left:3px solid}
+.note-card.expanded .note-body{display:block}
+.note-body{display:none;margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,.05);font-size:11px;color:rgba(255,255,255,.4);line-height:1.6;white-space:pre-wrap}
+.note-colors{display:flex;gap:6px;margin-bottom:8px}
+.nc{width:22px;height:22px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:all .15s}.nc.sel{border-color:#fff;transform:scale(1.15)}
+
+/* GOALS */
+.goal-prog{height:6px;border-radius:3px;background:rgba(255,255,255,.05);margin-top:6px;overflow:hidden}
+.goal-fill{height:100%;border-radius:3px;transition:width .3s}
+
+/* FINANCE */
+.fin-summary{display:flex;justify-content:space-around;text-align:center;margin-bottom:14px;padding:12px;background:rgba(255,255,255,.03);border-radius:13px;border:1px solid rgba(255,255,255,.05)}
+.fin-val{font-size:20px;font-weight:700}.fin-lbl{font-size:9px;color:rgba(255,255,255,.2);margin-top:2px}
+.fin-in{color:#4ade80}.fin-out{color:#f87171}.fin-bal{color:#a78bfa}
+
+/* MOOD */
+.mood-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:14px}
+.mood-day{text-align:center;padding:6px 2px;background:rgba(255,255,255,.025);border-radius:8px;cursor:pointer;transition:all .15s}
+.mood-day:hover{background:rgba(255,255,255,.06)}
+.mood-day .md{font-size:8px;color:rgba(255,255,255,.2);margin-bottom:2px;font-weight:600}
+.mood-day .me{font-size:18px}
+.mood-picker{display:flex;gap:8px;justify-content:center;margin-bottom:14px}
+.mood-opt{font-size:26px;cursor:pointer;transition:transform .15s;filter:grayscale(.4)}.mood-opt:hover{transform:scale(1.2);filter:none}.mood-opt.sel{transform:scale(1.25);filter:none}
+
+/* PASSWORDS */
+.pw-card{display:flex;align-items:center;gap:10px;padding:10px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.05);border-radius:11px;margin-bottom:4px}
+.pw-icon{width:36px;height:36px;border-radius:9px;background:rgba(108,92,231,.1);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.pw-info{flex:1;min-width:0}.pw-site{font-size:11px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.pw-user{font-size:9px;color:rgba(255,255,255,.2)}
+.pw-show{padding:4px 8px;border-radius:6px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);font-size:9px;color:rgba(255,255,255,.4);cursor:pointer;font-family:inherit}
+
+/* WISHLIST */
+.wish-card{display:flex;align-items:center;gap:10px}
+.wish-img{width:44px;height:44px;border-radius:10px;background:rgba(108,92,231,.06);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.wish-info{flex:1;min-width:0}.wish-name{font-size:12px;font-weight:600}.wish-price{font-size:10px;color:#a78bfa;margin-top:1px}
+.wish-check{width:24px;height:24px;border-radius:7px;border:2px solid rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:11px;flex-shrink:0;transition:all .15s}
+.wish-check.done{border-color:#4ade80;background:rgba(74,222,128,.1);color:#4ade80}
+/* SYNC */
+.sync-btn{position:fixed;bottom:14px;right:14px;width:36px;height:36px;border-radius:11px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;font-size:14px;cursor:pointer;z-index:20;transition:all .3s}
+.sync-btn.connected{border-color:rgba(74,222,128,.25);background:rgba(74,222,128,.06);box-shadow:0 0 12px rgba(74,222,128,.1)}
+.sync-status{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:9px;font-size:11px;font-weight:600;margin-bottom:14px}
+.sync-status.off{background:rgba(255,255,255,.04);color:rgba(255,255,255,.25)}
+.sync-status.on{background:rgba(74,222,128,.08);color:#4ade80}
+.setup-steps{font-size:11px;color:rgba(255,255,255,.3);line-height:1.8;margin-bottom:12px;padding:12px;background:rgba(255,255,255,.02);border-radius:11px;border:1px solid rgba(255,255,255,.04)}
+.setup-steps b{color:rgba(255,255,255,.5)}
+.setup-steps .hl{color:#a78bfa}
+.sync-actions{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.sync-act{padding:9px 14px;border-radius:10px;font-family:inherit;font-size:11px;font-weight:600;cursor:pointer;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);color:rgba(255,255,255,.5);display:flex;align-items:center;gap:5px;transition:all .15s}
+.sync-act:hover{background:rgba(255,255,255,.07)}
+.sync-act.primary{background:linear-gradient(135deg,rgba(108,92,231,.15),rgba(168,85,247,.1));border-color:rgba(108,92,231,.25);color:#a78bfa}
+.sync-act.primary:hover{background:linear-gradient(135deg,rgba(108,92,231,.25),rgba(168,85,247,.15))}
+</style>
+<script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-database-compat.js"></script>
+</head>
+<body>
+<div class="bg"><div class="aurora"></div><div class="aurora2"></div><div class="stars" id="stars"></div>
+<div class="gorb" style="width:220px;height:220px;background:rgba(90,50,220,.25);top:55%;left:8%"></div>
+<div class="gorb" style="width:180px;height:180px;background:rgba(50,140,220,.15);top:25%;right:3%;animation-delay:-10s"></div>
+<div class="gorb" style="width:140px;height:140px;background:rgba(200,50,140,.12);top:70%;right:20%;animation-delay:-18s"></div></div>
+
+<div id="dashboard">
+  <div class="title">LifeVault</div>
+  <div class="cal-wrap" id="calWrap"></div>
+  <div id="cubes"></div>
+  <div class="trash-zone" id="trash">🗑️</div>
+  <div class="hbtn" onclick="toggleHistory()">📋</div>
+  <div class="hpanel" id="hpanel"></div>
+  <div class="sync-btn" id="syncBtn" onclick="openPage({page:'sync',emoji:'☁️',name:'Cloud Sync'})">☁️</div>
+</div>
+
+<!-- MYSELF --><div class="page" id="page-myself"><div class="ph"><div class="pb" onclick="closePage()">←</div><div class="pt">Myself</div></div><div class="my-layout"><div class="my-left" id="myselfFields"></div><div class="my-right"><svg class="body-svg" viewBox="0 0 120 320" width="100"><circle cx="60" cy="30" r="18" class="lm"/><line x1="60" y1="48" x2="60" y2="62" class="lm"/><path d="M60 62 L38 74 L34 145 L52 148 L55 105 L60 108 L65 105 L68 148 L86 145 L82 74 Z" class="lm tf"/><path d="M38 74 L16 118 L12 150" class="lm"/><path d="M82 74 L104 118 L108 150" class="lm"/><ellipse cx="12" cy="153" rx="4" ry="3.5" class="lm"/><ellipse cx="108" cy="153" rx="4" ry="3.5" class="lm"/><path d="M52 148 L46 225 L42 275" class="lm"/><path d="M68 148 L74 225 L78 275" class="lm"/><circle cx="46" cy="225" r="3" class="jt"/><circle cx="74" cy="225" r="3" class="jt"/><path d="M42 275 L34 290 L52 290 Z" class="lm"/><path d="M78 275 L70 290 L88 290 Z" class="lm"/></svg></div></div></div>
+
+<!-- IDEAS --><div class="page" id="page-ideas"><div class="ph"><div class="pb" onclick="closePage()">←</div><div class="pt">💡 Ideas</div></div><div class="px"><div class="tabs" id="ideaTabs"></div><button class="add-btn" onclick="openModal('idea')">+ New Idea</button><div id="ideasList"></div></div></div>
+
+<!-- FILES --><div class="page" id="page-files"><div class="ph"><div class="pb" onclick="closePage()">←</div><div class="pt">📁 Files</div></div><div class="px"><div class="search-wrap"><input class="search-bar" id="fileSearch" placeholder="Search files..." oninput="renderFiles()"></div><div class="tabs" id="fileTabs"></div><div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()"><div style="font-size:24px;margin-bottom:4px">📎</div><div style="color:rgba(255,255,255,.25);font-size:11px">Tap to upload</div></div><input type="file" id="fileInput" multiple style="display:none" onchange="handleFiles(this.files)"><div id="filesList"></div></div></div>
+
+<!-- ROUTINE --><div class="page" id="page-routine"><div class="ph"><div class="pb" onclick="closePage()">←</div><div class="pt">⏰ Routine</div></div><div class="px"><div class="tt-wrap" id="routineTT"></div></div></div>
+
+<!-- NOTES --><div class="page" id="page-notes"><div class="ph"><div class="pb" onclick="closePage()">←</div><div class="pt">🗒️ Notes</div></div><div class="px"><button class="add-btn" onclick="openModal('note')">+ New Note</button><div id="notesList"></div></div></div>
+
+<!-- GOALS --><div class="page" id="page-goals"><div class="ph"><div class="pb" onclick="closePage()">←</div><div class="pt">🎯 Goals</div></div><div class="px"><button class="add-btn" onclick="openModal('goal')">+ New Goal</button><div id="goalsList"></div></div></div>
+
+<!-- FINANCE --><div class="page" id="page-finance"><div class="ph"><div class="pb" onclick="closePage()">←</div><div class="pt">💰 Finance</div></div><div class="px"><div class="fin-summary" id="finSum"></div><button class="add-btn" onclick="openModal('transaction')">+ Add</button><div id="finList"></div></div></div>
+
+<!-- MOOD --><div class="page" id="page-mood"><div class="ph"><div class="pb" onclick="closePage()">←</div><div class="pt">😊 Mood</div></div><div class="px"><div class="sec">How are you today?</div><div class="mood-picker" id="moodPicker"></div><div class="sec">This week</div><div class="mood-grid" id="moodGrid"></div><div class="sec">Journal</div><textarea id="moodJournal" class="my-input" rows="4" placeholder="Write about your day..." oninput="saveMoodJournal()"></textarea></div></div>
+
+<!-- PASSWORDS --><div class="page" id="page-passwords"><div class="ph"><div class="pb" onclick="closePage()">←</div><div class="pt">🔐 Passwords</div></div><div class="px"><button class="add-btn" onclick="openModal('password')">+ Add Password</button><div id="pwList"></div></div></div>
+
+<!-- WISHLIST --><div class="page" id="page-wishlist"><div class="ph"><div class="pb" onclick="closePage()">←</div><div class="pt">🎁 Wishlist</div></div><div class="px"><button class="add-btn" onclick="openModal('wish')">+ Add Item</button><div id="wishList"></div></div></div>
+
+<!-- HABITS --><div class="page" id="page-habits"><div class="ph"><div class="pb" onclick="closePage()">←</div><div class="pt">✅ Habits</div></div><div class="px"><div id="habitsStats"></div><button class="add-btn" onclick="openModal('habit')">+ Add Habit</button><div id="habitsList"></div></div></div>
+
+<!-- SYNC --><div class="page" id="page-sync"><div class="ph"><div class="pb" onclick="closePage()">←</div><div class="pt">☁️ Cloud Sync</div></div><div class="px" id="syncContent"></div></div>
+
+<!-- GENERIC --><div class="page" id="innerPage"><div class="ph"><div class="pb" onclick="closePage()">←</div><div class="pt" id="innerTitle"></div></div><div class="px"><div class="empty-msg">Coming soon</div></div></div>
+
+<div class="mbg" id="mbg" onclick="if(event.target===this)closeModal()"><div class="modal" id="modalBody"></div></div>
+
+<script>
+const S=(k,v)=>{localStorage.setItem('lv3_'+k,JSON.stringify(v));cloudPush()},L=(k,d)=>{try{return JSON.parse(localStorage.getItem('lv3_'+k))||d}catch{return d}},U=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6),$=id=>document.getElementById(id);
+!function(){const s=$('stars');for(let i=0;i<90;i++){const d=document.createElement('div');d.className='star'+(Math.random()>.85?' big':'');d.style.cssText=`left:${Math.random()*100}%;top:${Math.random()*80}%;--d:${2+Math.random()*3}s;animation-delay:${Math.random()*4}s`;s.appendChild(d)}}();
+
+/* ═══ CALENDAR ═══ */
+let calM=new Date().getMonth(),calY=new Date().getFullYear(),calSel=null;
+function renderCal(){const t=new Date(),f=new Date(calY,calM,1),last=new Date(calY,calM+1,0),sd=(f.getDay()+6)%7,ds=last.getDate(),mn=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],ev=L('events',{});
+let h=`<div class="cal-head"><div class="cal-nav" onclick="calM--;if(calM<0){calM=11;calY--}renderCal()">‹</div><div class="cal-title">${mn[calM]} ${calY}</div><div class="cal-nav" onclick="calM++;if(calM>11){calM=0;calY++}renderCal()">›</div></div><div class="cal-grid">`;
+['Mo','Tu','We','Th','Fr','Sa','Su'].forEach(d=>h+=`<div class="cal-day">${d}</div>`);
+const pl=new Date(calY,calM,0).getDate();for(let i=sd-1;i>=0;i--)h+=`<div class="cal-cell other">${pl-i}</div>`;
+for(let d=1;d<=ds;d++){const k=`${calY}-${String(calM+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`,it=d===t.getDate()&&calM===t.getMonth()&&calY===t.getFullYear(),has=ev[k]?.length;h+=`<div class="cal-cell${it?' today':''}${has?' has-ev':''}${calSel===k?' sel':''}" onclick="selDay('${k}')">${d}</div>`}
+const rem=(sd+ds)%7?7-(sd+ds)%7:0;for(let i=1;i<=rem;i++)h+=`<div class="cal-cell other">${i}</div>`;h+=`</div>`;
+if(calSel){const e=ev[calSel]||[];h+=`<div class="cal-evs">${e.map((x,i)=>`<div class="cal-ev"><span>${x}</span><span style="cursor:pointer;color:rgba(255,100,100,.5)" onclick="delEv('${calSel}',${i})">×</span></div>`).join('')}</div><div class="cal-add"><input id="calIn" placeholder="Add event..." onkeydown="if(event.key==='Enter')addEv('${calSel}')"><button onclick="addEv('${calSel}')">Add</button></div>`}
+$('calWrap').innerHTML=h}
+function selDay(k){calSel=calSel===k?null:k;renderCal()}
+function addEv(k){const v=$('calIn').value.trim();if(!v)return;const e=L('events',{});if(!e[k])e[k]=[];e[k].push(v);S('events',e);renderCal()}
+function delEv(k,i){const e=L('events',{});e[k].splice(i,1);if(!e[k].length)delete e[k];S('events',e);renderCal()}
+
+/* ═══ CUBES ═══ */
+const DEFS=[
+  {id:'myself',emoji:'🧑',name:'Myself',color:'#6c5ce7',page:'myself'},
+  {id:'ideas',emoji:'💡',name:'Ideas',color:'#fdcb6e',page:'ideas'},
+  {id:'files',emoji:'📁',name:'Files',color:'#00b894',page:'files'},
+  {id:'routine',emoji:'⏰',name:'Routine',color:'#e17055',page:'routine'},
+  {id:'notes',emoji:'🗒️',name:'Notes',color:'#fd79a8',page:'notes'},
+  {id:'goals',emoji:'🎯',name:'Goals',color:'#a855f7',page:'goals'},
+  {id:'finance',emoji:'💰',name:'Finance',color:'#f9ca24',page:'finance'},
+  {id:'mood',emoji:'😊',name:'Mood',color:'#74b9ff',page:'mood'},
+  {id:'passwords',emoji:'🔐',name:'Passwords',color:'#636e72',page:'passwords'},
+  {id:'wishlist',emoji:'🎁',name:'Wishlist',color:'#e84393',page:'wishlist'},
+  {id:'habits',emoji:'✅',name:'Habits',color:'#00cec9',page:'habits'}
+];
+let cubes=L('cubes3',null);
+if(!cubes||!Array.isArray(cubes)||!cubes.find(c=>c.id==='mood')){
+  const pos=[{x:2,y:5},{x:2,y:18},{x:2,y:31},{x:2,y:44},{x:2,y:57},{x:2,y:70},{x:84,y:5},{x:84,y:18},{x:84,y:31},{x:84,y:44},{x:84,y:57}];
+  cubes=DEFS.map((c,i)=>({...c,x:(pos[i]||{x:2,y:5+i*13}).x,y:(pos[i]||{x:2,y:5+i*13}).y}));S('cubes3',cubes);
+}
+let deleted=L('del3',[]),curPage=null;
+function renderCubes(){const co=$('cubes');co.innerHTML='';cubes.forEach(c=>{const e=document.createElement('div');e.className='cube spawning';e.style.left=c.x+'%';e.style.top=c.y+'%';e.style.borderColor=c.color+'20';e.innerHTML=`<div class="glow" style="background:${c.color}"></div><div class="emoji">${c.emoji}</div><div class="label">${c.name}</div>`;e.dataset.id=c.id;drag(e,c);co.appendChild(e)})}
+function drag(el,cube){let ht,dr=false,hr=false,sx,sy,ox,oy,lt=0;const st=(x,y)=>{sx=x;sy=y;ox=el.offsetLeft;oy=el.offsetTop;hr=dr=false;ht=setTimeout(()=>hr=true,80)};const mv=(x,y)=>{const dx=x-sx,dy=y-sy;if(hr&&!dr&&(Math.abs(dx)>6||Math.abs(dy)>6)){dr=true;el.classList.add('dragging')}if(!dr)return;el.style.left=Math.max(0,Math.min(90,((ox+dx)/innerWidth)*100))+'%';el.style.top=Math.max(3,Math.min(87,((oy+dy)/innerHeight)*100))+'%';const t=$('trash').getBoundingClientRect();$('trash').classList.toggle('active',x>t.left-10&&x<t.right+10&&y>t.top-10&&y<t.bottom+10)};const en=(x,y)=>{clearTimeout(ht);if(dr){el.classList.remove('dragging');const t=$('trash').getBoundingClientRect();if(x>t.left-10&&x<t.right+10&&y>t.top-10&&y<t.bottom+10){deleted.push(cubes.find(z=>z.id===cube.id));S('del3',deleted);cubes=cubes.filter(z=>z.id!==cube.id);S('cubes3',cubes);renderCubes();$('trash').classList.remove('active')}else{cube.x=parseFloat(el.style.left);cube.y=parseFloat(el.style.top);S('cubes3',cubes)}dr=false}else{const n=Date.now();if(n-lt<400){openPage(cube);lt=0}else lt=n}hr=false};
+el.addEventListener('mousedown',e=>{e.preventDefault();st(e.clientX,e.clientY);const mm=e2=>mv(e2.clientX,e2.clientY),mu=e2=>{document.removeEventListener('mousemove',mm);document.removeEventListener('mouseup',mu);en(e2.clientX,e2.clientY)};document.addEventListener('mousemove',mm);document.addEventListener('mouseup',mu)});
+el.addEventListener('touchstart',e=>{const t=e.touches[0];st(t.clientX,t.clientY);const tm=e2=>{e2.preventDefault();mv(e2.touches[0].clientX,e2.touches[0].clientY)},te=e2=>{el.removeEventListener('touchmove',tm);el.removeEventListener('touchend',te);const t2=e2.changedTouches[0];en(t2.clientX,t2.clientY)};el.addEventListener('touchmove',tm,{passive:false});el.addEventListener('touchend',te)},{passive:true})}
+function toggleHistory(){const p=$('hpanel');p.classList.toggle('open');if(p.classList.contains('open'))p.innerHTML=deleted.length?deleted.map((c,i)=>`<div class="hitem" onclick="restoreCube(${i})">${c.emoji} ${c.name}<span style="color:#4ade80">↩</span></div>`).join(''):'<div style="padding:8px;text-align:center;color:rgba(255,255,255,.12);font-size:10px">Empty</div>'}
+function restoreCube(i){const c=deleted.splice(i,1)[0];c.x=3+Math.random()*12;c.y=5+Math.random()*60;cubes.push(c);S('cubes3',cubes);S('del3',deleted);renderCubes();toggleHistory()}
+
+/* ═══ PAGES ═══ */
+const renderers={myself:renderMyself,ideas:renderIdeas,files:renderFiles,routine:renderRoutine,notes:renderNotes,goals:renderGoals,finance:renderFinance,mood:renderMood,passwords:renderPW,wishlist:renderWish,habits:renderHabits,sync:renderSync};
+function openPage(cube){curPage=cube;const pg=$('page-'+cube.page);if(pg){pg.classList.add('open');(renderers[cube.page]||function(){})()} else{$('innerTitle').textContent=cube.emoji+' '+cube.name;$('innerPage').classList.add('open')}$('dashboard').style.opacity='0';$('dashboard').style.pointerEvents='none'}
+function closePage(){document.querySelectorAll('.page.open').forEach(p=>p.classList.remove('open'));curPage=null;$('dashboard').style.opacity='1';$('dashboard').style.pointerEvents='auto'}
+
+/* ═══ MYSELF ═══ */
+const MF=[{k:'name',l:'Name'},{k:'age',l:'Age'},{k:'location',l:'Location'},{k:'bio',l:'Bio',ta:1},{k:'hobbies',l:'Hobbies'},{k:'goals',l:'Goals',ta:1},{k:'contact',l:'Contact'}];
+function renderMyself(){const d=L('myself',{});$('myselfFields').innerHTML='<div class="sec">About Me</div>'+MF.map(f=>`<div class="my-field"><div class="my-label">${f.l}</div>${f.ta?`<textarea class="my-input" rows="2" placeholder="${f.l}..." oninput="saveMy('${f.k}',this.value)">${d[f.k]||''}</textarea>`:`<input class="my-input" placeholder="${f.l}..." value="${d[f.k]||''}" oninput="saveMy('${f.k}',this.value)">`}</div>`).join('')}
+function saveMy(k,v){const d=L('myself',{});d[k]=v;S('myself',d)}
+
+/* ═══ IDEAS ═══ */
+const IC=['All','Personal','Work','Creative','Other'];let icat='All';
+function renderIdeas(){$('ideaTabs').innerHTML=IC.map(c=>`<div class="tab${c===icat?' active':''}" onclick="icat='${c}';renderIdeas()">${c}</div>`).join('');const all=L('ideas',[]),items=icat==='All'?all:all.filter(x=>x.cat===icat);
+$('ideasList').innerHTML=items.length?items.map(it=>{const i=all.findIndex(x=>x.id===it.id);return`<div class="card idea-card" data-c="${it.cat||'Other'}" onclick="this.classList.toggle('expanded')"><div style="display:flex;justify-content:space-between;align-items:center"><div><div style="font-size:13px;font-weight:600">${it.title}</div><div class="idea-cat ${it.cat||'Other'}">${it.cat||'Other'}</div></div><div style="display:flex;gap:4px" onclick="event.stopPropagation()"><div class="edit-btn" onclick="editIdea(${i})">✎</div><div class="del-btn" onclick="del('ideas',${i});renderIdeas()">×</div></div></div><div class="idea-detail"><div style="font-size:11px;color:rgba(255,255,255,.35);line-height:1.5;white-space:pre-wrap">${it.text||'No description'}</div></div></div>`}).join(''):'<div class="empty-msg">No ideas yet</div>'}
+function editIdea(i){const a=L('ideas',[]),it=a[i];$('modalBody').innerHTML=`<h3>Edit Idea</h3><input id="mT" value="${it.title}"><select id="mC">${['Personal','Work','Creative','Other'].map(c=>`<option${c===it.cat?' selected':''}>${c}</option>`).join('')}</select><textarea id="mX">${it.text||''}</textarea><div class="mbtn"><button class="cn" onclick="closeModal()">Cancel</button><button class="sv" onclick="const a=L('ideas',[]);a[${i}].title=$('mT').value;a[${i}].cat=$('mC').value;a[${i}].text=$('mX').value;S('ideas',a);closeModal();renderIdeas()">Save</button></div>`;$('mbg').classList.add('open')}
+
+/* ═══ FILES ═══ */
+const FC=['All','Personal','Study','Work','Other'];let fcat='All';
+function renderFiles(){const q=($('fileSearch')||{}).value?.toLowerCase()||'';$('fileTabs').innerHTML=FC.map(c=>`<div class="tab${c===fcat?' active':''}" onclick="fcat='${c}';renderFiles()">${c}</div>`).join('');let f=L('files',[]);if(fcat!=='All')f=f.filter(x=>x.cat===fcat);if(q)f=f.filter(x=>x.name.toLowerCase().includes(q));
+$('filesList').innerHTML=f.length?f.map(x=>{const ri=L('files',[]).findIndex(z=>z.id===x.id);const cls=!x.type?'def':x.type.startsWith('image')?'img':x.type.includes('pdf')?'doc':(x.type.includes('zip')||x.type.includes('rar'))?'zip':x.type.includes('audio')?'aud':'def';const ic={img:'🖼️',doc:'📕',zip:'📦',aud:'🎵',def:'📄'}[cls];return`<div class="file-card"><div class="file-ic ${cls}">${ic}</div><div class="file-info"><div class="file-name">${x.name}</div><div class="file-meta">${fmtSz(x.size)} · ${x.cat||'Other'}</div></div><div class="dl-btn" onclick="dlFile('${x.id}')">↓</div><div class="del-btn" onclick="del('files',${ri});renderFiles()" style="margin-left:3px">×</div></div>`}).join(''):'<div class="empty-msg">No files</div>'}
+function fmtSz(b){if(!b)return'';if(b<1024)return b+'B';if(b<1048576)return(b/1024).toFixed(1)+'KB';return(b/1048576).toFixed(1)+'MB'}
+function handleFiles(fl){const f=L('files',[]);Array.from(fl).forEach(x=>{const r=new FileReader();r.onload=()=>{f.push({id:U(),name:x.name,type:x.type,size:x.size,cat:fcat==='All'?'Personal':fcat,data:r.result});S('files',f);renderFiles()};r.readAsDataURL(x)})}
+function dlFile(id){const f=L('files',[]).find(x=>x.id===id);if(!f)return;const a=document.createElement('a');a.href=f.data;a.download=f.name;a.click()}
+document.addEventListener('DOMContentLoaded',()=>{const uz=$('uploadZone');uz.addEventListener('dragover',e=>{e.preventDefault();uz.style.borderColor='rgba(108,92,231,.6)'});uz.addEventListener('dragleave',()=>uz.style.borderColor='');uz.addEventListener('drop',e=>{e.preventDefault();uz.style.borderColor='';handleFiles(e.dataTransfer.files)})});
+
+/* ═══ ROUTINE (timetable 6:00-00:00) ═══ */
+const RDAYS=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],RTIMES=[];
+for(let h=6;h<=23;h++)RTIMES.push(String(h).padStart(2,'0')+':00');RTIMES.push('00:00');
+function renderRoutine(){const tt=L('routine',{});let h=`<div class="tt" style="grid-template-columns:44px repeat(7,1fr)"><div class="tt-corner"></div>`;RDAYS.forEach(d=>h+=`<div class="tt-dayh">${d}</div>`);
+RTIMES.forEach((t,r)=>{h+=`<div class="tt-timeh">${t}</div>`;for(let c=0;c<7;c++){const k=`${r}_${c}`,v=tt[k]||'';h+=`<div class="tt-cell${v?' filled':''}" onclick="editRT('${k}')">${v}</div>`}});h+='</div>';$('routineTT').innerHTML=h}
+function editRT(k){const tt=L('routine',{});const v=prompt('Activity:',tt[k]||'');if(v===null)return;if(v.trim())tt[k]=v.trim();else delete tt[k];S('routine',tt);renderRoutine()}
+
+/* ═══ NOTES ═══ */
+const NCOLS=['#a78bfa','#38bdf8','#fb923c','#4ade80','#f87171','#fbbf24'];
+function renderNotes(){const notes=L('notes',[]);$('notesList').innerHTML=notes.length?notes.map((n,i)=>`<div class="card note-card" style="border-left-color:${n.color||NCOLS[0]}" onclick="this.classList.toggle('expanded')"><div style="display:flex;justify-content:space-between;align-items:center"><div style="font-size:13px;font-weight:600">${n.title}</div><div style="display:flex;gap:4px" onclick="event.stopPropagation()"><div class="edit-btn" onclick="editNote(${i})">✎</div><div class="del-btn" onclick="del('notes',${i});renderNotes()">×</div></div></div><div class="note-body">${n.text||'Empty note'}</div></div>`).join(''):'<div class="empty-msg">No notes yet</div>'}
+function editNote(i){const a=L('notes',[]),n=a[i];$('modalBody').innerHTML=`<h3>Edit Note</h3><input id="mT" value="${n.title}"><textarea id="mX">${n.text||''}</textarea><div class="note-colors" id="ncPick">${NCOLS.map(c=>`<div class="nc${c===n.color?' sel':''}" style="background:${c}" onclick="document.querySelectorAll('.nc').forEach(x=>x.classList.remove('sel'));this.classList.add('sel')"></div>`).join('')}</div><div class="mbtn"><button class="cn" onclick="closeModal()">Cancel</button><button class="sv" onclick="const a=L('notes',[]);a[${i}].title=$('mT').value;a[${i}].text=$('mX').value;a[${i}].color=document.querySelector('.nc.sel')?.style.background||'${NCOLS[0]}';S('notes',a);closeModal();renderNotes()">Save</button></div>`;$('mbg').classList.add('open')}
+
+/* ═══ GOALS ═══ */
+function renderGoals(){const g=L('goals',[]);$('goalsList').innerHTML=g.length?g.map((x,i)=>`<div class="card"><div style="display:flex;justify-content:space-between;align-items:center"><div style="font-size:13px;font-weight:600">${x.title}</div><div style="display:flex;align-items:center;gap:6px"><span style="font-size:11px;color:#a78bfa;font-weight:700">${x.progress||0}%</span><div class="del-btn" onclick="del('goals',${i});renderGoals()">×</div></div></div><div class="goal-prog"><div class="goal-fill" style="width:${x.progress||0}%;background:linear-gradient(90deg,#6c5ce7,#a855f7)"></div></div><input type="range" min="0" max="100" value="${x.progress||0}" style="width:100%;margin-top:6px;accent-color:#6c5ce7" oninput="updGoal(${i},this.value)"></div>`).join(''):'<div class="empty-msg">No goals yet</div>'}
+function updGoal(i,v){const g=L('goals',[]);g[i].progress=+v;S('goals',g);renderGoals()}
+
+/* ═══ FINANCE ═══ */
+function renderFinance(){const f=L('finance',[]),inc=f.filter(x=>x.type==='in').reduce((s,x)=>s+x.amount,0),exp=f.filter(x=>x.type==='out').reduce((s,x)=>s+x.amount,0);
+$('finSum').innerHTML=`<div><div class="fin-val fin-in">+€${inc.toFixed(2)}</div><div class="fin-lbl">Income</div></div><div><div class="fin-val fin-bal">€${(inc-exp).toFixed(2)}</div><div class="fin-lbl">Balance</div></div><div><div class="fin-val fin-out">-€${exp.toFixed(2)}</div><div class="fin-lbl">Expenses</div></div>`;
+$('finList').innerHTML=f.length?f.slice().reverse().map((x,i)=>{const ri=f.length-1-i;return`<div class="card"><div style="display:flex;justify-content:space-between;align-items:center"><div><div style="font-size:12px;font-weight:600">${x.desc}</div><div style="font-size:9px;color:rgba(255,255,255,.2);margin-top:1px">${x.date||''}</div></div><div style="display:flex;align-items:center;gap:6px"><span style="font-size:13px;font-weight:700;color:${x.type==='in'?'#4ade80':'#f87171'}">${x.type==='in'?'+':'-'}€${x.amount.toFixed(2)}</span><div class="del-btn" onclick="del('finance',${ri});renderFinance()">×</div></div></div></div>`}).join(''):'<div class="empty-msg">No transactions</div>'}
+
+/* ═══ MOOD ═══ */
+const MOODS=['😄','😊','😐','😔','😢'];
+function renderMood(){const today=new Date().toISOString().slice(0,10),md=L('mood',{}),cur=md[today]?.mood;
+$('moodPicker').innerHTML=MOODS.map((m,i)=>`<div class="mood-opt${cur===i?' sel':''}" onclick="setMood(${i})">${m}</div>`).join('');
+const days=[];for(let i=6;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);days.push(d)}
+$('moodGrid').innerHTML=days.map(d=>{const k=d.toISOString().slice(0,10),v=md[k];return`<div class="mood-day"><div class="md">${['Su','Mo','Tu','We','Th','Fr','Sa'][d.getDay()]}</div><div class="me">${v?.mood!==undefined?MOODS[v.mood]:'·'}</div></div>`}).join('');
+$('moodJournal').value=md[today]?.journal||''}
+function setMood(i){const k=new Date().toISOString().slice(0,10),md=L('mood',{});if(!md[k])md[k]={};md[k].mood=i;S('mood',md);renderMood()}
+function saveMoodJournal(){const k=new Date().toISOString().slice(0,10),md=L('mood',{});if(!md[k])md[k]={};md[k].journal=$('moodJournal').value;S('mood',md)}
+
+/* ═══ PASSWORDS ═══ */
+function renderPW(){const p=L('passwords',[]);$('pwList').innerHTML=p.length?p.map((x,i)=>`<div class="pw-card"><div class="pw-icon">🔑</div><div class="pw-info"><div class="pw-site">${x.site}</div><div class="pw-user">${x.user}</div></div><div class="pw-show" onclick="this.textContent=this.textContent==='Show'?'${x.pw.replace(/'/g,"\\'")}':'Show'">Show</div><div class="del-btn" onclick="del('passwords',${i});renderPW()" style="margin-left:4px">×</div></div>`).join(''):'<div class="empty-msg">No passwords saved</div>'}
+
+/* ═══ WISHLIST ═══ */
+function renderWish(){const w=L('wishlist',[]);$('wishList').innerHTML=w.length?w.map((x,i)=>`<div class="card"><div class="wish-card"><div class="wish-img">${x.emoji||'🎁'}</div><div class="wish-info"><div class="wish-name">${x.name}</div>${x.price?`<div class="wish-price">€${x.price}</div>`:''}</div><div class="wish-check${x.done?' done':''}" onclick="togWish(${i})">${x.done?'✓':''}</div><div class="del-btn" onclick="del('wishlist',${i});renderWish()" style="margin-left:4px">×</div></div></div>`).join(''):'<div class="empty-msg">No items yet</div>'}
+function togWish(i){const w=L('wishlist',[]);w[i].done=!w[i].done;S('wishlist',w);renderWish()}
+
+/* ═══ HABITS ═══ */
+function renderHabits(){const h=L('habits',[]),days=['M','T','W','T','F','S','S'],total=h.length*7,done=h.reduce((s,x)=>(x.days||[]).reduce((a,v)=>a+v,0)+s,0),pct=total?Math.round(done/total*100):0;
+$('habitsStats').innerHTML=h.length?`<div class="card" style="text-align:center;margin-bottom:12px"><div style="font-size:24px;font-weight:700;background:linear-gradient(135deg,#4ade80,#22d3ee);-webkit-background-clip:text;-webkit-text-fill-color:transparent">${pct}%</div><div style="font-size:9px;color:rgba(255,255,255,.18);margin-top:2px">Weekly</div><div class="streak-bar" style="margin-top:6px"><div class="streak-fill" style="width:${pct}%"></div></div></div>`:'';
+$('habitsList').innerHTML=h.length?h.map((x,hi)=>{const cnt=(x.days||[]).reduce((a,v)=>a+v,0);return`<div class="card"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px"><div style="display:flex;align-items:center"><span style="font-size:18px;margin-right:6px">${x.emoji||'✅'}</span><div><div style="font-size:12px;font-weight:600">${x.name}</div></div></div><div style="display:flex;align-items:center;gap:5px"><span style="font-size:9px;color:rgba(255,255,255,.18)">${cnt}/7</span><div class="del-btn" onclick="del('habits',${hi});renderHabits()">×</div></div></div><div class="day-row">${days.map((d,di)=>`<div class="day-box${x.days&&x.days[di]?' done':''}" onclick="togH(${hi},${di})"><span class="dl">${d}</span><span class="dc">✓</span></div>`).join('')}</div><div class="streak-bar"><div class="streak-fill" style="width:${Math.round(cnt/7*100)}%"></div></div></div>`}).join(''):'<div class="empty-msg">No habits yet</div>'}
+function togH(hi,di){const h=L('habits',[]);if(!h[hi].days)h[hi].days=[0,0,0,0,0,0,0];h[hi].days[di]=h[hi].days[di]?0:1;S('habits',h);renderHabits()}
+
+/* ═══ HELPERS ═══ */
+function del(k,i){const a=L(k,[]);a.splice(i,1);S(k,a)}
+
+/* ═══ MODAL ═══ */
+function openModal(t){const m=$('modalBody');
+if(t==='idea')m.innerHTML='<h3>New Idea</h3><input id="mT" placeholder="Title"><select id="mC"><option>Personal</option><option>Work</option><option>Creative</option><option>Other</option></select><textarea id="mX" placeholder="Description (optional)"></textarea><div class="mbtn"><button class="cn" onclick="closeModal()">Cancel</button><button class="sv" onclick="saveM(\'idea\')">Save</button></div>';
+else if(t==='note')m.innerHTML=`<h3>New Note</h3><input id="mT" placeholder="Title"><textarea id="mX" placeholder="Content"></textarea><div class="note-colors">${NCOLS.map((c,i)=>`<div class="nc${!i?' sel':''}" style="background:${c}" onclick="document.querySelectorAll('.nc').forEach(x=>x.classList.remove('sel'));this.classList.add('sel')"></div>`).join('')}</div><div class="mbtn"><button class="cn" onclick="closeModal()">Cancel</button><button class="sv" onclick="saveM('note')">Save</button></div>`;
+else if(t==='goal')m.innerHTML='<h3>New Goal</h3><input id="mT" placeholder="Goal title"><div class="mbtn"><button class="cn" onclick="closeModal()">Cancel</button><button class="sv" onclick="saveM(\'goal\')">Save</button></div>';
+else if(t==='transaction')m.innerHTML='<h3>New Transaction</h3><input id="mD2" placeholder="Description"><input id="mA" type="number" step="0.01" placeholder="Amount"><select id="mTp"><option value="in">Income</option><option value="out">Expense</option></select><input id="mDt" type="date"><div class="mbtn"><button class="cn" onclick="closeModal()">Cancel</button><button class="sv" onclick="saveM(\'transaction\')">Save</button></div>';
+else if(t==='habit')m.innerHTML='<h3>New Habit</h3><input id="mN" placeholder="Habit name"><input id="mE" placeholder="Emoji (optional)" maxlength="4"><div class="mbtn"><button class="cn" onclick="closeModal()">Cancel</button><button class="sv" onclick="saveM(\'habit\')">Save</button></div>';
+else if(t==='password')m.innerHTML='<h3>Add Password</h3><input id="mSi" placeholder="Site / App"><input id="mUs" placeholder="Username / Email"><input id="mPw" placeholder="Password" type="password"><div class="mbtn"><button class="cn" onclick="closeModal()">Cancel</button><button class="sv" onclick="saveM(\'password\')">Save</button></div>';
+else if(t==='wish')m.innerHTML='<h3>Add to Wishlist</h3><input id="mN" placeholder="Item name"><input id="mE" placeholder="Emoji (optional)" maxlength="4"><input id="mPr" type="number" step="0.01" placeholder="Price (optional)"><div class="mbtn"><button class="cn" onclick="closeModal()">Cancel</button><button class="sv" onclick="saveM(\'wish\')">Save</button></div>';
+$('mbg').classList.add('open')}
+function closeModal(){$('mbg').classList.remove('open')}
+function saveM(t){const g=id=>$(id)?.value||'';
+if(t==='idea'){const a=L('ideas',[]);a.push({id:U(),title:g('mT')||'Untitled',cat:g('mC'),text:g('mX')});S('ideas',a);renderIdeas()}
+else if(t==='note'){const a=L('notes',[]);a.push({id:U(),title:g('mT')||'Untitled',text:g('mX'),color:document.querySelector('.nc.sel')?.style.background||NCOLS[0]});S('notes',a);renderNotes()}
+else if(t==='goal'){const a=L('goals',[]);a.push({id:U(),title:g('mT')||'Goal',progress:0});S('goals',a);renderGoals()}
+else if(t==='transaction'){const a=L('finance',[]);a.push({id:U(),desc:g('mD2')||'Transaction',amount:parseFloat(g('mA'))||0,type:g('mTp'),date:g('mDt')});S('finance',a);renderFinance()}
+else if(t==='habit'){const a=L('habits',[]);a.push({id:U(),name:g('mN')||'Habit',emoji:g('mE')||'✅',days:[0,0,0,0,0,0,0]});S('habits',a);renderHabits()}
+else if(t==='password'){const a=L('passwords',[]);a.push({id:U(),site:g('mSi')||'Site',user:g('mUs'),pw:g('mPw')});S('passwords',a);renderPW()}
+else if(t==='wish'){const a=L('wishlist',[]);a.push({id:U(),name:g('mN')||'Item',emoji:g('mE')||'🎁',price:parseFloat(g('mPr'))||0,done:false});S('wishlist',a);renderWish()}
+closeModal()}
+
+/* ═══ CLOUD SYNC ═══ */
+let fbDb=null,fbRef=null,syncTimer=null,pulling=false;
+const FB_KEYS=['cubes3','del3','events','myself','ideas','files','routine','notes','goals','finance','mood','passwords','wishlist','habits'];
+
+function renderSync(){
+const cfg=L('fb_config',null),code=L('vault_code',''),on=!!fbDb;
+$('syncContent').innerHTML=`
+<div class="sync-status ${on?'on':'off'}">${on?'● Prisijungta':'○ Neprisijungta'}</div>
+
+<div class="sec">Greitas eksportas / importas</div>
+<div class="sync-actions">
+<button class="sync-act" onclick="exportData()">📥 Export JSON</button>
+<button class="sync-act" onclick="document.getElementById('importIn').click()">📤 Import JSON</button>
+<input type="file" id="importIn" accept=".json" style="display:none" onchange="importData(this.files[0])">
+</div>
+
+<div class="sec">Firebase Cloud Sync</div>
+<div class="setup-steps">
+<b>1.</b> Eik į <span class="hl">console.firebase.google.com</span><br>
+<b>2.</b> Spausk <b>Create a project</b> → įrašyk pavadinimą → <b>Continue</b> → išjunk Analytics → <b>Create</b><br>
+<b>3.</b> Kairėje spausk <b>Build → Realtime Database → Create Database → Start in test mode → Enable</b><br>
+<b>4.</b> Eik į ⚙️ <b>Project Settings</b> (viršuje kairėje) → apačioje spausk <b>&lt;/&gt;</b> (Web) → Register app<br>
+<b>5.</b> Nukopijuok <b>firebaseConfig = {...}</b> objektą ir įklijuok žemiau
+</div>
+<textarea class="my-input" id="fbCfgIn" rows="7" placeholder='{"apiKey":"...","authDomain":"...","databaseURL":"...","projectId":"...","storageBucket":"...","messagingSenderId":"...","appId":"..."}'style="font-size:10px;font-family:monospace">${cfg?JSON.stringify(cfg,null,2):''}</textarea>
+<div style="margin-top:8px">
+<div class="my-label">Vault Code (naudok tą patį visuose prietaisuose)</div>
+<input class="my-input" id="vaultIn" placeholder="pvz: mano-vault-2025" value="${code}">
+</div>
+<div class="sync-actions" style="margin-top:12px">
+<button class="sync-act primary" onclick="saveFirebaseConfig()">💾 Išsaugoti ir prisijungti</button>
+${on?`<button class="sync-act primary" onclick="pushToCloud()">⬆ Push į Cloud</button>
+<button class="sync-act primary" onclick="pullFromCloud()">⬇ Pull iš Cloud</button>`:''}
+${cfg?'<button class="sync-act" onclick="disconnectFB()">Atjungti</button>':''}
+</div>`;
+}
+
+function saveFirebaseConfig(){
+try{
+let raw=$('fbCfgIn').value.trim();
+if(raw.startsWith('const ')||raw.startsWith('var ')||raw.startsWith('let '))raw=raw.replace(/^.*?=\s*/,'').replace(/;$/,'');
+const cfg=JSON.parse(raw);
+if(!cfg.databaseURL){alert('Trūksta databaseURL! Patikrink ar teisingai nukopijuota.');return}
+const code=$('vaultIn').value.trim();
+if(!code){alert('Įvesk vault code!');return}
+S('fb_config',cfg);S('vault_code',code);
+initFB(cfg,code);
+setTimeout(renderSync,500);
+}catch(e){alert('Neteisingas JSON formatas: '+e.message)}}
+
+function initFB(cfg,code){
+try{
+if(firebase.apps.length){firebase.app().delete().then(()=>doInitFB(cfg,code))}
+else doInitFB(cfg,code);
+}catch(e){console.error('FB init:',e)}}
+
+function doInitFB(cfg,code){
+firebase.initializeApp(cfg);
+fbDb=firebase.database();
+fbRef=fbDb.ref('vaults/'+encodeURIComponent(code));
+const sb=$('syncBtn');if(sb)sb.classList.add('connected');
+fbRef.on('value',snap=>{
+if(pulling)return;
+const data=snap.val();
+if(data&&!syncTimer){
+pulling=true;
+FB_KEYS.forEach(k=>{if(data[k]!==undefined)localStorage.setItem('lv3_'+k,data[k])});
+pulling=false;
+}});
+}
+
+function pushToCloud(){
+if(!fbRef){alert('Neprisijungta!');return}
+const data={};
+FB_KEYS.forEach(k=>{const v=localStorage.getItem('lv3_'+k);if(v)data[k]=v});
+fbRef.set(data).then(()=>alert('✅ Duomenys nusiųsti į cloud!')).catch(e=>alert('Klaida: '+e.message));
+}
+
+function pullFromCloud(){
+if(!fbRef){alert('Neprisijungta!');return}
+fbRef.once('value',snap=>{
+const data=snap.val();
+if(data){
+FB_KEYS.forEach(k=>{if(data[k])localStorage.setItem('lv3_'+k,data[k])});
+alert('✅ Duomenys parsiųsti! Atnaujinama...');
+location.reload();
+}else alert('Cloud tuščias - nėra duomenų.')});
+}
+
+function disconnectFB(){
+localStorage.removeItem('lv3_fb_config');localStorage.removeItem('lv3_vault_code');
+if(fbRef)fbRef.off();
+fbDb=null;fbRef=null;
+const sb=$('syncBtn');if(sb)sb.classList.remove('connected');
+renderSync();
+}
+
+function cloudPush(){
+if(!fbRef||pulling)return;
+clearTimeout(syncTimer);
+syncTimer=setTimeout(()=>{
+const data={};
+FB_KEYS.forEach(k=>{const v=localStorage.getItem('lv3_'+k);if(v)data[k]=v});
+fbRef.set(data).catch(()=>{});
+syncTimer=null;
+},2000);
+}
+
+function exportData(){
+const data={};
+for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k.startsWith('lv3_'))data[k]=localStorage.getItem(k)}
+const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+const a=document.createElement('a');a.href=URL.createObjectURL(blob);
+a.download='lifevault-backup-'+new Date().toISOString().slice(0,10)+'.json';a.click();
+}
+
+function importData(file){
+if(!file)return;
+const r=new FileReader();
+r.onload=()=>{try{
+const data=JSON.parse(r.result);
+Object.keys(data).forEach(k=>{if(k.startsWith('lv3_'))localStorage.setItem(k,data[k])});
+alert('✅ Importuota! Atnaujinama...');location.reload();
+}catch(e){alert('Neteisingas failas: '+e.message)}};
+r.readAsText(file);
+}
+
+renderCubes();renderCal();
+/* Auto-connect Firebase if configured */
+(function(){const c=L('fb_config',null),v=L('vault_code','');if(c&&v)initFB(c,v)})();
+</script>
+</body>
+</html>
