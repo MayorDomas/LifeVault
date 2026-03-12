@@ -178,7 +178,7 @@ body{font-family:'Space Grotesk',sans-serif;background:#06070b;color:#e0dcd4;min
 /* IDEAS */
 .idea-card{cursor:pointer;position:relative;padding-left:16px;overflow:hidden}
 .idea-card::before{content:'';position:absolute;top:0;left:0;width:4px;height:100%;border-radius:4px 0 0 4px}
-.idea-card[data-c="Personal"]::before{background:#a78bfa}.idea-card[data-c="Work"]::before{background:#38bdf8}.idea-card[data-c="Creative"]::before{background:#fb923c}.idea-card[data-c="Other"]::before{background:#4ade80}
+.idea-card[data-c="Personal"]::before{background:#a78bfa}.idea-card[data-c="Work"]::before{background:#38bdf8}.idea-card[data-c="Creative"]::before{background:#fb923c}.idea-card[data-c="Remote"]::before{background:#22d3ee}.idea-card[data-c="Other"]::before{background:#4ade80}
 .ideas-canvas{position:relative;width:100%;min-height:calc(100vh - 140px);overflow:visible}
 .idea-cube{position:absolute;width:110px;height:100px;border-radius:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;background:linear-gradient(145deg,rgba(255,255,255,.07),rgba(255,255,255,.02));backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.08);box-shadow:0 8px 32px rgba(0,0,0,.25),inset 0 0 0 1px rgba(255,255,255,.05);transition:transform .25s cubic-bezier(.34,1.56,.64,1),box-shadow .25s;touch-action:none;z-index:10;text-align:center;padding:8px;overflow:hidden}
 .idea-cube::before{content:'';position:absolute;inset:0;border-radius:16px;background:linear-gradient(135deg,rgba(255,255,255,.1),transparent 50%);pointer-events:none}
@@ -456,9 +456,9 @@ function renderMyself(){const d=L('myself',{});$('myselfFields').innerHTML='<div
 function saveMy(k,v){const d=L('myself',{});d[k]=v;S('myself',d)}
 
 /* ═══ IDEAS ═══ */
-const IC=['All','Personal','Work','Creative','Other'];let icat='All';let activeIdeaId=null;
-const CAT_COLORS={Personal:'#a78bfa',Work:'#38bdf8',Creative:'#fb923c',Other:'#4ade80'};
-const CAT_EMOJIS={Personal:'💜',Work:'💼',Creative:'🎨',Other:'💚'};
+const IC=['All','Personal','Work','Creative','Remote','Other'];let icat='All';let activeIdeaId=null;
+const CAT_COLORS={Personal:'#a78bfa',Work:'#38bdf8',Creative:'#fb923c',Remote:'#22d3ee',Other:'#4ade80'};
+const CAT_EMOJIS={Personal:'💜',Work:'💼',Creative:'🎨',Remote:'📡',Other:'💚'};
 function renderIdeas(){$('ideaTabs').innerHTML=IC.map(c=>`<div class="tab${c===icat?' active':''}" onclick="icat='${c}';renderIdeas()">${c}</div>`).join('');const all=L('ideas',[]),items=icat==='All'?all:all.filter(x=>x.cat===icat);
 const cv=$('ideasCanvas');cv.innerHTML='';if(!items.length){cv.innerHTML='<div class="empty-msg">No ideas yet — tap + to add one</div>';return}
 items.forEach(it=>{const el=document.createElement('div');el.className='idea-cube';el.style.left=(it.x||0)+'px';el.style.top=(it.y||0)+'px';const col=CAT_COLORS[it.cat]||CAT_COLORS.Other;el.innerHTML=`<div class="ic-glow" style="background:${col}"></div><div class="ic-emoji">${CAT_EMOJIS[it.cat]||'💡'}</div><div class="ic-title">${it.title}</div><div class="ic-cat" style="color:${col}">${it.cat||'Other'}</div>`;el.style.borderColor=col+'25';el.dataset.iid=it.id;ideaDrag(el,it);cv.appendChild(el)})}
@@ -942,7 +942,7 @@ renderCubes();renderCal();
 /* Auto-connect Firebase if configured */
 (function(){const c=L('fb_config',null),v=L('vault_code','');if(c&&v)initFB(c,v)})();
 /* Siri Shortcut: ?idea=TEXT adds idea automatically and opens Ideas page */
-(function(){const p=new URLSearchParams(location.search);const idea=p.get('idea');if(idea){const cat=p.get('cat')||'Personal';const catMap={personal:'Personal',work:'Work',creative:'Creative',other:'Other',general:'Personal'};const mapped=catMap[cat.toLowerCase()]||'Personal';const a=L('ideas',[]);const cnt=a.length;const col=Math.floor(cnt%4),row=Math.floor(cnt/4);a.push({id:U(),title:'Remote Idea',cat:mapped,text:idea,x:10+col*125,y:10+row*115});S('ideas',a);history.replaceState(null,'',location.pathname);setTimeout(()=>{const cube=cubes.find(c=>c.id==='ideas');if(cube)openPage(cube)},300)}})();
+(function(){const p=new URLSearchParams(location.search);const idea=p.get('idea');if(idea){const a=L('ideas',[]);const cnt=a.length;const col=Math.floor(cnt%4),row=Math.floor(cnt/4);a.push({id:U(),title:idea,cat:'Remote',text:'',x:10+col*125,y:10+row*115});S('ideas',a);history.replaceState(null,'',location.pathname);setTimeout(()=>{const cube=cubes.find(c=>c.id==='ideas');if(cube)openPage(cube)},300)}})();
 </script>
 </body>
 </html>
