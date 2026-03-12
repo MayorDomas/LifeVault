@@ -942,7 +942,7 @@ renderCubes();renderCal();
 /* Auto-connect Firebase if configured */
 (function(){const c=L('fb_config',null),v=L('vault_code','');if(c&&v)initFB(c,v)})();
 /* Siri Shortcut: ?idea=TEXT adds idea automatically and opens Ideas page */
-(function(){const p=new URLSearchParams(location.search);const idea=p.get('idea');if(idea){const a=L('ideas',[]);const cnt=a.length;const col=Math.floor(cnt%4),row=Math.floor(cnt/4);a.push({id:U(),title:idea,cat:'Remote',text:'',x:10+col*125,y:10+row*115});S('ideas',a);history.replaceState(null,'',location.pathname);setTimeout(()=>{const cube=cubes.find(c=>c.id==='ideas');if(cube)openPage(cube)},300)}})();
+(function(){const raw=location.search;const p=new URLSearchParams(raw);const idea=p.get('idea');if(idea&&idea.length>0){const a=L('ideas',[]);const cnt=a.length;const col=Math.floor(cnt%4),row=Math.floor(cnt/4);a.push({id:U(),title:decodeURIComponent(idea),cat:'Remote',text:'',x:10+col*125,y:10+row*115});S('ideas',a);history.replaceState(null,'',location.pathname);setTimeout(()=>{const cube=cubes.find(c=>c.id==='ideas');if(cube)openPage(cube)},300)}else if(raw.includes('idea')){alert('DEBUG URL: '+raw)}})();
 </script>
 </body>
 </html>
