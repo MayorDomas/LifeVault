@@ -471,34 +471,127 @@ $('habitsList').innerHTML=h.length?h.map((x,hi)=>{const cnt=(x.days||[]).reduce(
 function togH(hi,di){const h=L('habits',[]);if(!h[hi].days)h[hi].days=[0,0,0,0,0,0,0];h[hi].days[di]=h[hi].days[di]?0:1;S('habits',h);renderHabits()}
 
 /* ═══ BODYMAP ═══ */
-const BM_PARTS=[
-{id:'hair',emoji:'💇',name:'Plaukai',desc:'Šukuosenos, plaukų spalva, stilius. Įkelk nuotraukas šukuosenų kurios patiko ir kurias nori išbandyti.',stats:[{k:'style',l:'Dabartinė šukuosena'},{k:'color',l:'Spalva'},{k:'length',l:'Ilgis'},{k:'barber_date',l:'Pask. kirpimas'}]},
-{id:'head',emoji:'🧠',name:'Galva / Protas',desc:'Smegenys, mąstymas, koncentracija, atmintis. Sek savo protinę sveikatą ir tikslus.',stats:[{k:'iq_goal',l:'IQ Tikslas'},{k:'books_read',l:'Knygų perskaityta'}]},
-{id:'face',emoji:'😎',name:'Veidas / Išvaizda',desc:'Odos priežiūra, barzda, stilius. Įkelk selfie ir sek savo look pokyčius.',stats:[{k:'skin_type',l:'Odos tipas'},{k:'routine',l:'Priežiūros rutina'}]},
-{id:'eyes',emoji:'👁️',name:'Akys / Regėjimas',desc:'Akių sveikata, ekrano laikas, regėjimo būklė.',stats:[{k:'screen_hrs',l:'Ekrano val/d'},{k:'vision',l:'Regėjimas'}]},
-{id:'mouth',emoji:'👄',name:'Burna / Dantys',desc:'Dantų priežiūra, šypsena, mityba. Odontologo vizitai.',stats:[{k:'water_l',l:'Vandens L/d'},{k:'dentist',l:'Pask. vizitas'}]},
-{id:'chest',emoji:'❤️',name:'Krūtinė / Širdis',desc:'Širdies sveikata, kvėpavimas, emocijos. Pulsas, kraujo spaudimas.',stats:[{k:'heart_rate',l:'Pulsas'},{k:'bp',l:'Kraujo spaudimas'}]},
+const STYLE_PARTS=[
+{id:'s_hair',emoji:'💇',name:'Plaukai / Šukuosena',desc:'Šukuosenos, plaukų spalva, stilius. Įkelk nuotraukas šukuosenų kurias nori išbandyti.',stats:[{k:'style',l:'Šukuosena'},{k:'color',l:'Spalva'},{k:'barber',l:'Pask. kirpimas'}]},
+{id:'s_hat',emoji:'🧢',name:'Kepurė / Galvos apdangalas',desc:'Kepurės, skrybėlės, bandanos. Įkelk foto savo kolekcijos.',stats:[{k:'fav',l:'Mėgstamiausia'},{k:'count',l:'Kiekis'}]},
+{id:'s_glasses',emoji:'🕶️',name:'Akiniai',desc:'Akiniai nuo saulės, optiniai akiniai. Sek kurie labiausiai tinka.',stats:[{k:'type',l:'Tipas'},{k:'brand',l:'Brandas'}]},
+{id:'s_face',emoji:'😎',name:'Veido stilius',desc:'Barzda, ūsai, makiažas, odos priežiūra. Sek savo look.',stats:[{k:'beard',l:'Barzda'},{k:'skincare',l:'Rutina'}]},
+{id:'s_necklace',emoji:'📿',name:'Grandinėlė / Kaklo papuošalai',desc:'Grandinėlės, pakabukai, karoliai. Tavo kolekcija.',stats:[{k:'material',l:'Medžiaga'},{k:'fav',l:'Mėgstamiausia'}]},
+{id:'s_top',emoji:'👕',name:'Viršus / Marškinėliai',desc:'Marškinėliai, marškiniai, džemperiai. Mėgstami deriniai.',stats:[{k:'fav_color',l:'Spalva'},{k:'size',l:'Dydis'}]},
+{id:'s_jacket',emoji:'🧥',name:'Striukė / Paltas',desc:'Striukės, paltai, hoodies. Sezoninė apranga.',stats:[{k:'type',l:'Tipas'},{k:'brand',l:'Brandas'}]},
+{id:'s_watch',emoji:'⌚',name:'Laikrodis',desc:'Laikrodžiai, smart watch, apyrankės.',stats:[{k:'model',l:'Modelis'},{k:'brand',l:'Brandas'}]},
+{id:'s_rings',emoji:'💍',name:'Žiedai / Apyrankės',desc:'Žiedai, apyrankės, rankų aksesuarai.',stats:[{k:'count',l:'Kiekis'},{k:'fav',l:'Mėgstamiausias'}]},
+{id:'s_belt',emoji:'🪢',name:'Diržas',desc:'Diržai ir juosmens aksesuarai.',stats:[{k:'material',l:'Medžiaga'},{k:'color',l:'Spalva'}]},
+{id:'s_pants',emoji:'👖',name:'Kelnės / Apačia',desc:'Džinsai, kelnės, šortai. Mėgstami modeliai.',stats:[{k:'fit',l:'Fit tipas'},{k:'size',l:'Dydis'}]},
+{id:'s_socks',emoji:'🧦',name:'Kojinės',desc:'Kojinių kolekcija ir stilius.',stats:[{k:'fav',l:'Mėgstamiausios'},{k:'style',l:'Stilius'}]},
+{id:'s_shoes',emoji:'👟',name:'Batai',desc:'Sportbačiai, klasikiniai, botai. Kolekcija ir mėgstami.',stats:[{k:'size',l:'Dydis'},{k:'fav',l:'Mėgstami'},{k:'count',l:'Kiekis'}]},
+{id:'s_bag',emoji:'🎒',name:'Krepšys / Rankinė',desc:'Kuprinės, rankinės, krepšiai.',stats:[{k:'type',l:'Tipas'},{k:'brand',l:'Brandas'}]},
+{id:'s_nails',emoji:'💅',name:'Nagai',desc:'Nagų priežiūra, manikiūras, dizainai.',stats:[{k:'style',l:'Stilius'},{k:'last_mani',l:'Pask. manikiūras'}]},
+{id:'s_perfume',emoji:'🧴',name:'Kvepalai / Priežiūra',desc:'Kvepalai, losjonai, dezodorantai. Mėgstami kvapai.',stats:[{k:'fav',l:'Mėgstami'},{k:'brand',l:'Brandas'}]}
+];
+
+const BODY_PARTS=[
+{id:'hair',emoji:'💇',name:'Plaukai',desc:'Plaukų sveikata, augimas, priežiūra.',stats:[{k:'type',l:'Tipas'},{k:'length',l:'Ilgis'}]},
+{id:'head',emoji:'🧠',name:'Galva / Protas',desc:'Smegenys, mąstymas, koncentracija, atmintis.',stats:[{k:'iq_goal',l:'IQ Tikslas'},{k:'books_read',l:'Knygų perskaityta'}]},
+{id:'face',emoji:'😊',name:'Veidas',desc:'Odos priežiūra, veido forma, pokyčiai.',stats:[{k:'skin_type',l:'Odos tipas'},{k:'routine',l:'Rutina'}]},
+{id:'eyes',emoji:'👁️',name:'Akys',desc:'Akių sveikata, regėjimas, ekrano laikas.',stats:[{k:'screen_hrs',l:'Ekrano val/d'},{k:'vision',l:'Regėjimas'}]},
+{id:'mouth',emoji:'👄',name:'Burna / Dantys',desc:'Dantų priežiūra, šypsena, odontologo vizitai.',stats:[{k:'water_l',l:'Vandens L/d'},{k:'dentist',l:'Pask. vizitas'}]},
+{id:'chest',emoji:'❤️',name:'Krūtinė / Širdis',desc:'Širdies sveikata, kvėpavimas, pulsas.',stats:[{k:'heart_rate',l:'Pulsas'},{k:'bp',l:'Kraujo spaudimas'}]},
 {id:'left_arm',emoji:'💪',name:'Kairė ranka',desc:'Jėga, lankstumas, treniruočių progresas.',stats:[{k:'strength',l:'Jėga (kg)'},{k:'flex',l:'Lankstumas'}]},
 {id:'right_arm',emoji:'💪',name:'Dešinė ranka',desc:'Jėga, lankstumas, treniruočių progresas.',stats:[{k:'strength',l:'Jėga (kg)'},{k:'flex',l:'Lankstumas'}]},
-{id:'core',emoji:'🔥',name:'Pilvas / Core',desc:'Pilvo raumenys, virškinimas, svoris, liemuo.',stats:[{k:'weight',l:'Svoris (kg)'},{k:'waist',l:'Liemuo (cm)'}]},
-{id:'nails',emoji:'💅',name:'Nagai',desc:'Nagų priežiūra, manikiūras, stilius. Įkelk nuotraukas nagų dizainų.',stats:[{k:'style',l:'Dabartinis stilius'},{k:'last_mani',l:'Pask. manikiūras'}]},
+{id:'core',emoji:'🔥',name:'Pilvas / Core',desc:'Pilvo raumenys, virškinimas, svoris.',stats:[{k:'weight',l:'Svoris (kg)'},{k:'waist',l:'Liemuo (cm)'}]},
+{id:'hands',emoji:'🤲',name:'Plaštakos',desc:'Plaštakų sveikata, pirštai.',stats:[{k:'grip',l:'Grip (kg)'},{k:'wpm',l:'WPM'}]},
+{id:'nails_b',emoji:'💅',name:'Nagai',desc:'Nagų sveikata, priežiūra.',stats:[{k:'health',l:'Būklė'},{k:'care',l:'Priežiūra'}]},
 {id:'left_leg',emoji:'🦵',name:'Kairė koja',desc:'Kojos jėga, bėgimas, mobilumas.',stats:[{k:'squat',l:'Squat (kg)'},{k:'run_km',l:'Bėgimas km'}]},
 {id:'right_leg',emoji:'🦵',name:'Dešinė koja',desc:'Kojos jėga, bėgimas, mobilumas.',stats:[{k:'squat',l:'Squat (kg)'},{k:'run_km',l:'Bėgimas km'}]},
-{id:'hands',emoji:'🤲',name:'Plaštakos',desc:'Plaštakų sveikata, pirštai, riešo kanalas.',stats:[{k:'grip',l:'Grip (kg)'},{k:'wpm',l:'WPM tipavimas'}]},
-{id:'feet',emoji:'🦶',name:'Pėdos',desc:'Pėdų sveikata, balansas, batų dydis.',stats:[{k:'shoe_size',l:'Batų dydis'},{k:'steps',l:'Žingsniai/d'}]},
-{id:'skin',emoji:'✨',name:'Oda / Kūnas',desc:'Odos būklė, tatuiruotės, randai, priežiūra. Įkelk nuotraukas pokyčiams sekti.',stats:[{k:'skin_routine',l:'Rutina'},{k:'spf',l:'SPF naudojimas'}]},
-{id:'outfit',emoji:'👔',name:'Apranga / Stilius',desc:'Mėgstami outfit\'ai, stilius, drabužių deriniai. Įkelk outfit foto inspiracijai.',stats:[{k:'style_type',l:'Stilius'},{k:'fav_brand',l:'Mėgstamas brand'}]}
+{id:'feet',emoji:'🦶',name:'Pėdos',desc:'Pėdų sveikata, balansas.',stats:[{k:'shoe_size',l:'Batų dydis'},{k:'steps',l:'Žingsniai/d'}]},
+{id:'skin',emoji:'✨',name:'Oda',desc:'Odos būklė, tatuiruotės, randai, priežiūra.',stats:[{k:'routine',l:'Rutina'},{k:'spf',l:'SPF'}]}
 ];
-let bmActive='hair';
+
+let bmMode='style',bmActive='s_hair';
+function getBmParts(){return bmMode==='style'?STYLE_PARTS:BODY_PARTS}
 
 function renderBodyMap(){
-$('bmBodyWrap').innerHTML=`<div class="sec" style="text-align:center;margin-top:8px">Spausk ant kūno dalies</div><svg class="bm-svg" viewBox="0 0 240 520" xmlns="http://www.w3.org/2000/svg">
+const modeToggle=`<div style="display:flex;justify-content:center;gap:6px;margin:10px 0 4px">
+<div class="tab${bmMode==='style'?' active':''}" onclick="bmMode='style';bmActive='s_hair';renderBodyMap()" style="font-size:11px;padding:8px 16px">👔 Stilius</div>
+<div class="tab${bmMode==='body'?' active':''}" onclick="bmMode='body';bmActive='hair';renderBodyMap()" style="font-size:11px;padding:8px 16px">🧬 Kūnas</div>
+</div>`;
+const svgStyle=bmMode==='style'?svgStyleMode():svgBodyMode();
+$('bmBodyWrap').innerHTML=modeToggle+svgStyle;
+
+/* Click handlers */
+document.querySelectorAll('.bm-part').forEach(el=>{
+el.addEventListener('click',()=>{
+const p=el.dataset.part;
+if(p){bmActive=p;renderBmTabs();highlightBmPart(p);openBpDetail(p)}
+})});
+
+renderBmTabs();
+}
+
+function svgStyleMode(){return`<svg class="bm-svg" viewBox="0 0 240 520" xmlns="http://www.w3.org/2000/svg">
+<!-- Hair/Hairstyle -->
+<path class="bm-part" data-part="s_hair" d="M88 22 Q88 4 120 0 Q152 4 152 22 L152 42 Q152 20 120 14 Q88 20 88 42 Z"/>
+<path class="bm-part" data-part="s_hair" d="M86 42 Q86 28 96 18 Q108 10 120 10 Q132 10 144 18 Q154 28 154 42 L154 50 Q152 36 120 32 Q88 36 86 50 Z" style="fill:rgba(108,92,231,.05)"/>
+<!-- Hat zone -->
+<path class="bm-part" data-part="s_hat" d="M78 24 Q78 -4 120 -8 Q162 -4 162 24 L158 30 Q156 6 120 2 Q84 6 82 30 Z" style="stroke-dasharray:2 2"/>
+<!-- Head shape -->
+<ellipse class="bm-line" cx="120" cy="52" rx="30" ry="30"/>
+<!-- Glasses zone -->
+<rect class="bm-part" data-part="s_glasses" x="94" y="42" width="52" height="16" rx="8" style="stroke-dasharray:2 2;fill:rgba(108,92,231,.02)"/>
+<!-- Face/beard -->
+<path class="bm-part" data-part="s_face" d="M96 56 Q96 80 120 86 Q144 80 144 56" style="stroke-width:.7;fill:rgba(108,92,231,.02)"/>
+<!-- Eyes -->
+<ellipse class="bm-joint" cx="108" cy="50" rx="5" ry="3.5"/>
+<ellipse class="bm-joint" cx="132" cy="50" rx="5" ry="3.5"/>
+<!-- Mouth -->
+<path class="bm-line" d="M113 68 Q120 73 127 68" style="stroke-width:.6"/>
+<!-- Neck -->
+<line class="bm-line" x1="120" y1="86" x2="120" y2="104"/>
+<!-- Necklace/Chain -->
+<path class="bm-part" data-part="s_necklace" d="M92 104 Q120 118 148 104" style="stroke-width:1.2;fill:none;stroke-dasharray:2 1"/>
+<!-- Jacket -->
+<path class="bm-part" data-part="s_jacket" d="M74 106 L66 112 L50 140 L46 178 L58 180 L62 148 L74 132 L74 106 M166 106 L174 112 L190 140 L194 178 L182 180 L178 148 L166 132 L166 106" style="stroke-width:1"/>
+<!-- Top/Shirt -->
+<path class="bm-part" data-part="s_top" d="M82 106 Q120 96 158 106 L162 178 Q120 184 78 178 Z" style="fill:rgba(108,92,231,.04)"/>
+<!-- Watch -->
+<rect class="bm-part" data-part="s_watch" x="20" y="190" width="20" height="24" rx="5"/>
+<!-- Left Arm -->
+<path class="bm-line" d="M82 106 L58 116 L36 176 L28 220"/>
+<!-- Right Arm -->
+<path class="bm-line" d="M158 106 L182 116 L204 176 L212 220"/>
+<!-- Rings zone -->
+<circle class="bm-part" data-part="s_rings" cx="34" cy="238" r="14" style="stroke-dasharray:2 2"/>
+<circle class="bm-part" data-part="s_rings" cx="206" cy="238" r="14" style="stroke-dasharray:2 2"/>
+<!-- Nails -->
+<g class="bm-part" data-part="s_nails"><rect x="24" y="248" width="4" height="5" rx="1.5" style="stroke-width:.5"/><rect x="29" y="250" width="4" height="5" rx="1.5" style="stroke-width:.5"/><rect x="34" y="251" width="4" height="5" rx="1.5" style="stroke-width:.5"/><rect x="39" y="250" width="4" height="5" rx="1.5" style="stroke-width:.5"/><rect x="196" y="248" width="4" height="5" rx="1.5" style="stroke-width:.5"/><rect x="201" y="250" width="4" height="5" rx="1.5" style="stroke-width:.5"/><rect x="206" y="251" width="4" height="5" rx="1.5" style="stroke-width:.5"/><rect x="211" y="250" width="4" height="5" rx="1.5" style="stroke-width:.5"/></g>
+<!-- Belt -->
+<rect class="bm-part" data-part="s_belt" x="78" y="178" width="84" height="12" rx="4"/>
+<!-- Pants -->
+<path class="bm-part" data-part="s_pants" d="M78 190 Q120 198 162 190 L162 260 Q150 268 142 260 L136 380 L104 380 L98 260 Q90 268 78 260 Z" style="fill:rgba(108,92,231,.03)"/>
+<!-- Socks -->
+<rect class="bm-part" data-part="s_socks" x="94" y="380" width="16" height="30" rx="5" style="stroke-dasharray:2 2"/>
+<rect class="bm-part" data-part="s_socks" x="130" y="380" width="16" height="30" rx="5" style="stroke-dasharray:2 2"/>
+<!-- Shoes -->
+<path class="bm-part" data-part="s_shoes" d="M88 410 L82 430 L72 440 L68 444 L116 444 L112 430 L108 410 Z"/>
+<path class="bm-part" data-part="s_shoes" d="M132 410 L128 430 L124 444 L172 444 L168 440 L158 430 L152 410 Z"/>
+<!-- Bag (side) -->
+<rect class="bm-part" data-part="s_bag" x="190" y="140" width="28" height="36" rx="6" style="stroke-dasharray:2 2"/>
+<line class="bm-line" x1="204" y1="140" x2="204" y2="120" style="stroke-dasharray:2 2"/>
+<!-- Perfume (floating icon) -->
+<rect class="bm-part" data-part="s_perfume" x="2" y="140" width="24" height="30" rx="6" style="stroke-dasharray:2 2"/>
+<!-- Joints -->
+<circle class="bm-joint" cx="82" cy="106" r="3.5"/><circle class="bm-joint" cx="158" cy="106" r="3.5"/>
+<circle class="bm-joint" cx="46" cy="176" r="2.5"/><circle class="bm-joint" cx="194" cy="176" r="2.5"/>
+</svg>`}
+
+function svgBodyMode(){return`<svg class="bm-svg" viewBox="0 0 240 520" xmlns="http://www.w3.org/2000/svg">
 <!-- Hair -->
-<path class="bm-part" data-part="hair" d="M88 30 Q88 8 120 4 Q152 8 152 30 Q155 16 148 10 Q136 2 120 0 Q104 2 92 10 Q85 16 88 30 Z" style="stroke-width:1"/>
+<path class="bm-part" data-part="hair" d="M88 30 Q88 8 120 4 Q152 8 152 30 Q155 16 148 10 Q136 2 120 0 Q104 2 92 10 Q85 16 88 30 Z"/>
 <path class="bm-part" data-part="hair" d="M88 30 Q86 42 88 52 L88 38 Q88 22 96 16 Q108 10 120 10 Q132 10 144 16 Q152 22 152 38 L152 52 Q154 42 152 30" style="stroke-width:.8;fill:rgba(108,92,231,.04)"/>
-<!-- Head/Brain -->
+<!-- Head -->
 <ellipse class="bm-part" data-part="head" cx="120" cy="52" rx="30" ry="28" style="fill:rgba(108,92,231,.01)"/>
-<!-- Face outline -->
+<!-- Face -->
 <path class="bm-part" data-part="face" d="M94 40 Q94 76 120 82 Q146 76 146 40" style="stroke-width:.7;fill:rgba(108,92,231,.01)"/>
 <!-- Eyes -->
 <ellipse class="bm-part" data-part="eyes" cx="108" cy="50" rx="7" ry="4.5" style="stroke-width:.7"/>
@@ -511,65 +604,37 @@ $('bmBodyWrap').innerHTML=`<div class="sec" style="text-align:center;margin-top:
 <path class="bm-part" data-part="mouth" d="M112 68 Q120 75 128 68" style="stroke-width:.8;fill:rgba(108,92,231,.02)"/>
 <!-- Neck -->
 <line class="bm-line" x1="120" y1="84" x2="120" y2="108"/>
-<!-- Chest/Torso -->
+<!-- Chest -->
 <path class="bm-part" data-part="chest" d="M82 108 Q120 98 158 108 L162 180 Q120 186 78 180 Z"/>
-<!-- Core/Stomach -->
+<!-- Core -->
 <path class="bm-part" data-part="core" d="M78 180 Q120 186 162 180 L158 260 Q120 268 82 260 Z"/>
 <!-- Left Arm -->
 <path class="bm-part" data-part="left_arm" d="M82 108 L58 118 L36 178 L28 224 L42 226 L52 186 L62 148 L78 140"/>
 <!-- Right Arm -->
 <path class="bm-part" data-part="right_arm" d="M158 108 L182 118 L204 178 L212 224 L198 226 L188 186 L178 148 L162 140"/>
-<!-- Left Hand + Nails -->
+<!-- Hands -->
 <ellipse class="bm-part" data-part="hands" cx="34" cy="238" rx="12" ry="16"/>
-<g class="bm-part" data-part="nails">
-<rect x="24" y="250" width="4" height="5" rx="1.5" style="stroke-width:.5"/>
-<rect x="29" y="252" width="4" height="5" rx="1.5" style="stroke-width:.5"/>
-<rect x="34" y="253" width="4" height="5" rx="1.5" style="stroke-width:.5"/>
-<rect x="39" y="252" width="4" height="5" rx="1.5" style="stroke-width:.5"/>
-<rect x="44" y="250" width="3.5" height="4.5" rx="1.5" style="stroke-width:.5"/>
-</g>
-<!-- Right Hand + Nails -->
 <ellipse class="bm-part" data-part="hands" cx="206" cy="238" rx="12" ry="16"/>
-<g class="bm-part" data-part="nails">
-<rect x="196" y="250" width="4" height="5" rx="1.5" style="stroke-width:.5"/>
-<rect x="201" y="252" width="4" height="5" rx="1.5" style="stroke-width:.5"/>
-<rect x="206" y="253" width="4" height="5" rx="1.5" style="stroke-width:.5"/>
-<rect x="211" y="252" width="4" height="5" rx="1.5" style="stroke-width:.5"/>
-<rect x="216" y="250" width="3.5" height="4.5" rx="1.5" style="stroke-width:.5"/>
-</g>
+<!-- Nails -->
+<g class="bm-part" data-part="nails_b"><rect x="24" y="250" width="4" height="5" rx="1.5" style="stroke-width:.5"/><rect x="29" y="252" width="4" height="5" rx="1.5" style="stroke-width:.5"/><rect x="34" y="253" width="4" height="5" rx="1.5" style="stroke-width:.5"/><rect x="39" y="252" width="4" height="5" rx="1.5" style="stroke-width:.5"/><rect x="196" y="250" width="4" height="5" rx="1.5" style="stroke-width:.5"/><rect x="201" y="252" width="4" height="5" rx="1.5" style="stroke-width:.5"/><rect x="206" y="253" width="4" height="5" rx="1.5" style="stroke-width:.5"/><rect x="211" y="252" width="4" height="5" rx="1.5" style="stroke-width:.5"/></g>
+<!-- Skin overlay -->
+<path class="bm-part" data-part="skin" d="M120 86 Q130 86 136 90 L140 96" style="stroke-width:.5;fill:none;stroke-dasharray:2 2"/>
 <!-- Left Leg -->
 <path class="bm-part" data-part="left_leg" d="M82 260 Q90 268 98 260 L104 360 L96 440 L78 442 L74 362 Z"/>
 <!-- Right Leg -->
 <path class="bm-part" data-part="right_leg" d="M142 260 Q150 268 158 260 L166 362 L162 442 L144 440 L136 360 Z"/>
-<!-- Left Foot -->
+<!-- Feet -->
 <ellipse class="bm-part" data-part="feet" cx="86" cy="456" rx="16" ry="12"/>
-<!-- Right Foot -->
 <ellipse class="bm-part" data-part="feet" cx="154" cy="456" rx="16" ry="12"/>
-<!-- Skin overlay (full body outline) -->
-<path class="bm-part" data-part="skin" d="M120 4 Q152 8 155 35 Q157 55 150 80 L158 108 L182 118 L212 230 L206 258 L198 226 L158 108 L162 260 L154 468 L86 468 L78 260 L82 108 L42 226 L34 258 L28 230 L58 118 L82 108 L90 80 Q83 55 85 35 Q88 8 120 4" style="stroke-width:0;fill:transparent;pointer-events:none"/>
-<!-- Outfit area (torso outer) -->
-<rect class="bm-part" data-part="outfit" x="70" y="100" width="100" height="170" rx="14" style="stroke-width:.6;fill:transparent;stroke-dasharray:3 3;stroke:rgba(168,139,250,.1)"/>
 <!-- Joints -->
-<circle class="bm-joint" cx="82" cy="108" r="4"/>
-<circle class="bm-joint" cx="158" cy="108" r="4"/>
-<circle class="bm-joint" cx="46" cy="186" r="3"/>
-<circle class="bm-joint" cx="194" cy="186" r="3"/>
-<circle class="bm-joint" cx="90" cy="340" r="3.5"/>
-<circle class="bm-joint" cx="150" cy="340" r="3.5"/>
-</svg>`;
-
-/* Click handlers */
-document.querySelectorAll('.bm-part').forEach(el=>{
-el.addEventListener('click',()=>{
-const p=el.dataset.part;
-if(p){bmActive=p;renderBmTabs();highlightBmPart(p);openBpDetail(p)}
-})});
-
-renderBmTabs();
-}
+<circle class="bm-joint" cx="82" cy="108" r="4"/><circle class="bm-joint" cx="158" cy="108" r="4"/>
+<circle class="bm-joint" cx="46" cy="186" r="3"/><circle class="bm-joint" cx="194" cy="186" r="3"/>
+<circle class="bm-joint" cx="90" cy="340" r="3.5"/><circle class="bm-joint" cx="150" cy="340" r="3.5"/>
+</svg>`}
 
 function renderBmTabs(){
-$('bmTabs').innerHTML=BM_PARTS.map(p=>`<div class="bm-tab${p.id===bmActive?' active':''}" onclick="bmActive='${p.id}';renderBmTabs();highlightBmPart('${p.id}');openBpDetail('${p.id}')">${p.emoji} ${p.name.split(' / ')[0]}</div>`).join('');
+const parts=getBmParts();
+$('bmTabs').innerHTML=parts.map(p=>`<div class="bm-tab${p.id===bmActive?' active':''}" onclick="bmActive='${p.id}';renderBmTabs();highlightBmPart('${p.id}');openBpDetail('${p.id}')">${p.emoji} ${p.name.split(' / ')[0]}</div>`).join('');
 highlightBmPart(bmActive);
 }
 
@@ -582,7 +647,7 @@ document.querySelectorAll(`.bm-part[data-part="${id}"]`).forEach(el=>el.classLis
 let bpEditPart=null;
 function openBpDetail(partId){
 bpEditPart=partId;
-const part=BM_PARTS.find(p=>p.id===partId);if(!part)return;
+const part=getBmParts().find(p=>p.id===partId);if(!part)return;
 const data=L('bodymap',{});const pd=data[part.id]||{};
 const photos=pd.photos||[];
 
@@ -644,7 +709,7 @@ data[partId][key]=val;
 S('bodymap',data);
 if(key!=='notes'&&key!=='status'){
 const statVals=document.querySelectorAll('.bm-stat-val');
-const part=BM_PARTS.find(p=>p.id===partId);
+const part=getBmParts().find(p=>p.id===partId);
 if(part){part.stats.forEach((s,i)=>{if(s.k===key&&statVals[i])statVals[i].textContent=val||'—'})}
 }
 }
