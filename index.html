@@ -262,7 +262,7 @@ body{font-family:'Space Grotesk',sans-serif;background:#06070b;color:#e0dcd4;min
 
 <!-- HABITS --><div class="page" id="page-habits"><div class="ph"><div class="pb" onclick="closePage()">←</div><div class="pt">✅ Habits</div></div><div class="px"><div id="habitsStats"></div><button class="add-btn" onclick="openModal('habit')">+ Add Habit</button><div id="habitsList"></div></div></div>
 
-<!-- BODYMAP --><div class="page" id="page-bodymap"><div class="ph"><div class="pb" onclick="closePage()">←</div><div class="pt">🧬 BodyMap</div></div><div class="bm-layout"><div class="bm-body-wrap" id="bmBodyWrap"></div><div class="bm-tabs" id="bmTabs"></div><div class="bm-detail" id="bmDetail"></div></div></div>
+<!-- BODYMAP --><div class="page" id="page-bodymap"><div class="ph"><div class="pb" onclick="closePage()">←</div><div class="pt">🧬 Myself</div></div><div class="bm-layout"><div class="px" style="width:100%;max-width:500px;padding-bottom:0"><div class="sec">About Me</div><div id="bmMyselfFields"></div></div><div class="bm-body-wrap" id="bmBodyWrap"></div><div class="bm-tabs" id="bmTabs"></div><div class="bm-detail" id="bmDetail"></div></div></div>
 
 <!-- SYNC --><div class="page" id="page-sync"><div class="ph"><div class="pb" onclick="closePage()">←</div><div class="pt">☁️ Cloud Sync</div></div><div class="px" id="syncContent"></div></div>
 
@@ -336,7 +336,7 @@ S('events',ev);closeEvDetail();renderCal();
 
 /* ═══ CUBES ═══ */
 const DEFS=[
-  {id:'myself',emoji:'🧑',name:'Myself',color:'#6c5ce7',page:'myself'},
+  {id:'myself',emoji:'🧬',name:'Myself',color:'#e879f9',page:'bodymap'},
   {id:'ideas',emoji:'💡',name:'Ideas',color:'#fdcb6e',page:'ideas'},
   {id:'files',emoji:'📁',name:'Files',color:'#00b894',page:'files'},
   {id:'routine',emoji:'⏰',name:'Routine',color:'#e17055',page:'routine'},
@@ -346,8 +346,7 @@ const DEFS=[
   {id:'mood',emoji:'😊',name:'Mood',color:'#74b9ff',page:'mood'},
   {id:'passwords',emoji:'🔐',name:'Passwords',color:'#636e72',page:'passwords'},
   {id:'wishlist',emoji:'🎁',name:'Wishlist',color:'#e84393',page:'wishlist'},
-  {id:'habits',emoji:'✅',name:'Habits',color:'#00cec9',page:'habits'},
-  {id:'bodymap',emoji:'🧬',name:'BodyMap',color:'#e879f9',page:'bodymap'}
+  {id:'habits',emoji:'✅',name:'Habits',color:'#00cec9',page:'habits'}
 ];
 let cubes=L('cubes3',null);
 if(!cubes||!Array.isArray(cubes)||!cubes.find(c=>c.id==='mood')){
@@ -448,7 +447,10 @@ const BM_PARTS=[
 let bmActive='head';
 
 function renderBodyMap(){
-$('bmBodyWrap').innerHTML=`<svg class="bm-svg" viewBox="0 0 240 520" xmlns="http://www.w3.org/2000/svg">
+/* About Me fields */
+const md=L('myself',{});
+$('bmMyselfFields').innerHTML=MF.map(f=>`<div class="my-field"><div class="my-label">${f.l}</div>${f.ta?`<textarea class="my-input" rows="2" placeholder="${f.l}..." oninput="saveMy('${f.k}',this.value)">${md[f.k]||''}</textarea>`:`<input class="my-input" placeholder="${f.l}..." value="${md[f.k]||''}" oninput="saveMy('${f.k}',this.value)">`}</div>`).join('');
+$('bmBodyWrap').innerHTML=`<div class="sec" style="text-align:center;margin-top:8px">Spausk ant kūno dalies</div><svg class="bm-svg" viewBox="0 0 240 520" xmlns="http://www.w3.org/2000/svg">
 <!-- Head -->
 <ellipse class="bm-part" data-part="head" cx="120" cy="52" rx="32" ry="38"/>
 <!-- Neck -->
