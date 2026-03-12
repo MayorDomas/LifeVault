@@ -941,8 +941,8 @@ r.readAsText(file);
 renderCubes();renderCal();
 /* Auto-connect Firebase if configured */
 (function(){const c=L('fb_config',null),v=L('vault_code','');if(c&&v)initFB(c,v)})();
-/* Siri Shortcut: #idea=TEXT adds idea automatically and opens Ideas page */
-(function(){const h=location.hash;if(h.startsWith('#idea=')){const txt=decodeURIComponent(h.slice(6).replace(/\+/g,' '));if(txt.length>0){const a=L('ideas',[]);const cnt=a.length;const col=Math.floor(cnt%4),row=Math.floor(cnt/4);a.push({id:U(),title:txt,cat:'Remote',text:'',x:10+col*125,y:10+row*115});S('ideas',a);history.replaceState(null,'',location.pathname);setTimeout(()=>{const cube=cubes.find(c=>c.id==='ideas');if(cube)openPage(cube)},300)}}})();
+/* Siri Shortcut: ?t=TEXT or #idea=TEXT adds idea automatically */
+(function(){let txt=new URLSearchParams(location.search).get('t');if(!txt&&location.hash.startsWith('#idea='))txt=decodeURIComponent(location.hash.slice(6).replace(/\+/g,' '));if(!txt){const m=location.href.match(/[?&]t=([^&]+)/);if(m)txt=decodeURIComponent(m[1].replace(/\+/g,' '))}if(txt&&txt.length>0){const a=L('ideas',[]);const cnt=a.length;const col=Math.floor(cnt%4),row=Math.floor(cnt/4);a.push({id:U(),title:txt,cat:'Remote',text:'',x:10+col*125,y:10+row*115});S('ideas',a);history.replaceState(null,'',location.pathname);setTimeout(()=>{const cube=cubes.find(c=>c.id==='ideas');if(cube)openPage(cube)},300)}})();
 </script>
 </body>
 </html>
