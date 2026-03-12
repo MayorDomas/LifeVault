@@ -221,6 +221,31 @@ body{font-family:'Space Grotesk',sans-serif;background:#06070b;color:#e0dcd4;min
 .note-card.expanded .note-body{display:block}
 .note-body{display:none;margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,.05);font-size:11px;color:rgba(255,255,255,.4);line-height:1.6;white-space:pre-wrap}
 .note-colors{display:flex;gap:6px;margin-bottom:8px}
+.gen-canvas{position:relative;width:100%;min-height:calc(100vh - 140px);overflow:visible}
+.gen-cube{position:absolute;width:110px;min-height:100px;border-radius:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;background:linear-gradient(145deg,rgba(255,255,255,.07),rgba(255,255,255,.02));backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.08);box-shadow:0 8px 32px rgba(0,0,0,.25),inset 0 0 0 1px rgba(255,255,255,.05);transition:transform .25s cubic-bezier(.34,1.56,.64,1),box-shadow .25s;touch-action:none;z-index:10;text-align:center;padding:8px;overflow:hidden}
+.gen-cube::before{content:'';position:absolute;inset:0;border-radius:16px;background:linear-gradient(135deg,rgba(255,255,255,.1),transparent 50%);pointer-events:none}
+.gen-cube:hover{transform:scale(1.08)}.gen-cube.dragging{transform:scale(1.15)!important;box-shadow:0 20px 60px rgba(0,0,0,.5);z-index:99;opacity:.9}
+.gen-cube .gc-glow{position:absolute;inset:-6px;border-radius:22px;opacity:.12;pointer-events:none;filter:blur(12px)}
+.gen-cube .gc-emoji{font-size:24px;margin-bottom:2px}.gen-cube .gc-title{font-size:9px;font-weight:700;color:rgba(255,255,255,.85);letter-spacing:.3px;line-height:1.2;max-height:24px;overflow:hidden;text-overflow:ellipsis;word-break:break-word}
+.gen-cube .gc-sub{font-size:7px;font-weight:600;letter-spacing:.4px;text-transform:uppercase;margin-top:2px;opacity:.6}
+.gen-cube .gc-prog{width:70%;height:4px;border-radius:2px;background:rgba(255,255,255,.08);margin-top:4px;overflow:hidden}
+.gen-cube .gc-prog-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,#6c5ce7,#a855f7);transition:width .3s}
+.gen-cube.wish-done{opacity:.5}.gen-cube.wish-done .gc-emoji{filter:grayscale(.5)}
+.gen-overlay{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.85);backdrop-filter:blur(20px);display:flex;flex-direction:column;padding:20px;opacity:0;visibility:hidden;transform:scale(.6);transform-origin:var(--ox,50%) var(--oy,50%);transition:opacity .35s,transform .4s cubic-bezier(.34,1.56,.64,1),visibility 0s .4s;overflow-y:auto}
+.gen-overlay.open{opacity:1;visibility:visible;transform:scale(1);transition:opacity .35s,transform .4s cubic-bezier(.34,1.56,.64,1),visibility 0s}
+.go-back{cursor:pointer;font-size:22px;margin-bottom:12px;width:40px}
+.go-title{font-size:20px;font-weight:700;margin-bottom:4px}
+.go-sub{font-size:11px;font-weight:600;letter-spacing:.4px;text-transform:uppercase;margin-bottom:16px;opacity:.5}
+.go-body{font-size:13px;color:rgba(255,255,255,.6);line-height:1.6;white-space:pre-wrap;flex:1;overflow-y:auto}
+.go-actions{display:flex;gap:8px;margin-top:16px}
+.go-actions button{flex:1;padding:12px;border:none;border-radius:11px;font-family:inherit;font-weight:600;font-size:12px;cursor:pointer}
+.go-edit{background:linear-gradient(135deg,#6c5ce7,#a855f7);color:#fff}
+.go-del{background:rgba(255,60,60,.08);color:#f87171;border:1px solid rgba(255,60,60,.15)!important}
+.go-slider{width:100%;margin:12px 0;accent-color:#6c5ce7}
+.go-pct{font-size:28px;font-weight:700;text-align:center;background:linear-gradient(135deg,#6c5ce7,#a855f7);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.emoji-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;margin:8px 0}
+.emoji-opt{font-size:20px;text-align:center;padding:6px;border-radius:8px;cursor:pointer;background:rgba(255,255,255,.03);border:2px solid transparent;transition:all .15s}
+.emoji-opt:hover{background:rgba(255,255,255,.06)}.emoji-opt.sel{border-color:#a78bfa;background:rgba(108,92,231,.15)}
 .nc{width:22px;height:22px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:all .15s}.nc.sel{border-color:#fff;transform:scale(1.15)}
 
 /* GOALS */
@@ -296,9 +321,11 @@ body{font-family:'Space Grotesk',sans-serif;background:#06070b;color:#e0dcd4;min
 
 <!-- ROUTINE --><div class="page" id="page-routine"><div class="ph"><div class="pb" onclick="closePage()">←</div><div class="pt">⏰ Routine</div></div><div class="px"><div class="tt-wrap" id="routineTT"></div></div></div>
 
-<!-- NOTES --><div class="page" id="page-notes"><div class="ph"><div class="pb" onclick="closePage()">←</div><div class="pt">🗒️ Notes</div></div><div class="px"><button class="add-btn" onclick="openModal('note')">+ New Note</button><div id="notesList"></div></div></div>
+<!-- NOTES --><div class="page" id="page-notes"><div class="ph"><div class="pb" onclick="closePage()">←</div><div class="pt">🗒️ Notes</div></div><div class="px"><button class="add-btn" onclick="openModal('note')">+ New Note</button><div class="gen-canvas" id="notesCanvas"></div></div></div>
+<div class="gen-overlay" id="noteOverlay"><div class="go-back" onclick="closeNoteDetail()">←</div><div class="go-title" id="noTitle"></div><div class="go-sub" id="noColor"></div><div class="go-body" id="noText"></div><div class="go-actions"><button class="go-edit" onclick="editNoteFromDetail()">✎ Edit</button><button class="go-del" onclick="delNoteFromDetail()">✕ Delete</button></div></div>
 
-<!-- GOALS --><div class="page" id="page-goals"><div class="ph"><div class="pb" onclick="closePage()">←</div><div class="pt">🎯 Goals</div></div><div class="px"><button class="add-btn" onclick="openModal('goal')">+ New Goal</button><div id="goalsList"></div></div></div>
+<!-- GOALS --><div class="page" id="page-goals"><div class="ph"><div class="pb" onclick="closePage()">←</div><div class="pt">🎯 Goals</div></div><div class="px"><button class="add-btn" onclick="openModal('goal')">+ New Goal</button><div class="gen-canvas" id="goalsCanvas"></div></div></div>
+<div class="gen-overlay" id="goalOverlay"><div class="go-back" onclick="closeGoalDetail()">←</div><div class="go-title" id="glTitle"></div><div class="go-pct" id="glPct"></div><input type="range" class="go-slider" id="glSlider" min="0" max="100" value="0" oninput="updGoalFromDetail(this.value)"><div class="go-actions"><button class="go-edit" onclick="editGoalFromDetail()">✎ Edit</button><button class="go-del" onclick="delGoalFromDetail()">✕ Delete</button></div></div>
 
 <!-- FINANCE --><div class="page" id="page-finance"><div class="ph"><div class="pb" onclick="closePage()">←</div><div class="pt">💰 Finance</div></div><div class="px"><div class="fin-summary" id="finSum"></div><button class="add-btn" onclick="openModal('transaction')">+ Add</button><div id="finList"></div></div></div>
 
@@ -306,9 +333,8 @@ body{font-family:'Space Grotesk',sans-serif;background:#06070b;color:#e0dcd4;min
 
 <!-- PASSWORDS --><div class="page" id="page-passwords"><div class="ph"><div class="pb" onclick="closePage()">←</div><div class="pt">🔐 Passwords</div></div><div class="px"><button class="add-btn" onclick="openModal('password')">+ Add Password</button><div id="pwList"></div></div></div>
 
-<!-- WISHLIST --><div class="page" id="page-wishlist"><div class="ph"><div class="pb" onclick="closePage()">←</div><div class="pt">🎁 Wishlist</div></div><div class="px"><button class="add-btn" onclick="openModal('wish')">+ Add Item</button><div id="wishList"></div></div></div>
-
-<!-- HABITS --><div class="page" id="page-habits"><div class="ph"><div class="pb" onclick="closePage()">←</div><div class="pt">✅ Habits</div></div><div class="px"><div id="habitsStats"></div><button class="add-btn" onclick="openModal('habit')">+ Add Habit</button><div id="habitsList"></div></div></div>
+<!-- WISHLIST --><div class="page" id="page-wishlist"><div class="ph"><div class="pb" onclick="closePage()">←</div><div class="pt">🎁 Wishlist</div></div><div class="px"><button class="add-btn" onclick="openModal('wish')">+ Add Item</button><div class="gen-canvas" id="wishCanvas"></div></div></div>
+<div class="gen-overlay" id="wishOverlay"><div class="go-back" onclick="closeWishDetail()">←</div><div class="go-title" id="wiTitle"></div><div class="go-sub" id="wiPrice"></div><div class="go-body" id="wiStatus"></div><div class="go-actions"><button class="go-edit" onclick="togWishFromDetail()">✓ Toggle Done</button><button class="go-edit" onclick="editWishFromDetail()">✎ Edit</button><button class="go-del" onclick="delWishFromDetail()">✕ Delete</button></div></div>
 
 <!-- BODYMAP --><div class="page" id="page-bodymap"><div class="ph"><div class="pb" onclick="closePage()">←</div><div class="pt">🧬 Myself</div></div><div class="bm-layout"><div class="bm-body-wrap" id="bmBodyWrap"></div><div class="bm-tabs" id="bmTabs"></div></div></div>
 
@@ -397,14 +423,14 @@ const DEFS=[
   {id:'finance',emoji:'💰',name:'Finance',color:'#f9ca24',page:'finance'},
   {id:'mood',emoji:'😊',name:'Mood',color:'#74b9ff',page:'mood'},
   {id:'passwords',emoji:'🔐',name:'Passwords',color:'#636e72',page:'passwords'},
-  {id:'wishlist',emoji:'🎁',name:'Wishlist',color:'#e84393',page:'wishlist'},
-  {id:'habits',emoji:'✅',name:'Habits',color:'#00cec9',page:'habits'}
+  {id:'wishlist',emoji:'🎁',name:'Wishlist',color:'#e84393',page:'wishlist'}
 ];
 let cubes=L('cubes3',null);
 if(!cubes||!Array.isArray(cubes)||!cubes.find(c=>c.id==='mood')){
-  const pos=[{x:2,y:5},{x:2,y:18},{x:2,y:31},{x:2,y:44},{x:2,y:57},{x:2,y:70},{x:84,y:5},{x:84,y:18},{x:84,y:31},{x:84,y:44},{x:84,y:57}];
+  const pos=[{x:2,y:5},{x:2,y:18},{x:2,y:31},{x:2,y:44},{x:2,y:57},{x:84,y:5},{x:84,y:18},{x:84,y:31},{x:84,y:44},{x:84,y:57}];
   cubes=DEFS.map((c,i)=>({...c,x:(pos[i]||{x:2,y:5+i*13}).x,y:(pos[i]||{x:2,y:5+i*13}).y}));S('cubes3',cubes);
 }
+cubes=cubes.filter(c=>c.id!=='habits');
 let deleted=L('del3',[]),curPage=null;
 function renderCubes(){const co=$('cubes');co.innerHTML='';cubes.forEach(c=>{const e=document.createElement('div');e.className='cube spawning';e.style.left=c.x+'%';e.style.top=c.y+'%';e.style.borderColor=c.color+'20';e.innerHTML=`<div class="glow" style="background:${c.color}"></div><div class="emoji">${c.emoji}</div><div class="label">${c.name}</div>`;e.dataset.id=c.id;drag(e,c);co.appendChild(e)})}
 function drag(el,cube){let ht,dr=false,hr=false,sx,sy,ox,oy,lt=0;const st=(x,y)=>{sx=x;sy=y;ox=el.offsetLeft;oy=el.offsetTop;hr=dr=false;ht=setTimeout(()=>hr=true,80)};const mv=(x,y)=>{const dx=x-sx,dy=y-sy;if(hr&&!dr&&(Math.abs(dx)>6||Math.abs(dy)>6)){dr=true;el.classList.add('dragging')}if(!dr)return;el.style.left=Math.max(0,Math.min(90,((ox+dx)/innerWidth)*100))+'%';el.style.top=Math.max(3,Math.min(87,((oy+dy)/innerHeight)*100))+'%';const t=$('trash').getBoundingClientRect();$('trash').classList.toggle('active',x>t.left-10&&x<t.right+10&&y>t.top-10&&y<t.bottom+10)};const en=(x,y)=>{clearTimeout(ht);if(dr){el.classList.remove('dragging');const t=$('trash').getBoundingClientRect();if(x>t.left-10&&x<t.right+10&&y>t.top-10&&y<t.bottom+10){deleted.push(cubes.find(z=>z.id===cube.id));S('del3',deleted);cubes=cubes.filter(z=>z.id!==cube.id);S('cubes3',cubes);renderCubes();$('trash').classList.remove('active')}else{cube.x=parseFloat(el.style.left);cube.y=parseFloat(el.style.top);S('cubes3',cubes)}dr=false}else{const n=Date.now();if(n-lt<400){openPage(cube);lt=0}else lt=n}hr=false};
@@ -414,7 +440,7 @@ function toggleHistory(){const p=$('hpanel');p.classList.toggle('open');if(p.cla
 function restoreCube(i){const c=deleted.splice(i,1)[0];c.x=3+Math.random()*12;c.y=5+Math.random()*60;cubes.push(c);S('cubes3',cubes);S('del3',deleted);renderCubes();toggleHistory()}
 
 /* ═══ PAGES ═══ */
-const renderers={myself:renderMyself,ideas:renderIdeas,files:renderFiles,routine:renderRoutine,notes:renderNotes,goals:renderGoals,finance:renderFinance,mood:renderMood,passwords:renderPW,wishlist:renderWish,habits:renderHabits,bodymap:renderBodyMap,sync:renderSync};
+const renderers={myself:renderMyself,ideas:renderIdeas,files:renderFiles,routine:renderRoutine,notes:renderNotes,goals:renderGoals,finance:renderFinance,mood:renderMood,passwords:renderPW,wishlist:renderWish,bodymap:renderBodyMap,sync:renderSync};
 function openPage(cube){curPage=cube;
 /* Zoom from cube position */
 const el=document.querySelector(`.cube[data-id="${cube.id}"]`);
@@ -461,14 +487,33 @@ function renderRoutine(){const tt=L('routine',{});let h=`<div class="tt" style="
 RTIMES.forEach((t,r)=>{h+=`<div class="tt-timeh">${t}</div>`;for(let c=0;c<7;c++){const k=`${r}_${c}`,v=tt[k]||'';h+=`<div class="tt-cell${v?' filled':''}" onclick="editRT('${k}')">${v}</div>`}});h+='</div>';$('routineTT').innerHTML=h}
 function editRT(k){const tt=L('routine',{});const v=prompt('Activity:',tt[k]||'');if(v===null)return;if(v.trim())tt[k]=v.trim();else delete tt[k];S('routine',tt);renderRoutine()}
 
+/* ═══ SHARED DRAG ═══ */
+function genDrag(el,item,key,render,openFn){let ht,dr=false,hr=false,sx,sy,ox,oy,lt=0;const cv=el.parentElement||el.closest('.gen-canvas')||el.closest('.ideas-canvas');const st=(x,y)=>{sx=x;sy=y;const p=el.parentElement;const r=el.getBoundingClientRect(),pr=p.getBoundingClientRect();ox=r.left-pr.left;oy=r.top-pr.top;hr=dr=false;ht=setTimeout(()=>hr=true,80)};const mv=(x,y)=>{const dx=x-sx,dy=y-sy;if(hr&&!dr&&(Math.abs(dx)>6||Math.abs(dy)>6)){dr=true;el.classList.add('dragging')}if(!dr)return;const p=el.parentElement,pr=p.getBoundingClientRect();el.style.left=Math.max(0,Math.min(pr.width-115,ox+dx))+'px';el.style.top=Math.max(0,oy+dy)+'px'};const en=(x,y)=>{clearTimeout(ht);if(dr){el.classList.remove('dragging');item.x=parseInt(el.style.left);item.y=parseInt(el.style.top);const a=L(key,[]),idx=a.findIndex(z=>z.id===item.id);if(idx>-1){a[idx].x=item.x;a[idx].y=item.y;S(key,a)}dr=false}else{const n=Date.now();if(n-lt<400){openFn(item.id,el)}else lt=n}hr=false};
+el.addEventListener('mousedown',e=>{e.preventDefault();st(e.clientX,e.clientY);const mm=e2=>mv(e2.clientX,e2.clientY),mu=e2=>{document.removeEventListener('mousemove',mm);document.removeEventListener('mouseup',mu);en(e2.clientX,e2.clientY)};document.addEventListener('mousemove',mm);document.addEventListener('mouseup',mu)});
+el.addEventListener('touchstart',e=>{const t=e.touches[0];st(t.clientX,t.clientY);const tm=e2=>{e2.preventDefault();mv(e2.touches[0].clientX,e2.touches[0].clientY)},te=e2=>{el.removeEventListener('touchmove',tm);el.removeEventListener('touchend',te);const t2=e2.changedTouches[0];en(t2.clientX,t2.clientY)};el.addEventListener('touchmove',tm,{passive:false});el.addEventListener('touchend',te)},{passive:true})}
+
 /* ═══ NOTES ═══ */
 const NCOLS=['#a78bfa','#38bdf8','#fb923c','#4ade80','#f87171','#fbbf24'];
-function renderNotes(){const notes=L('notes',[]);$('notesList').innerHTML=notes.length?notes.map((n,i)=>`<div class="card note-card" style="border-left-color:${n.color||NCOLS[0]}" onclick="this.classList.toggle('expanded')"><div style="display:flex;justify-content:space-between;align-items:center"><div style="font-size:13px;font-weight:600">${n.title}</div><div style="display:flex;gap:4px" onclick="event.stopPropagation()"><div class="edit-btn" onclick="editNote(${i})">✎</div><div class="del-btn" onclick="del('notes',${i});renderNotes()">×</div></div></div><div class="note-body">${n.text||'Empty note'}</div></div>`).join(''):'<div class="empty-msg">No notes yet</div>'}
+const NOTE_EMOJIS={'#a78bfa':'🗒️','#38bdf8':'📝','#fb923c':'🔥','#4ade80':'📗','#f87171':'❤️','#fbbf24':'⭐'};
+let activeNoteId=null;
+function renderNotes(){const notes=L('notes',[]),cv=$('notesCanvas');cv.innerHTML='';if(!notes.length){cv.innerHTML='<div class="empty-msg">No notes yet — tap + to add one</div>';return}
+notes.forEach(nt=>{const el=document.createElement('div');el.className='gen-cube';el.style.left=(nt.x||0)+'px';el.style.top=(nt.y||0)+'px';const col=nt.color||NCOLS[0];el.innerHTML=`<div class="gc-glow" style="background:${col}"></div><div class="gc-emoji">${NOTE_EMOJIS[col]||'🗒️'}</div><div class="gc-title">${nt.title}</div><div class="gc-sub" style="color:${col}">${nt.text?nt.text.slice(0,20)+'…':'Empty'}</div>`;el.style.borderColor=col+'25';el.dataset.nid=nt.id;genDrag(el,nt,'notes',renderNotes,openNoteDetail);cv.appendChild(el)})}
+function openNoteDetail(id,el){activeNoteId=id;const a=L('notes',[]),nt=a.find(z=>z.id===id);if(!nt)return;const ov=$('noteOverlay');if(el){const r=el.getBoundingClientRect();ov.style.setProperty('--ox',(r.left+r.width/2)/innerWidth*100+'%');ov.style.setProperty('--oy',(r.top+r.height/2)/innerHeight*100+'%')}$('noTitle').textContent=nt.title;$('noColor').textContent='Note';$('noColor').style.color=nt.color||NCOLS[0];$('noText').textContent=nt.text||'Empty note';ov.classList.add('open')}
+function closeNoteDetail(){$('noteOverlay').classList.remove('open');activeNoteId=null}
+function editNoteFromDetail(){const a=L('notes',[]),i=a.findIndex(z=>z.id===activeNoteId);if(i<0)return;closeNoteDetail();editNote(i)}
+function delNoteFromDetail(){const a=L('notes',[]),i=a.findIndex(z=>z.id===activeNoteId);if(i<0)return;a.splice(i,1);S('notes',a);closeNoteDetail();renderNotes()}
 function editNote(i){const a=L('notes',[]),n=a[i];$('modalBody').innerHTML=`<h3>Edit Note</h3><input id="mT" value="${n.title}"><textarea id="mX">${n.text||''}</textarea><div class="note-colors" id="ncPick">${NCOLS.map(c=>`<div class="nc${c===n.color?' sel':''}" style="background:${c}" onclick="document.querySelectorAll('.nc').forEach(x=>x.classList.remove('sel'));this.classList.add('sel')"></div>`).join('')}</div><div class="mbtn"><button class="cn" onclick="closeModal()">Cancel</button><button class="sv" onclick="const a=L('notes',[]);a[${i}].title=$('mT').value;a[${i}].text=$('mX').value;a[${i}].color=document.querySelector('.nc.sel')?.style.background||'${NCOLS[0]}';S('notes',a);closeModal();renderNotes()">Save</button></div>`;$('mbg').classList.add('open')}
 
 /* ═══ GOALS ═══ */
-function renderGoals(){const g=L('goals',[]);$('goalsList').innerHTML=g.length?g.map((x,i)=>`<div class="card"><div style="display:flex;justify-content:space-between;align-items:center"><div style="font-size:13px;font-weight:600">${x.title}</div><div style="display:flex;align-items:center;gap:6px"><span style="font-size:11px;color:#a78bfa;font-weight:700">${x.progress||0}%</span><div class="del-btn" onclick="del('goals',${i});renderGoals()">×</div></div></div><div class="goal-prog"><div class="goal-fill" style="width:${x.progress||0}%;background:linear-gradient(90deg,#6c5ce7,#a855f7)"></div></div><input type="range" min="0" max="100" value="${x.progress||0}" style="width:100%;margin-top:6px;accent-color:#6c5ce7" oninput="updGoal(${i},this.value)"></div>`).join(''):'<div class="empty-msg">No goals yet</div>'}
-function updGoal(i,v){const g=L('goals',[]);g[i].progress=+v;S('goals',g);renderGoals()}
+let activeGoalId=null;
+function renderGoals(){const goals=L('goals',[]),cv=$('goalsCanvas');cv.innerHTML='';if(!goals.length){cv.innerHTML='<div class="empty-msg">No goals yet — tap + to add one</div>';return}
+goals.forEach(gl=>{const el=document.createElement('div');el.className='gen-cube';el.style.left=(gl.x||0)+'px';el.style.top=(gl.y||0)+'px';const p=gl.progress||0;el.innerHTML=`<div class="gc-glow" style="background:#a855f7"></div><div class="gc-emoji">🎯</div><div class="gc-title">${gl.title}</div><div class="gc-sub" style="color:#a78bfa">${p}%</div><div class="gc-prog"><div class="gc-prog-fill" style="width:${p}%"></div></div>`;el.style.borderColor='#a855f725';el.dataset.gid=gl.id;genDrag(el,gl,'goals',renderGoals,openGoalDetail);cv.appendChild(el)})}
+function openGoalDetail(id,el){activeGoalId=id;const a=L('goals',[]),gl=a.find(z=>z.id===id);if(!gl)return;const ov=$('goalOverlay');if(el){const r=el.getBoundingClientRect();ov.style.setProperty('--ox',(r.left+r.width/2)/innerWidth*100+'%');ov.style.setProperty('--oy',(r.top+r.height/2)/innerHeight*100+'%')}$('glTitle').textContent=gl.title;$('glPct').textContent=(gl.progress||0)+'%';$('glSlider').value=gl.progress||0;ov.classList.add('open')}
+function closeGoalDetail(){$('goalOverlay').classList.remove('open');activeGoalId=null}
+function updGoalFromDetail(v){const a=L('goals',[]),i=a.findIndex(z=>z.id===activeGoalId);if(i<0)return;a[i].progress=+v;S('goals',a);$('glPct').textContent=v+'%';renderGoals()}
+function editGoalFromDetail(){const a=L('goals',[]),i=a.findIndex(z=>z.id===activeGoalId);if(i<0)return;closeGoalDetail();editGoal(i)}
+function delGoalFromDetail(){const a=L('goals',[]),i=a.findIndex(z=>z.id===activeGoalId);if(i<0)return;a.splice(i,1);S('goals',a);closeGoalDetail();renderGoals()}
+function editGoal(i){const a=L('goals',[]),g=a[i];$('modalBody').innerHTML=`<h3>Edit Goal</h3><input id="mT" value="${g.title}"><div class="mbtn"><button class="cn" onclick="closeModal()">Cancel</button><button class="sv" onclick="const a=L('goals',[]);a[${i}].title=$('mT').value;S('goals',a);closeModal();renderGoals()">Save</button></div>`;$('mbg').classList.add('open')}
 
 /* ═══ FINANCE ═══ */
 function renderFinance(){const f=L('finance',[]),inc=f.filter(x=>x.type==='in').reduce((s,x)=>s+x.amount,0),exp=f.filter(x=>x.type==='out').reduce((s,x)=>s+x.amount,0);
@@ -489,14 +534,16 @@ function saveMoodJournal(){const k=new Date().toISOString().slice(0,10),md=L('mo
 function renderPW(){const p=L('passwords',[]);$('pwList').innerHTML=p.length?p.map((x,i)=>`<div class="pw-card"><div class="pw-icon">🔑</div><div class="pw-info"><div class="pw-site">${x.site}</div><div class="pw-user">${x.user}</div></div><div class="pw-show" onclick="this.textContent=this.textContent==='Show'?'${x.pw.replace(/'/g,"\\'")}':'Show'">Show</div><div class="del-btn" onclick="del('passwords',${i});renderPW()" style="margin-left:4px">×</div></div>`).join(''):'<div class="empty-msg">No passwords saved</div>'}
 
 /* ═══ WISHLIST ═══ */
-function renderWish(){const w=L('wishlist',[]);$('wishList').innerHTML=w.length?w.map((x,i)=>`<div class="card"><div class="wish-card"><div class="wish-img">${x.emoji||'🎁'}</div><div class="wish-info"><div class="wish-name">${x.name}</div>${x.price?`<div class="wish-price">€${x.price}</div>`:''}</div><div class="wish-check${x.done?' done':''}" onclick="togWish(${i})">${x.done?'✓':''}</div><div class="del-btn" onclick="del('wishlist',${i});renderWish()" style="margin-left:4px">×</div></div></div>`).join(''):'<div class="empty-msg">No items yet</div>'}
-function togWish(i){const w=L('wishlist',[]);w[i].done=!w[i].done;S('wishlist',w);renderWish()}
-
-/* ═══ HABITS ═══ */
-function renderHabits(){const h=L('habits',[]),days=['M','T','W','T','F','S','S'],total=h.length*7,done=h.reduce((s,x)=>(x.days||[]).reduce((a,v)=>a+v,0)+s,0),pct=total?Math.round(done/total*100):0;
-$('habitsStats').innerHTML=h.length?`<div class="card" style="text-align:center;margin-bottom:12px"><div style="font-size:24px;font-weight:700;background:linear-gradient(135deg,#4ade80,#22d3ee);-webkit-background-clip:text;-webkit-text-fill-color:transparent">${pct}%</div><div style="font-size:9px;color:rgba(255,255,255,.18);margin-top:2px">Weekly</div><div class="streak-bar" style="margin-top:6px"><div class="streak-fill" style="width:${pct}%"></div></div></div>`:'';
-$('habitsList').innerHTML=h.length?h.map((x,hi)=>{const cnt=(x.days||[]).reduce((a,v)=>a+v,0);return`<div class="card"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px"><div style="display:flex;align-items:center"><span style="font-size:18px;margin-right:6px">${x.emoji||'✅'}</span><div><div style="font-size:12px;font-weight:600">${x.name}</div></div></div><div style="display:flex;align-items:center;gap:5px"><span style="font-size:9px;color:rgba(255,255,255,.18)">${cnt}/7</span><div class="del-btn" onclick="del('habits',${hi});renderHabits()">×</div></div></div><div class="day-row">${days.map((d,di)=>`<div class="day-box${x.days&&x.days[di]?' done':''}" onclick="togH(${hi},${di})"><span class="dl">${d}</span><span class="dc">✓</span></div>`).join('')}</div><div class="streak-bar"><div class="streak-fill" style="width:${Math.round(cnt/7*100)}%"></div></div></div>`}).join(''):'<div class="empty-msg">No habits yet</div>'}
-function togH(hi,di){const h=L('habits',[]);if(!h[hi].days)h[hi].days=[0,0,0,0,0,0,0];h[hi].days[di]=h[hi].days[di]?0:1;S('habits',h);renderHabits()}
+const WISH_EMOJIS=['🎁','🎮','👟','📱','💻','🎧','📚','🎨','✈️','🏠','🚗','💎','👗','🍕','🎵','🌸'];
+let activeWishId=null;
+function renderWish(){const items=L('wishlist',[]),cv=$('wishCanvas');cv.innerHTML='';if(!items.length){cv.innerHTML='<div class="empty-msg">No items yet — tap + to add one</div>';return}
+items.forEach(wi=>{const el=document.createElement('div');el.className='gen-cube'+(wi.done?' wish-done':'');el.style.left=(wi.x||0)+'px';el.style.top=(wi.y||0)+'px';el.innerHTML=`<div class="gc-glow" style="background:#e84393"></div><div class="gc-emoji">${wi.emoji||'🎁'}</div><div class="gc-title">${wi.name}</div>${wi.price?`<div class="gc-sub" style="color:#e84393">€${wi.price}</div>`:''}`;el.style.borderColor=wi.done?'#4ade8025':'#e8439325';el.dataset.wid=wi.id;genDrag(el,wi,'wishlist',renderWish,openWishDetail);cv.appendChild(el)})}
+function openWishDetail(id,el){activeWishId=id;const a=L('wishlist',[]),wi=a.find(z=>z.id===id);if(!wi)return;const ov=$('wishOverlay');if(el){const r=el.getBoundingClientRect();ov.style.setProperty('--ox',(r.left+r.width/2)/innerWidth*100+'%');ov.style.setProperty('--oy',(r.top+r.height/2)/innerHeight*100+'%')}$('wiTitle').textContent=wi.name;$('wiPrice').textContent=wi.price?'€'+wi.price:'';$('wiPrice').style.color='#e84393';$('wiStatus').textContent=wi.done?'✓ Got it!':'Not yet';ov.classList.add('open')}
+function closeWishDetail(){$('wishOverlay').classList.remove('open');activeWishId=null}
+function togWishFromDetail(){const a=L('wishlist',[]),i=a.findIndex(z=>z.id===activeWishId);if(i<0)return;a[i].done=!a[i].done;S('wishlist',a);$('wiStatus').textContent=a[i].done?'✓ Got it!':'Not yet';renderWish()}
+function editWishFromDetail(){const a=L('wishlist',[]),i=a.findIndex(z=>z.id===activeWishId);if(i<0)return;closeWishDetail();editWish(i)}
+function delWishFromDetail(){const a=L('wishlist',[]),i=a.findIndex(z=>z.id===activeWishId);if(i<0)return;a.splice(i,1);S('wishlist',a);closeWishDetail();renderWish()}
+function editWish(i){const a=L('wishlist',[]),w=a[i];$('modalBody').innerHTML=`<h3>Edit Wish</h3><input id="mN" value="${w.name}"><div class="emoji-grid">${WISH_EMOJIS.map(e=>`<div class="emoji-opt${e===w.emoji?' sel':''}" onclick="document.querySelectorAll('.emoji-opt').forEach(x=>x.classList.remove('sel'));this.classList.add('sel');this.dataset.v='${e}'"data-v="${e}">${e}</div>`).join('')}</div><input id="mPr" type="number" step="0.01" placeholder="Price (optional)" value="${w.price||''}"><div class="mbtn"><button class="cn" onclick="closeModal()">Cancel</button><button class="sv" onclick="const a=L('wishlist',[]);a[${i}].name=$('mN').value;a[${i}].emoji=document.querySelector('.emoji-opt.sel')?.dataset.v||'🎁';a[${i}].price=parseFloat($('mPr').value)||0;S('wishlist',a);closeModal();renderWish()">Save</button></div>`;$('mbg').classList.add('open')}
 
 /* ═══ BODYMAP ═══ */
 const STYLE_PARTS=[
@@ -751,24 +798,22 @@ if(t==='idea')m.innerHTML='<h3>New Idea</h3><input id="mT" placeholder="Title"><
 else if(t==='note')m.innerHTML=`<h3>New Note</h3><input id="mT" placeholder="Title"><textarea id="mX" placeholder="Content"></textarea><div class="note-colors">${NCOLS.map((c,i)=>`<div class="nc${!i?' sel':''}" style="background:${c}" onclick="document.querySelectorAll('.nc').forEach(x=>x.classList.remove('sel'));this.classList.add('sel')"></div>`).join('')}</div><div class="mbtn"><button class="cn" onclick="closeModal()">Cancel</button><button class="sv" onclick="saveM('note')">Save</button></div>`;
 else if(t==='goal')m.innerHTML='<h3>New Goal</h3><input id="mT" placeholder="Goal title"><div class="mbtn"><button class="cn" onclick="closeModal()">Cancel</button><button class="sv" onclick="saveM(\'goal\')">Save</button></div>';
 else if(t==='transaction')m.innerHTML='<h3>New Transaction</h3><input id="mD2" placeholder="Description"><input id="mA" type="number" step="0.01" placeholder="Amount"><select id="mTp"><option value="in">Income</option><option value="out">Expense</option></select><input id="mDt" type="date"><div class="mbtn"><button class="cn" onclick="closeModal()">Cancel</button><button class="sv" onclick="saveM(\'transaction\')">Save</button></div>';
-else if(t==='habit')m.innerHTML='<h3>New Habit</h3><input id="mN" placeholder="Habit name"><input id="mE" placeholder="Emoji (optional)" maxlength="4"><div class="mbtn"><button class="cn" onclick="closeModal()">Cancel</button><button class="sv" onclick="saveM(\'habit\')">Save</button></div>';
 else if(t==='password')m.innerHTML='<h3>Add Password</h3><input id="mSi" placeholder="Site / App"><input id="mUs" placeholder="Username / Email"><input id="mPw" placeholder="Password" type="password"><div class="mbtn"><button class="cn" onclick="closeModal()">Cancel</button><button class="sv" onclick="saveM(\'password\')">Save</button></div>';
-else if(t==='wish')m.innerHTML='<h3>Add to Wishlist</h3><input id="mN" placeholder="Item name"><input id="mE" placeholder="Emoji (optional)" maxlength="4"><input id="mPr" type="number" step="0.01" placeholder="Price (optional)"><div class="mbtn"><button class="cn" onclick="closeModal()">Cancel</button><button class="sv" onclick="saveM(\'wish\')">Save</button></div>';
+else if(t==='wish')m.innerHTML=`<h3>Add to Wishlist</h3><input id="mN" placeholder="Item name"><div class="emoji-grid">${WISH_EMOJIS.map(e=>`<div class="emoji-opt${e==='🎁'?' sel':''}" onclick="document.querySelectorAll('.emoji-opt').forEach(x=>x.classList.remove('sel'));this.classList.add('sel');this.dataset.v='${e}'" data-v="${e}">${e}</div>`).join('')}</div><input id="mPr" type="number" step="0.01" placeholder="Price (optional)"><div class="mbtn"><button class="cn" onclick="closeModal()">Cancel</button><button class="sv" onclick="saveM('wish')">Save</button></div>`;
 $('mbg').classList.add('open')}
 function closeModal(){$('mbg').classList.remove('open')}
 function saveM(t){const g=id=>$(id)?.value||'';
 if(t==='idea'){const a=L('ideas',[]);const cnt=a.length;const col=Math.floor(cnt%4),row=Math.floor(cnt/4);a.push({id:U(),title:g('mT')||'Untitled',cat:g('mC'),text:g('mX'),x:10+col*125,y:10+row*115});S('ideas',a);renderIdeas()}
-else if(t==='note'){const a=L('notes',[]);a.push({id:U(),title:g('mT')||'Untitled',text:g('mX'),color:document.querySelector('.nc.sel')?.style.background||NCOLS[0]});S('notes',a);renderNotes()}
-else if(t==='goal'){const a=L('goals',[]);a.push({id:U(),title:g('mT')||'Goal',progress:0});S('goals',a);renderGoals()}
+else if(t==='note'){const a=L('notes',[]);const cnt=a.length;const col=Math.floor(cnt%4),row=Math.floor(cnt/4);a.push({id:U(),title:g('mT')||'Untitled',text:g('mX'),color:document.querySelector('.nc.sel')?.style.background||NCOLS[0],x:10+col*125,y:10+row*115});S('notes',a);renderNotes()}
+else if(t==='goal'){const a=L('goals',[]);const cnt=a.length;const col=Math.floor(cnt%4),row=Math.floor(cnt/4);a.push({id:U(),title:g('mT')||'Goal',progress:0,x:10+col*125,y:10+row*115});S('goals',a);renderGoals()}
 else if(t==='transaction'){const a=L('finance',[]);a.push({id:U(),desc:g('mD2')||'Transaction',amount:parseFloat(g('mA'))||0,type:g('mTp'),date:g('mDt')});S('finance',a);renderFinance()}
-else if(t==='habit'){const a=L('habits',[]);a.push({id:U(),name:g('mN')||'Habit',emoji:g('mE')||'✅',days:[0,0,0,0,0,0,0]});S('habits',a);renderHabits()}
 else if(t==='password'){const a=L('passwords',[]);a.push({id:U(),site:g('mSi')||'Site',user:g('mUs'),pw:g('mPw')});S('passwords',a);renderPW()}
-else if(t==='wish'){const a=L('wishlist',[]);a.push({id:U(),name:g('mN')||'Item',emoji:g('mE')||'🎁',price:parseFloat(g('mPr'))||0,done:false});S('wishlist',a);renderWish()}
+else if(t==='wish'){const a=L('wishlist',[]);const cnt=a.length;const col=Math.floor(cnt%4),row=Math.floor(cnt/4);a.push({id:U(),name:g('mN')||'Item',emoji:document.querySelector('.emoji-opt.sel')?.dataset.v||'🎁',price:parseFloat(g('mPr'))||0,done:false,x:10+col*125,y:10+row*115});S('wishlist',a);renderWish()}
 closeModal()}
 
 /* ═══ CLOUD SYNC ═══ */
 let fbDb=null,fbRef=null,syncTimer=null,pulling=false;
-const FB_KEYS=['cubes3','del3','events','myself','ideas','files','routine','notes','goals','finance','mood','passwords','wishlist','habits','bodymap'];
+const FB_KEYS=['cubes3','del3','events','myself','ideas','files','routine','notes','goals','finance','mood','passwords','wishlist','bodymap'];
 
 function renderSync(){
 const cfg=L('fb_config',null),code=L('vault_code',''),on=!!fbDb;
@@ -896,6 +941,8 @@ r.readAsText(file);
 renderCubes();renderCal();
 /* Auto-connect Firebase if configured */
 (function(){const c=L('fb_config',null),v=L('vault_code','');if(c&&v)initFB(c,v)})();
+/* Siri Shortcut: ?idea=TEXT&cat=CATEGORY adds idea automatically */
+(function(){const p=new URLSearchParams(location.search);const idea=p.get('idea');if(idea){const cat=p.get('cat')||'Other';const catMap={personal:'Personal',work:'Work',creative:'Creative',other:'Other',general:'Other'};const mapped=catMap[cat.toLowerCase()]||'Other';const a=L('ideas',[]);const cnt=a.length;const col=Math.floor(cnt%4),row=Math.floor(cnt/4);a.push({id:U(),title:idea,cat:mapped,text:'',x:10+col*125,y:10+row*115});S('ideas',a);history.replaceState(null,'',location.pathname);document.title='✓ Idea saved!';setTimeout(()=>document.title='LifeVault',2000)}})();
 </script>
 </body>
 </html>
