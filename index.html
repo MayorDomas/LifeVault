@@ -941,8 +941,8 @@ r.readAsText(file);
 renderCubes();renderCal();
 /* Auto-connect Firebase if configured */
 (function(){const c=L('fb_config',null),v=L('vault_code','');if(c&&v)initFB(c,v)})();
-/* Siri Shortcut: ?idea=TEXT&cat=CATEGORY adds idea automatically */
-(function(){const p=new URLSearchParams(location.search);const idea=p.get('idea');if(idea){const cat=p.get('cat')||'Other';const catMap={personal:'Personal',work:'Work',creative:'Creative',other:'Other',general:'Other'};const mapped=catMap[cat.toLowerCase()]||'Other';const a=L('ideas',[]);const cnt=a.length;const col=Math.floor(cnt%4),row=Math.floor(cnt/4);a.push({id:U(),title:idea,cat:mapped,text:'',x:10+col*125,y:10+row*115});S('ideas',a);history.replaceState(null,'',location.pathname);document.title='✓ Idea saved!';setTimeout(()=>document.title='LifeVault',2000)}})();
+/* Siri Shortcut: ?idea=TEXT adds idea automatically and opens Ideas page */
+(function(){const p=new URLSearchParams(location.search);const idea=p.get('idea');if(idea){const cat=p.get('cat')||'Personal';const catMap={personal:'Personal',work:'Work',creative:'Creative',other:'Other',general:'Personal'};const mapped=catMap[cat.toLowerCase()]||'Personal';const a=L('ideas',[]);const cnt=a.length;const col=Math.floor(cnt%4),row=Math.floor(cnt/4);a.push({id:U(),title:'Remote Idea',cat:mapped,text:idea,x:10+col*125,y:10+row*115});S('ideas',a);history.replaceState(null,'',location.pathname);setTimeout(()=>{const cube=cubes.find(c=>c.id==='ideas');if(cube)openPage(cube)},300)}})();
 </script>
 </body>
 </html>
