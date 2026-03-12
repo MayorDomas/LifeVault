@@ -106,6 +106,37 @@ body{font-family:'Space Grotesk',sans-serif;background:#06070b;color:#e0dcd4;min
 .mbtn{display:flex;gap:7px;margin-top:6px}.mbtn button{flex:1;padding:11px;border:none;border-radius:11px;font-family:inherit;font-weight:600;font-size:12px;cursor:pointer}
 .mbtn .sv{background:linear-gradient(135deg,#6c5ce7,#a855f7);color:#fff}.mbtn .cn{background:rgba(255,255,255,.06);color:rgba(255,255,255,.6)}
 
+/* BODYMAP */
+.bm-layout{display:flex;gap:0;min-height:calc(100vh - 60px);flex-direction:column;align-items:center}
+.bm-body-wrap{position:relative;width:min(280px,70vw);margin:10px auto 0;flex-shrink:0}
+.bm-svg{width:100%;height:auto;filter:drop-shadow(0 0 30px rgba(108,92,231,.15))}
+.bm-svg .bm-part{cursor:pointer;fill:rgba(108,92,231,.03);stroke:rgba(168,139,250,.35);stroke-width:1.2;transition:all .25s;stroke-linecap:round;stroke-linejoin:round}
+.bm-svg .bm-part:hover{fill:rgba(108,92,231,.12);stroke:rgba(168,139,250,.7);filter:drop-shadow(0 0 8px rgba(108,92,231,.3))}
+.bm-svg .bm-part.active{fill:rgba(108,92,231,.18);stroke:#a78bfa;stroke-width:2;filter:drop-shadow(0 0 12px rgba(108,92,231,.4))}
+.bm-svg .bm-line{stroke:rgba(168,139,250,.25);stroke-width:1;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.bm-svg .bm-joint{fill:rgba(168,139,250,.12);stroke:none}
+.bm-label{position:absolute;font-size:8px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:rgba(168,139,250,.4);pointer-events:none;white-space:nowrap;transition:color .25s}
+.bm-label.active{color:#a78bfa}
+.bm-detail{width:100%;max-width:500px;padding:0 16px 40px;margin:0 auto}
+.bm-tabs{display:flex;gap:4px;flex-wrap:wrap;justify-content:center;margin:12px 0 8px;padding:0 8px}
+.bm-tab{padding:6px 11px;border-radius:9px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.05);font-family:inherit;font-size:10px;font-weight:600;color:rgba(255,255,255,.3);cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:4px}
+.bm-tab:hover{background:rgba(255,255,255,.06)}
+.bm-tab.active{background:rgba(108,92,231,.15);border-color:rgba(108,92,231,.3);color:#a78bfa}
+.bm-tab .bm-tab-dot{width:6px;height:6px;border-radius:50%;background:currentColor;opacity:.5}
+.bm-panel{animation:bmFade .3s ease}
+@keyframes bmFade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.bm-panel-head{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.bm-panel-emoji{font-size:28px}
+.bm-panel-title{font-size:16px;font-weight:700}
+.bm-panel-desc{font-size:11px;color:rgba(255,255,255,.25);line-height:1.5;margin-bottom:14px;padding:10px;background:rgba(255,255,255,.02);border-radius:10px;border:1px solid rgba(255,255,255,.04)}
+.bm-notes-area{width:100%;min-height:80px;padding:10px 12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);border-radius:10px;color:#fff;font-family:inherit;font-size:12px;line-height:1.6;outline:none;resize:vertical}.bm-notes-area:focus{border-color:rgba(108,92,231,.3)}
+.bm-stats{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:12px}
+.bm-stat{padding:10px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.05);border-radius:10px;text-align:center}
+.bm-stat-val{font-size:18px;font-weight:700;color:#a78bfa}.bm-stat-lbl{font-size:8px;color:rgba(255,255,255,.18);margin-top:2px;text-transform:uppercase;letter-spacing:.5px}
+.bm-stat input{width:100%;text-align:center;padding:4px;margin-top:4px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);border-radius:6px;color:#fff;font-family:inherit;font-size:11px;outline:none}
+.bm-stat input:focus{border-color:rgba(108,92,231,.3)}
+@keyframes bmPulse{0%,100%{filter:drop-shadow(0 0 20px rgba(108,92,231,.1))}50%{filter:drop-shadow(0 0 35px rgba(108,92,231,.2))}}.bm-svg{animation:bmPulse 4s ease-in-out infinite}
+
 /* MYSELF */
 .my-layout{display:flex;gap:16px;min-height:calc(100vh - 60px);padding:0 16px 30px}
 .my-left{flex:1;min-width:0;overflow-y:auto}.my-right{width:130px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
@@ -231,6 +262,8 @@ body{font-family:'Space Grotesk',sans-serif;background:#06070b;color:#e0dcd4;min
 
 <!-- HABITS --><div class="page" id="page-habits"><div class="ph"><div class="pb" onclick="closePage()">←</div><div class="pt">✅ Habits</div></div><div class="px"><div id="habitsStats"></div><button class="add-btn" onclick="openModal('habit')">+ Add Habit</button><div id="habitsList"></div></div></div>
 
+<!-- BODYMAP --><div class="page" id="page-bodymap"><div class="ph"><div class="pb" onclick="closePage()">←</div><div class="pt">🧬 BodyMap</div></div><div class="bm-layout"><div class="bm-body-wrap" id="bmBodyWrap"></div><div class="bm-tabs" id="bmTabs"></div><div class="bm-detail" id="bmDetail"></div></div></div>
+
 <!-- SYNC --><div class="page" id="page-sync"><div class="ph"><div class="pb" onclick="closePage()">←</div><div class="pt">☁️ Cloud Sync</div></div><div class="px" id="syncContent"></div></div>
 
 <!-- GENERIC --><div class="page" id="innerPage"><div class="ph"><div class="pb" onclick="closePage()">←</div><div class="pt" id="innerTitle"></div></div><div class="px"><div class="empty-msg">Coming soon</div></div></div>
@@ -311,7 +344,8 @@ const DEFS=[
   {id:'mood',emoji:'😊',name:'Mood',color:'#74b9ff',page:'mood'},
   {id:'passwords',emoji:'🔐',name:'Passwords',color:'#636e72',page:'passwords'},
   {id:'wishlist',emoji:'🎁',name:'Wishlist',color:'#e84393',page:'wishlist'},
-  {id:'habits',emoji:'✅',name:'Habits',color:'#00cec9',page:'habits'}
+  {id:'habits',emoji:'✅',name:'Habits',color:'#00cec9',page:'habits'},
+  {id:'bodymap',emoji:'🧬',name:'BodyMap',color:'#e879f9',page:'bodymap'}
 ];
 let cubes=L('cubes3',null);
 if(!cubes||!Array.isArray(cubes)||!cubes.find(c=>c.id==='mood')){
@@ -327,7 +361,7 @@ function toggleHistory(){const p=$('hpanel');p.classList.toggle('open');if(p.cla
 function restoreCube(i){const c=deleted.splice(i,1)[0];c.x=3+Math.random()*12;c.y=5+Math.random()*60;cubes.push(c);S('cubes3',cubes);S('del3',deleted);renderCubes();toggleHistory()}
 
 /* ═══ PAGES ═══ */
-const renderers={myself:renderMyself,ideas:renderIdeas,files:renderFiles,routine:renderRoutine,notes:renderNotes,goals:renderGoals,finance:renderFinance,mood:renderMood,passwords:renderPW,wishlist:renderWish,habits:renderHabits,sync:renderSync};
+const renderers={myself:renderMyself,ideas:renderIdeas,files:renderFiles,routine:renderRoutine,notes:renderNotes,goals:renderGoals,finance:renderFinance,mood:renderMood,passwords:renderPW,wishlist:renderWish,habits:renderHabits,bodymap:renderBodyMap,sync:renderSync};
 function openPage(cube){curPage=cube;const pg=$('page-'+cube.page);if(pg){pg.classList.add('open');(renderers[cube.page]||function(){})()} else{$('innerTitle').textContent=cube.emoji+' '+cube.name;$('innerPage').classList.add('open')}$('dashboard').style.opacity='0';$('dashboard').style.pointerEvents='none'}
 function closePage(){document.querySelectorAll('.page.open').forEach(p=>p.classList.remove('open'));curPage=null;$('dashboard').style.opacity='1';$('dashboard').style.pointerEvents='auto'}
 
@@ -395,6 +429,121 @@ $('habitsStats').innerHTML=h.length?`<div class="card" style="text-align:center;
 $('habitsList').innerHTML=h.length?h.map((x,hi)=>{const cnt=(x.days||[]).reduce((a,v)=>a+v,0);return`<div class="card"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px"><div style="display:flex;align-items:center"><span style="font-size:18px;margin-right:6px">${x.emoji||'✅'}</span><div><div style="font-size:12px;font-weight:600">${x.name}</div></div></div><div style="display:flex;align-items:center;gap:5px"><span style="font-size:9px;color:rgba(255,255,255,.18)">${cnt}/7</span><div class="del-btn" onclick="del('habits',${hi});renderHabits()">×</div></div></div><div class="day-row">${days.map((d,di)=>`<div class="day-box${x.days&&x.days[di]?' done':''}" onclick="togH(${hi},${di})"><span class="dl">${d}</span><span class="dc">✓</span></div>`).join('')}</div><div class="streak-bar"><div class="streak-fill" style="width:${Math.round(cnt/7*100)}%"></div></div></div>`}).join(''):'<div class="empty-msg">No habits yet</div>'}
 function togH(hi,di){const h=L('habits',[]);if(!h[hi].days)h[hi].days=[0,0,0,0,0,0,0];h[hi].days[di]=h[hi].days[di]?0:1;S('habits',h);renderHabits()}
 
+/* ═══ BODYMAP ═══ */
+const BM_PARTS=[
+{id:'head',emoji:'🧠',name:'Galva / Protas',desc:'Smegenys, mąstymas, koncentracija, atmintis. Sek savo protinę sveikatą, mokymąsi ir kognityvinius tikslus.',stats:[{k:'iq_goal',l:'IQ Tikslas'},{k:'books_read',l:'Knygų perskaityta'}]},
+{id:'eyes',emoji:'👁️',name:'Akys / Regėjimas',desc:'Akių sveikata, ekrano laikas, regėjimo būklė. Užsirašyk optometristo vizitus ir pokyčius.',stats:[{k:'screen_hrs',l:'Ekrano val/d'},{k:'vision',l:'Regėjimas'}]},
+{id:'mouth',emoji:'👄',name:'Burna / Mityba',desc:'Mityba, dieta, dantų priežiūra. Sek ką valgai ir geri, odontologo vizitus.',stats:[{k:'water_l',l:'Vandens L/d'},{k:'calories',l:'Kalorijos/d'}]},
+{id:'chest',emoji:'❤️',name:'Krūtinė / Širdis',desc:'Širdies ir kraujagyslių sveikata, kvėpavimas, emocijos. Pulsas, kraujo spaudimas.',stats:[{k:'heart_rate',l:'Pulsas'},{k:'bp',l:'Kraujo spaudimas'}]},
+{id:'left_arm',emoji:'💪',name:'Kairė ranka',desc:'Kairės rankos jėga, lankstumas, sužalojimai. Treniruočių progresas viršutinei kūno daliai.',stats:[{k:'strength',l:'Jėga (kg)'},{k:'flex',l:'Lankstumas'}]},
+{id:'right_arm',emoji:'💪',name:'Dešinė ranka',desc:'Dešinės rankos jėga, lankstumas, sužalojimai. Treniruočių progresas.',stats:[{k:'strength',l:'Jėga (kg)'},{k:'flex',l:'Lankstumas'}]},
+{id:'core',emoji:'🔥',name:'Pilvas / Core',desc:'Pilvo raumenys, virškinimas, kūno centras. Sek svorį, liemens apimtį ir treniruotes.',stats:[{k:'weight',l:'Svoris (kg)'},{k:'waist',l:'Liemuo (cm)'}]},
+{id:'left_leg',emoji:'🦵',name:'Kairė koja',desc:'Kairės kojos jėga, bėgimas, mobilumas. Sužalojimai ir atsistatymas.',stats:[{k:'squat',l:'Squat (kg)'},{k:'run_km',l:'Bėgimas km'}]},
+{id:'right_leg',emoji:'🦵',name:'Dešinė koja',desc:'Dešinės kojos jėga, bėgimas, mobilumas. Sužalojimai ir atsistatymas.',stats:[{k:'squat',l:'Squat (kg)'},{k:'run_km',l:'Bėgimas km'}]},
+{id:'hands',emoji:'🤲',name:'Plaštakos',desc:'Plaštakų ir pirštų sveikata, dexterity, tipavimo greitis, riešo kanalas.',stats:[{k:'grip',l:'Grip (kg)'},{k:'wpm',l:'WPM tipavimas'}]},
+{id:'feet',emoji:'🦶',name:'Pėdos',desc:'Pėdų sveikata, balansas, batų dydis. Pėdų priežiūra ir laikysena.',stats:[{k:'shoe_size',l:'Batų dydis'},{k:'steps',l:'Žingsniai/d'}]}
+];
+let bmActive='head';
+
+function renderBodyMap(){
+$('bmBodyWrap').innerHTML=`<svg class="bm-svg" viewBox="0 0 240 520" xmlns="http://www.w3.org/2000/svg">
+<!-- Head -->
+<ellipse class="bm-part" data-part="head" cx="120" cy="52" rx="32" ry="38"/>
+<!-- Neck -->
+<line class="bm-line" x1="120" y1="90" x2="120" y2="108"/>
+<!-- Chest/Torso -->
+<path class="bm-part" data-part="chest" d="M82 108 Q120 98 158 108 L162 180 Q120 186 78 180 Z"/>
+<!-- Core/Stomach -->
+<path class="bm-part" data-part="core" d="M78 180 Q120 186 162 180 L158 260 Q120 268 82 260 Z"/>
+<!-- Left Arm -->
+<path class="bm-part" data-part="left_arm" d="M82 108 L58 118 L36 178 L28 230 L42 232 L52 186 L62 148 L78 140" />
+<!-- Right Arm -->
+<path class="bm-part" data-part="right_arm" d="M158 108 L182 118 L204 178 L212 230 L198 232 L188 186 L178 148 L162 140"/>
+<!-- Left Hand -->
+<ellipse class="bm-part" data-part="hands" cx="34" cy="242" rx="12" ry="16"/>
+<!-- Right Hand -->
+<ellipse class="bm-part" data-part="hands" cx="206" cy="242" rx="12" ry="16"/>
+<!-- Left Leg -->
+<path class="bm-part" data-part="left_leg" d="M82 260 Q90 268 98 260 L104 360 L96 440 L78 442 L74 362 Z"/>
+<!-- Right Leg -->
+<path class="bm-part" data-part="right_leg" d="M142 260 Q150 268 158 260 L166 362 L162 442 L144 440 L136 360 Z"/>
+<!-- Left Foot -->
+<ellipse class="bm-part" data-part="feet" cx="86" cy="456" rx="16" ry="12"/>
+<!-- Right Foot -->
+<ellipse class="bm-part" data-part="feet" cx="154" cy="456" rx="16" ry="12"/>
+<!-- Eyes -->
+<ellipse class="bm-part" data-part="eyes" cx="108" cy="46" rx="7" ry="5" style="stroke-width:.8"/>
+<ellipse class="bm-part" data-part="eyes" cx="132" cy="46" rx="7" ry="5" style="stroke-width:.8"/>
+<!-- Eye pupils -->
+<circle class="bm-joint" cx="108" cy="46" r="2.5" style="fill:rgba(168,139,250,.3)"/>
+<circle class="bm-joint" cx="132" cy="46" r="2.5" style="fill:rgba(168,139,250,.3)"/>
+<!-- Mouth -->
+<path class="bm-part" data-part="mouth" d="M112 62 Q120 70 128 62" style="stroke-width:.8;fill:rgba(108,92,231,.02)"/>
+<!-- Joints -->
+<circle class="bm-joint" cx="82" cy="108" r="4"/>
+<circle class="bm-joint" cx="158" cy="108" r="4"/>
+<circle class="bm-joint" cx="46" cy="186" r="3"/>
+<circle class="bm-joint" cx="194" cy="186" r="3"/>
+<circle class="bm-joint" cx="90" cy="340" r="3.5"/>
+<circle class="bm-joint" cx="150" cy="340" r="3.5"/>
+</svg>`;
+
+/* Click handlers */
+document.querySelectorAll('.bm-part').forEach(el=>{
+el.addEventListener('click',()=>{
+const p=el.dataset.part;
+if(p){bmActive=p;renderBmTabs();renderBmDetail()}
+})});
+
+renderBmTabs();
+renderBmDetail();
+}
+
+function renderBmTabs(){
+$('bmTabs').innerHTML=BM_PARTS.map(p=>`<div class="bm-tab${p.id===bmActive?' active':''}" onclick="bmActive='${p.id}';renderBmTabs();renderBmDetail();highlightBmPart('${p.id}')">${p.emoji} ${p.name.split(' / ')[0]}</div>`).join('');
+highlightBmPart(bmActive);
+}
+
+function highlightBmPart(id){
+document.querySelectorAll('.bm-part').forEach(el=>el.classList.remove('active'));
+document.querySelectorAll(`.bm-part[data-part="${id}"]`).forEach(el=>el.classList.add('active'));
+}
+
+function renderBmDetail(){
+const part=BM_PARTS.find(p=>p.id===bmActive);
+if(!part){$('bmDetail').innerHTML='';return}
+const data=L('bodymap',{});
+const pd=data[part.id]||{};
+
+$('bmDetail').innerHTML=`
+<div class="bm-panel">
+<div class="bm-panel-head">
+<div class="bm-panel-emoji">${part.emoji}</div>
+<div class="bm-panel-title">${part.name}</div>
+</div>
+<div class="bm-panel-desc">${part.desc}</div>
+<div class="sec">Statistika</div>
+<div class="bm-stats">${part.stats.map(s=>`<div class="bm-stat"><div class="bm-stat-lbl">${s.l}</div><div class="bm-stat-val">${pd[s.k]||'—'}</div><input placeholder="${s.l}" value="${pd[s.k]||''}" oninput="saveBmStat('${part.id}','${s.k}',this.value)"></div>`).join('')}</div>
+<div class="sec">Būklė</div>
+<div style="display:flex;gap:6px;margin-bottom:12px">${['🟢 Puiku','🟡 OK','🟠 Dėmesio','🔴 Blogai'].map((s,i)=>{const v=['great','ok','warn','bad'][i];return`<div class="tab${pd.status===v?' active':''}" onclick="saveBmStat('${part.id}','status','${v}');renderBmDetail()" style="font-size:10px">${s}</div>`}).join('')}</div>
+<div class="sec">Užrašai</div>
+<textarea class="bm-notes-area" placeholder="Rašyk pastabas apie ${part.name.toLowerCase()}..." oninput="saveBmStat('${part.id}','notes',this.value)">${pd.notes||''}</textarea>
+</div>`;
+}
+
+function saveBmStat(partId,key,val){
+const data=L('bodymap',{});
+if(!data[partId])data[partId]={};
+data[partId][key]=val;
+S('bodymap',data);
+/* Update stat display without full re-render */
+if(key!=='notes'&&key!=='status'){
+const statVals=document.querySelectorAll('.bm-stat-val');
+const part=BM_PARTS.find(p=>p.id===partId);
+if(part){part.stats.forEach((s,i)=>{if(s.k===key&&statVals[i])statVals[i].textContent=val||'—'})}
+}
+}
+
 /* ═══ HELPERS ═══ */
 function del(k,i){const a=L(k,[]);a.splice(i,1);S(k,a)}
 
@@ -421,7 +570,7 @@ closeModal()}
 
 /* ═══ CLOUD SYNC ═══ */
 let fbDb=null,fbRef=null,syncTimer=null,pulling=false;
-const FB_KEYS=['cubes3','del3','events','myself','ideas','files','routine','notes','goals','finance','mood','passwords','wishlist','habits'];
+const FB_KEYS=['cubes3','del3','events','myself','ideas','files','routine','notes','goals','finance','mood','passwords','wishlist','habits','bodymap'];
 
 function renderSync(){
 const cfg=L('fb_config',null),code=L('vault_code',''),on=!!fbDb;
