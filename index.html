@@ -21,17 +21,47 @@ body{font-family:'Space Grotesk',sans-serif;background:#06070b;color:#e0dcd4;min
 
 #dashboard{position:fixed;inset:0;z-index:1;transition:opacity .35s}
 .title{position:absolute;top:14px;left:50%;transform:translateX(-50%);font-size:22px;font-weight:700;letter-spacing:3px;z-index:5;background:linear-gradient(135deg,#e0e0ff,#c0c0ff,#e8d0ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 0 20px rgba(120,140,255,.4))}
-.cal-wrap{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:2;width:min(360px,66vw);background:rgba(255,255,255,.03);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.06);border-radius:18px;padding:14px;box-shadow:0 8px 40px rgba(0,0,0,.3)}
+.cal-wrap{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:2;width:min(440px,82vw);background:rgba(255,255,255,.03);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.06);border-radius:20px;padding:16px;box-shadow:0 8px 40px rgba(0,0,0,.3)}
 .cal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
-.cal-title{font-size:14px;font-weight:700}.cal-nav{width:28px;height:28px;border-radius:9px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.06);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:12px;color:#fff}
+.cal-title{font-size:16px;font-weight:700}.cal-nav{width:32px;height:32px;border-radius:10px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.06);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:13px;color:#fff}
 .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;text-align:center}
-.cal-day{font-size:8px;font-weight:700;color:rgba(255,255,255,.2);padding:3px 0;text-transform:uppercase}
-.cal-cell{aspect-ratio:1;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;color:rgba(255,255,255,.4);cursor:pointer;position:relative;transition:all .15s}
+.cal-day{font-size:9px;font-weight:700;color:rgba(255,255,255,.2);padding:4px 0;text-transform:uppercase}
+.cal-cell{aspect-ratio:1;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;color:rgba(255,255,255,.4);cursor:pointer;position:relative;transition:all .15s}
 .cal-cell:hover{background:rgba(255,255,255,.06)}.cal-cell.today{background:rgba(108,92,231,.15);color:#a78bfa;font-weight:700;border:1px solid rgba(108,92,231,.3)}
 .cal-cell.has-ev::after{content:'';position:absolute;bottom:2px;width:4px;height:4px;border-radius:50%;background:#a78bfa}
 .cal-cell.other{color:rgba(255,255,255,.1)}.cal-cell.sel{background:rgba(108,92,231,.22);color:#fff}
-.cal-evs{margin-top:8px;max-height:80px;overflow-y:auto}.cal-ev{display:flex;align-items:center;justify-content:space-between;padding:5px 7px;background:rgba(108,92,231,.08);border-radius:7px;margin-bottom:3px;font-size:10px}
-.cal-add{display:flex;gap:5px;margin-top:6px}.cal-add input{flex:1;padding:6px 9px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:7px;color:#fff;font-family:inherit;font-size:10px;outline:none}.cal-add button{padding:6px 10px;background:rgba(108,92,231,.2);border:1px solid rgba(108,92,231,.3);border-radius:7px;color:#a78bfa;font-family:inherit;font-size:10px;font-weight:600;cursor:pointer;white-space:nowrap}
+.cal-evs{margin-top:10px;max-height:100px;overflow-y:auto}.cal-ev{display:flex;align-items:center;gap:8px;padding:7px 9px;background:rgba(108,92,231,.08);border:1px solid rgba(108,92,231,.1);border-radius:9px;margin-bottom:4px;font-size:11px;cursor:pointer;transition:all .15s;position:relative;overflow:hidden}
+.cal-ev:hover{background:rgba(108,92,231,.14);border-color:rgba(108,92,231,.2)}
+.cal-ev .ev-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.cal-ev .ev-title{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:500}
+.cal-ev .ev-time{font-size:9px;color:rgba(255,255,255,.25);flex-shrink:0}
+.cal-add{display:flex;gap:5px;margin-top:8px}.cal-add input{flex:1;padding:8px 11px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:9px;color:#fff;font-family:inherit;font-size:11px;outline:none}.cal-add input:focus{border-color:rgba(108,92,231,.3)}.cal-add button{padding:8px 12px;background:rgba(108,92,231,.2);border:1px solid rgba(108,92,231,.3);border-radius:9px;color:#a78bfa;font-family:inherit;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap}
+
+/* Event Detail Overlay */
+.ev-overlay{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0);backdrop-filter:blur(0px);opacity:0;pointer-events:none;transition:all .35s cubic-bezier(.4,0,.2,1)}
+.ev-overlay.open{background:rgba(0,0,0,.6);backdrop-filter:blur(12px);opacity:1;pointer-events:auto}
+.ev-detail{background:rgba(14,12,28,.98);border:1px solid rgba(108,92,231,.15);border-radius:22px;padding:0;width:min(400px,90vw);max-height:85vh;overflow:hidden;box-shadow:0 24px 80px rgba(0,0,0,.7),0 0 60px rgba(108,92,231,.08);transform:scale(.7) translateY(20px);transition:transform .4s cubic-bezier(.34,1.56,.64,1),opacity .3s;opacity:0}
+.ev-overlay.open .ev-detail{transform:scale(1) translateY(0);opacity:1}
+.ev-detail-head{padding:20px 20px 0;display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.ev-detail-date{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.2);margin-bottom:4px}
+.ev-detail-close{width:32px;height:32px;border-radius:10px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;color:rgba(255,255,255,.4);flex-shrink:0;transition:all .15s}
+.ev-detail-close:hover{background:rgba(255,60,60,.1);border-color:rgba(255,60,60,.2);color:#f87171}
+.ev-detail-body{padding:16px 20px 20px}
+.ev-field{margin-bottom:12px}
+.ev-field label{display:block;font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.18);margin-bottom:5px}
+.ev-field input,.ev-field textarea{width:100%;padding:10px 12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);border-radius:10px;color:#fff;font-family:inherit;font-size:12px;outline:none;transition:border-color .15s}
+.ev-field input:focus,.ev-field textarea:focus{border-color:rgba(108,92,231,.35)}
+.ev-field textarea{min-height:80px;resize:vertical;line-height:1.5}
+.ev-field-row{display:flex;gap:8px}
+.ev-field-row .ev-field{flex:1}
+.ev-colors{display:flex;gap:6px;margin-top:2px}
+.ev-clr{width:24px;height:24px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:all .15s}.ev-clr:hover{transform:scale(1.1)}.ev-clr.sel{border-color:#fff;transform:scale(1.15);box-shadow:0 0 10px rgba(255,255,255,.15)}
+.ev-detail-actions{display:flex;gap:8px;margin-top:4px}
+.ev-detail-actions button{flex:1;padding:11px;border:none;border-radius:11px;font-family:inherit;font-weight:600;font-size:12px;cursor:pointer;transition:all .15s}
+.ev-save{background:linear-gradient(135deg,#6c5ce7,#a855f7);color:#fff}
+.ev-save:hover{filter:brightness(1.1)}
+.ev-del{background:rgba(255,60,60,.08);color:#f87171;border:1px solid rgba(255,60,60,.15)!important}
+.ev-del:hover{background:rgba(255,60,60,.15)}
 
 .cube{position:absolute;width:76px;height:76px;border-radius:20px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;z-index:10;background:linear-gradient(145deg,rgba(255,255,255,.07),rgba(255,255,255,.02));backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.08);box-shadow:0 8px 32px rgba(0,0,0,.25),inset 0 0 0 1px rgba(255,255,255,.05);transition:transform .25s cubic-bezier(.34,1.56,.64,1),box-shadow .25s;touch-action:none}
 .cube::before{content:'';position:absolute;inset:0;border-radius:20px;background:linear-gradient(135deg,rgba(255,255,255,.1),transparent 50%);pointer-events:none}
@@ -205,6 +235,8 @@ body{font-family:'Space Grotesk',sans-serif;background:#06070b;color:#e0dcd4;min
 
 <!-- GENERIC --><div class="page" id="innerPage"><div class="ph"><div class="pb" onclick="closePage()">←</div><div class="pt" id="innerTitle"></div></div><div class="px"><div class="empty-msg">Coming soon</div></div></div>
 
+<div class="ev-overlay" id="evOverlay" onclick="if(event.target===this)closeEvDetail()"><div class="ev-detail" id="evDetail"></div></div>
+
 <div class="mbg" id="mbg" onclick="if(event.target===this)closeModal()"><div class="modal" id="modalBody"></div></div>
 
 <script>
@@ -213,17 +245,59 @@ const S=(k,v)=>{localStorage.setItem('lv3_'+k,JSON.stringify(v));cloudPush()},L=
 
 /* ═══ CALENDAR ═══ */
 let calM=new Date().getMonth(),calY=new Date().getFullYear(),calSel=null;
-function renderCal(){const t=new Date(),f=new Date(calY,calM,1),last=new Date(calY,calM+1,0),sd=(f.getDay()+6)%7,ds=last.getDate(),mn=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],ev=L('events',{});
+const EV_COLORS=['#a78bfa','#38bdf8','#fb923c','#4ade80','#f87171','#fbbf24','#e879f9','#22d3ee'];
+
+/* Migrate old string events to objects */
+(function(){const ev=L('events',{});let changed=false;Object.keys(ev).forEach(k=>{if(Array.isArray(ev[k])){ev[k]=ev[k].map(x=>{if(typeof x==='string'){changed=true;return{id:U(),title:x,desc:'',time:'',color:EV_COLORS[0]}}return x})}});if(changed)S('events',ev)})();
+
+function renderCal(){const t=new Date(),f=new Date(calY,calM,1),last=new Date(calY,calM+1,0),sd=(f.getDay()+6)%7,ds=last.getDate(),mn=['January','February','March','April','May','June','July','August','September','October','November','December'],ev=L('events',{});
 let h=`<div class="cal-head"><div class="cal-nav" onclick="calM--;if(calM<0){calM=11;calY--}renderCal()">‹</div><div class="cal-title">${mn[calM]} ${calY}</div><div class="cal-nav" onclick="calM++;if(calM>11){calM=0;calY++}renderCal()">›</div></div><div class="cal-grid">`;
 ['Mo','Tu','We','Th','Fr','Sa','Su'].forEach(d=>h+=`<div class="cal-day">${d}</div>`);
 const pl=new Date(calY,calM,0).getDate();for(let i=sd-1;i>=0;i--)h+=`<div class="cal-cell other">${pl-i}</div>`;
 for(let d=1;d<=ds;d++){const k=`${calY}-${String(calM+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`,it=d===t.getDate()&&calM===t.getMonth()&&calY===t.getFullYear(),has=ev[k]?.length;h+=`<div class="cal-cell${it?' today':''}${has?' has-ev':''}${calSel===k?' sel':''}" onclick="selDay('${k}')">${d}</div>`}
 const rem=(sd+ds)%7?7-(sd+ds)%7:0;for(let i=1;i<=rem;i++)h+=`<div class="cal-cell other">${i}</div>`;h+=`</div>`;
-if(calSel){const e=ev[calSel]||[];h+=`<div class="cal-evs">${e.map((x,i)=>`<div class="cal-ev"><span>${x}</span><span style="cursor:pointer;color:rgba(255,100,100,.5)" onclick="delEv('${calSel}',${i})">×</span></div>`).join('')}</div><div class="cal-add"><input id="calIn" placeholder="Add event..." onkeydown="if(event.key==='Enter')addEv('${calSel}')"><button onclick="addEv('${calSel}')">Add</button></div>`}
+if(calSel){const e=ev[calSel]||[];
+h+=`<div class="cal-evs">${e.map((x,i)=>`<div class="cal-ev" onclick="openEvDetail('${calSel}',${i})"><div class="ev-dot" style="background:${x.color||EV_COLORS[0]}"></div><div class="ev-title">${x.title||x}</div>${x.time?`<div class="ev-time">${x.time}</div>`:''}</div>`).join('')}</div>`;
+h+=`<div class="cal-add"><input id="calIn" placeholder="Add event..." onkeydown="if(event.key==='Enter')addEv('${calSel}')"><button onclick="addEv('${calSel}')">Add</button></div>`}
 $('calWrap').innerHTML=h}
 function selDay(k){calSel=calSel===k?null:k;renderCal()}
-function addEv(k){const v=$('calIn').value.trim();if(!v)return;const e=L('events',{});if(!e[k])e[k]=[];e[k].push(v);S('events',e);renderCal()}
+function addEv(k){const v=$('calIn').value.trim();if(!v)return;const e=L('events',{});if(!e[k])e[k]=[];e[k].push({id:U(),title:v,desc:'',time:'',color:EV_COLORS[0]});S('events',e);renderCal()}
 function delEv(k,i){const e=L('events',{});e[k].splice(i,1);if(!e[k].length)delete e[k];S('events',e);renderCal()}
+
+/* Event Detail */
+function openEvDetail(dateKey,idx){
+const ev=L('events',{}),e=(ev[dateKey]||[])[idx];if(!e)return;
+const dp=new Date(dateKey+'T00:00:00'),dayNames=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],monNames=['January','February','March','April','May','June','July','August','September','October','November','December'];
+const dateStr=`${dayNames[dp.getDay()]}, ${monNames[dp.getMonth()]} ${dp.getDate()}, ${dp.getFullYear()}`;
+$('evDetail').innerHTML=`
+<div class="ev-detail-head">
+<div><div class="ev-detail-date">${dateStr}</div><input class="my-input" id="evTitle" value="${(e.title||'').replace(/"/g,'&quot;')}" placeholder="Event title" style="font-size:18px;font-weight:700;background:transparent;border:none;padding:4px 0;color:#fff"></div>
+<div class="ev-detail-close" onclick="closeEvDetail()">✕</div>
+</div>
+<div class="ev-detail-body">
+<div class="ev-field-row">
+<div class="ev-field"><label>Time</label><input type="time" id="evTime" value="${e.time||''}"></div>
+<div class="ev-field"><label>Color</label><div class="ev-colors">${EV_COLORS.map(c=>`<div class="ev-clr${c===(e.color||EV_COLORS[0])?' sel':''}" style="background:${c}" onclick="document.querySelectorAll('.ev-clr').forEach(x=>x.classList.remove('sel'));this.classList.add('sel')"></div>`).join('')}</div></div>
+</div>
+<div class="ev-field"><label>Description</label><textarea id="evDesc" placeholder="Add details, notes, links...">${e.desc||''}</textarea></div>
+<div class="ev-detail-actions">
+<button class="ev-del" onclick="delEv('${dateKey}',${idx});closeEvDetail();renderCal()">Delete</button>
+<button class="ev-save" onclick="saveEvDetail('${dateKey}',${idx})">Save</button>
+</div>
+</div>`;
+$('evOverlay').classList.add('open');
+}
+
+function closeEvDetail(){$('evOverlay').classList.remove('open')}
+
+function saveEvDetail(dateKey,idx){
+const ev=L('events',{});if(!ev[dateKey]||!ev[dateKey][idx])return;
+ev[dateKey][idx].title=$('evTitle').value||'Untitled';
+ev[dateKey][idx].desc=$('evDesc').value;
+ev[dateKey][idx].time=$('evTime').value;
+ev[dateKey][idx].color=document.querySelector('.ev-clr.sel')?.style.background||EV_COLORS[0];
+S('events',ev);closeEvDetail();renderCal();
+}
 
 /* ═══ CUBES ═══ */
 const DEFS=[
