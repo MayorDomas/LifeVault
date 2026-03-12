@@ -469,7 +469,7 @@ function openIdeaDetail(id,el){activeIdeaId=id;const a=L('ideas',[]),it=a.find(z
 function closeIdeaDetail(){$('ideaOverlay').classList.remove('open');activeIdeaId=null}
 function editIdeaFromDetail(){const a=L('ideas',[]),i=a.findIndex(z=>z.id===activeIdeaId);if(i<0)return;closeIdeaDetail();editIdea(i)}
 function delIdeaFromDetail(){const a=L('ideas',[]),i=a.findIndex(z=>z.id===activeIdeaId);if(i<0)return;a.splice(i,1);S('ideas',a);closeIdeaDetail();renderIdeas()}
-function editIdea(i){const a=L('ideas',[]),it=a[i];$('modalBody').innerHTML=`<h3>Edit Idea</h3><input id="mT" value="${it.title}"><select id="mC">${['Personal','Work','Creative','Other'].map(c=>`<option${c===it.cat?' selected':''}>${c}</option>`).join('')}</select><textarea id="mX">${it.text||''}</textarea><div class="mbtn"><button class="cn" onclick="closeModal()">Cancel</button><button class="sv" onclick="const a=L('ideas',[]);a[${i}].title=$('mT').value;a[${i}].cat=$('mC').value;a[${i}].text=$('mX').value;S('ideas',a);closeModal();renderIdeas()">Save</button></div>`;$('mbg').classList.add('open')}
+function editIdea(i){const a=L('ideas',[]),it=a[i];$('modalBody').innerHTML=`<h3>Edit Idea</h3><input id="mT" value="${it.title}"><select id="mC">${['Personal','Work','Creative','Remote','Other'].map(c=>`<option${c===it.cat?' selected':''}>${c}</option>`).join('')}</select><textarea id="mX">${it.text||''}</textarea><div class="mbtn"><button class="cn" onclick="closeModal()">Cancel</button><button class="sv" onclick="const a=L('ideas',[]);a[${i}].title=$('mT').value;a[${i}].cat=$('mC').value;a[${i}].text=$('mX').value;S('ideas',a);closeModal();renderIdeas()">Save</button></div>`;$('mbg').classList.add('open')}
 
 /* ═══ FILES ═══ */
 const FC=['All','Personal','Study','Work','Other'];let fcat='All';
@@ -794,7 +794,7 @@ function del(k,i){const a=L(k,[]);a.splice(i,1);S(k,a)}
 
 /* ═══ MODAL ═══ */
 function openModal(t){const m=$('modalBody');
-if(t==='idea')m.innerHTML='<h3>New Idea</h3><input id="mT" placeholder="Title"><select id="mC"><option>Personal</option><option>Work</option><option>Creative</option><option>Other</option></select><textarea id="mX" placeholder="Description (optional)"></textarea><div class="mbtn"><button class="cn" onclick="closeModal()">Cancel</button><button class="sv" onclick="saveM(\'idea\')">Save</button></div>';
+if(t==='idea')m.innerHTML='<h3>New Idea</h3><input id="mT" placeholder="Title"><select id="mC"><option>Personal</option><option>Work</option><option>Creative</option><option>Remote</option><option>Other</option></select><textarea id="mX" placeholder="Description (optional)"></textarea><div class="mbtn"><button class="cn" onclick="closeModal()">Cancel</button><button class="sv" onclick="saveM(\'idea\')">Save</button></div>';
 else if(t==='note')m.innerHTML=`<h3>New Note</h3><input id="mT" placeholder="Title"><textarea id="mX" placeholder="Content"></textarea><div class="note-colors">${NCOLS.map((c,i)=>`<div class="nc${!i?' sel':''}" style="background:${c}" onclick="document.querySelectorAll('.nc').forEach(x=>x.classList.remove('sel'));this.classList.add('sel')"></div>`).join('')}</div><div class="mbtn"><button class="cn" onclick="closeModal()">Cancel</button><button class="sv" onclick="saveM('note')">Save</button></div>`;
 else if(t==='goal')m.innerHTML='<h3>New Goal</h3><input id="mT" placeholder="Goal title"><div class="mbtn"><button class="cn" onclick="closeModal()">Cancel</button><button class="sv" onclick="saveM(\'goal\')">Save</button></div>';
 else if(t==='transaction')m.innerHTML='<h3>New Transaction</h3><input id="mD2" placeholder="Description"><input id="mA" type="number" step="0.01" placeholder="Amount"><select id="mTp"><option value="in">Income</option><option value="out">Expense</option></select><input id="mDt" type="date"><div class="mbtn"><button class="cn" onclick="closeModal()">Cancel</button><button class="sv" onclick="saveM(\'transaction\')">Save</button></div>';
@@ -941,8 +941,8 @@ r.readAsText(file);
 renderCubes();renderCal();
 /* Auto-connect Firebase if configured */
 (function(){const c=L('fb_config',null),v=L('vault_code','');if(c&&v)initFB(c,v)})();
-/* Siri Shortcut: ?idea=TEXT adds idea automatically and opens Ideas page */
-(function(){const raw=location.search;const p=new URLSearchParams(raw);const idea=p.get('idea');if(idea&&idea.length>0){const a=L('ideas',[]);const cnt=a.length;const col=Math.floor(cnt%4),row=Math.floor(cnt/4);a.push({id:U(),title:decodeURIComponent(idea),cat:'Remote',text:'',x:10+col*125,y:10+row*115});S('ideas',a);history.replaceState(null,'',location.pathname);setTimeout(()=>{const cube=cubes.find(c=>c.id==='ideas');if(cube)openPage(cube)},300)}else if(raw.includes('idea')){alert('DEBUG URL: '+raw)}})();
+/* Siri Shortcut: #idea=TEXT adds idea automatically and opens Ideas page */
+(function(){const h=location.hash;if(h.startsWith('#idea=')){const txt=decodeURIComponent(h.slice(6).replace(/\+/g,' '));if(txt.length>0){const a=L('ideas',[]);const cnt=a.length;const col=Math.floor(cnt%4),row=Math.floor(cnt/4);a.push({id:U(),title:txt,cat:'Remote',text:'',x:10+col*125,y:10+row*115});S('ideas',a);history.replaceState(null,'',location.pathname);setTimeout(()=>{const cube=cubes.find(c=>c.id==='ideas');if(cube)openPage(cube)},300)}}})();
 </script>
 </body>
 </html>
