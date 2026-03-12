@@ -292,6 +292,115 @@ body{font-family:'Space Grotesk',sans-serif;background:#06070b;color:#e0dcd4;min
 .sync-act:hover{background:rgba(255,255,255,.07)}
 .sync-act.primary{background:linear-gradient(135deg,rgba(108,92,231,.15),rgba(168,85,247,.1));border-color:rgba(108,92,231,.25);color:#a78bfa}
 .sync-act.primary:hover{background:linear-gradient(135deg,rgba(108,92,231,.25),rgba(168,85,247,.15))}
+
+/* ═══ MOBILE RESPONSIVE ═══ */
+@media (max-width: 768px) {
+  body{overflow:auto;overflow-x:hidden}
+  .page{overflow-y:auto;-webkit-overflow-scrolling:touch}
+  .cube{width:68px;height:68px;border-radius:18px}
+  .cube .emoji{font-size:20px}.cube .label{font-size:7px}
+  .cal-wrap{width:min(440px,88vw);padding:14px}
+  .cal-cell{font-size:11px}
+  .px{padding:4px 14px 40px}
+  .gen-cube{width:105px;min-height:95px}
+  .idea-cube{width:130px;min-height:85px}
+  .modal{width:min(360px,94vw);padding:20px}
+  .bm-body-wrap{width:min(260px,65vw)}
+  .bm-tabs{gap:3px;padding:0 6px}
+  .bm-tab{padding:5px 9px;font-size:9px}
+  .my-layout{flex-direction:column;padding:0 14px 30px}
+  .my-right{width:100%;height:auto;justify-content:center;margin-top:10px}
+  .my-right svg{width:80px}
+  .pb{min-width:44px;min-height:44px}
+  .add-btn{min-height:44px;padding:10px 16px;font-size:12px}
+  .del-btn{min-width:36px;min-height:36px;font-size:14px}
+  .edit-btn{min-width:36px;min-height:36px}
+  .sync-act{min-height:44px;padding:10px 14px;font-size:12px}
+  .mbtn button{min-height:44px;font-size:13px}
+  .tab{padding:8px 14px;font-size:11px}
+  .ev-detail-actions button{min-height:44px;font-size:13px}
+  .bp-detail{width:min(440px,94vw)}
+  .bp-st{padding:8px 12px;font-size:11px}
+  .bp-photos-grid{grid-template-columns:repeat(3,1fr);gap:5px}
+  .fin-val{font-size:18px}
+  .mood-opt{font-size:28px}
+  .pw-show{padding:6px 10px;font-size:10px;min-height:36px;display:flex;align-items:center}
+  .tt{min-width:460px}
+  .tt-cell{min-height:28px;font-size:8px}
+  .search-bar{padding:11px 12px 11px 32px;font-size:13px}
+}
+
+@media (max-width: 480px) {
+  body{overflow:auto;overflow-x:hidden}
+  .page{overflow-y:auto;-webkit-overflow-scrolling:touch}
+  .cube{width:64px;height:64px;border-radius:16px}
+  .cube .emoji{font-size:18px;margin-bottom:1px}.cube .label{font-size:7px}
+  .cal-wrap{width:92vw;padding:12px}
+  .cal-title{font-size:14px}
+  .cal-cell{font-size:10px;border-radius:8px}
+  .cal-day{font-size:8px}
+  .cal-add input{padding:10px 12px;font-size:12px}
+  .cal-add button{padding:10px 14px;font-size:12px;min-height:44px}
+  .px{padding:4px 12px 50px}
+  .ph{padding:12px 12px 8px}
+  .pt{font-size:16px}
+  .gen-cube{width:100px;min-height:90px;padding:6px}
+  .gen-cube .gc-emoji{font-size:22px}.gen-cube .gc-title{font-size:8px}
+  .idea-cube{width:120px;min-height:80px;padding:8px 6px}
+  .idea-cube .ic-emoji{font-size:18px}.idea-cube .ic-title{font-size:9px}
+  .modal{width:96vw;padding:18px;border-radius:16px}
+  .modal input,.modal textarea,.modal select{padding:12px 14px;font-size:13px}
+  .bm-body-wrap{width:min(240px,60vw)}
+  .bm-tabs{gap:2px;padding:0 4px}
+  .bm-tab{padding:5px 8px;font-size:8px}
+  .my-layout{flex-direction:column;gap:8px;padding:0 12px 30px}
+  .my-right{width:100%;height:auto;justify-content:center;margin-top:8px}
+  .my-right svg{width:70px}
+  .my-input{padding:10px 12px;font-size:13px}
+  .my-label{font-size:10px}
+  .pb{min-width:44px;min-height:44px;border-radius:12px}
+  .add-btn{min-height:44px;padding:11px 18px;font-size:12px}
+  .del-btn{min-width:40px;min-height:40px;font-size:15px;border-radius:10px}
+  .edit-btn{min-width:40px;min-height:40px;border-radius:10px}
+  .sync-act{min-height:44px;padding:11px 16px;font-size:12px}
+  .mbtn button{min-height:48px;font-size:14px}
+  .tab{padding:9px 14px;font-size:11px;min-height:38px}
+  .ev-detail{width:min(400px,96vw)}
+  .ev-detail-actions button{min-height:48px;font-size:14px}
+  .ev-field input,.ev-field textarea{padding:12px 14px;font-size:13px}
+  .bp-detail{width:96vw;max-height:90vh}
+  .bp-head-title{font-size:18px}
+  .bp-st{padding:9px 12px;font-size:11px;min-height:40px}
+  .bp-photos-grid{grid-template-columns:repeat(2,1fr);gap:6px}
+  .bm-stats{grid-template-columns:1fr 1fr;gap:5px}
+  .bm-stat{padding:8px}
+  .bm-stat-val{font-size:16px}
+  .bm-notes-area{font-size:13px;padding:12px}
+  .fin-summary{padding:10px;flex-wrap:wrap;gap:4px}
+  .fin-val{font-size:16px}
+  .fin-lbl{font-size:8px}
+  .mood-picker{gap:10px}
+  .mood-opt{font-size:30px}
+  .mood-grid{gap:3px}
+  .mood-day .me{font-size:20px}
+  .pw-card{padding:10px;gap:8px}
+  .pw-show{padding:8px 12px;font-size:10px;min-height:40px;display:flex;align-items:center}
+  .file-card{padding:10px;gap:8px}
+  .file-name{font-size:12px}
+  .dl-btn{min-width:36px;min-height:36px}
+  .upload-zone{padding:24px}
+  .tt{min-width:420px}
+  .tt-cell{min-height:26px;font-size:8px;padding:2px 1px}
+  .tt-dayh{font-size:8px;padding:4px 1px}
+  .tt-timeh{font-size:7px}
+  .search-bar{padding:12px 14px 12px 34px;font-size:14px}
+  .sec{font-size:10px;margin:14px 0 7px}
+  .empty-msg{font-size:13px;padding:30px 14px}
+  .card{padding:12px;border-radius:12px}
+  .hbtn{min-width:40px;min-height:40px}
+  .trash-zone{min-width:40px;min-height:40px}
+  .sync-btn{min-width:40px;min-height:40px}
+}
 </style>
 <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-database-compat.js"></script>
@@ -547,40 +656,40 @@ function editWish(i){const a=L('wishlist',[]),w=a[i];$('modalBody').innerHTML=`<
 
 /* ═══ BODYMAP ═══ */
 const STYLE_PARTS=[
-{id:'s_hair',emoji:'💇',name:'Plaukai / Šukuosena',desc:'Šukuosenos, plaukų spalva, stilius. Įkelk nuotraukas šukuosenų kurias nori išbandyti.',stats:[{k:'style',l:'Šukuosena'},{k:'color',l:'Spalva'},{k:'barber',l:'Pask. kirpimas'}]},
-{id:'s_hat',emoji:'🧢',name:'Kepurė / Galvos apdangalas',desc:'Kepurės, skrybėlės, bandanos. Įkelk foto savo kolekcijos.',stats:[{k:'fav',l:'Mėgstamiausia'},{k:'count',l:'Kiekis'}]},
-{id:'s_glasses',emoji:'🕶️',name:'Akiniai',desc:'Akiniai nuo saulės, optiniai akiniai. Sek kurie labiausiai tinka.',stats:[{k:'type',l:'Tipas'},{k:'brand',l:'Brandas'}]},
-{id:'s_face',emoji:'😎',name:'Veido stilius',desc:'Barzda, ūsai, makiažas, odos priežiūra. Sek savo look.',stats:[{k:'beard',l:'Barzda'},{k:'skincare',l:'Rutina'}]},
-{id:'s_necklace',emoji:'📿',name:'Grandinėlė / Kaklo papuošalai',desc:'Grandinėlės, pakabukai, karoliai. Tavo kolekcija.',stats:[{k:'material',l:'Medžiaga'},{k:'fav',l:'Mėgstamiausia'}]},
-{id:'s_top',emoji:'👕',name:'Viršus / Marškinėliai',desc:'Marškinėliai, marškiniai, džemperiai. Mėgstami deriniai.',stats:[{k:'fav_color',l:'Spalva'},{k:'size',l:'Dydis'}]},
-{id:'s_jacket',emoji:'🧥',name:'Striukė / Paltas',desc:'Striukės, paltai, hoodies. Sezoninė apranga.',stats:[{k:'type',l:'Tipas'},{k:'brand',l:'Brandas'}]},
-{id:'s_watch',emoji:'⌚',name:'Laikrodis',desc:'Laikrodžiai, smart watch, apyrankės.',stats:[{k:'model',l:'Modelis'},{k:'brand',l:'Brandas'}]},
-{id:'s_rings',emoji:'💍',name:'Žiedai / Apyrankės',desc:'Žiedai, apyrankės, rankų aksesuarai.',stats:[{k:'count',l:'Kiekis'},{k:'fav',l:'Mėgstamiausias'}]},
-{id:'s_belt',emoji:'🪢',name:'Diržas',desc:'Diržai ir juosmens aksesuarai.',stats:[{k:'material',l:'Medžiaga'},{k:'color',l:'Spalva'}]},
-{id:'s_pants',emoji:'👖',name:'Kelnės / Apačia',desc:'Džinsai, kelnės, šortai. Mėgstami modeliai.',stats:[{k:'fit',l:'Fit tipas'},{k:'size',l:'Dydis'}]},
-{id:'s_socks',emoji:'🧦',name:'Kojinės',desc:'Kojinių kolekcija ir stilius.',stats:[{k:'fav',l:'Mėgstamiausios'},{k:'style',l:'Stilius'}]},
-{id:'s_shoes',emoji:'👟',name:'Batai',desc:'Sportbačiai, klasikiniai, botai. Kolekcija ir mėgstami.',stats:[{k:'size',l:'Dydis'},{k:'fav',l:'Mėgstami'},{k:'count',l:'Kiekis'}]},
-{id:'s_bag',emoji:'🎒',name:'Krepšys / Rankinė',desc:'Kuprinės, rankinės, krepšiai.',stats:[{k:'type',l:'Tipas'},{k:'brand',l:'Brandas'}]},
-{id:'s_nails',emoji:'💅',name:'Nagai',desc:'Nagų priežiūra, manikiūras, dizainai.',stats:[{k:'style',l:'Stilius'},{k:'last_mani',l:'Pask. manikiūras'}]},
-{id:'s_perfume',emoji:'🧴',name:'Kvepalai / Priežiūra',desc:'Kvepalai, losjonai, dezodorantai. Mėgstami kvapai.',stats:[{k:'fav',l:'Mėgstami'},{k:'brand',l:'Brandas'}]}
+{id:'s_hair',emoji:'💇',name:'Hair / Hairstyle',desc:'Hairstyles, hair color, styling. Upload photos of hairstyles you want to try.',stats:[{k:'style',l:'Hairstyle'},{k:'color',l:'Color'},{k:'barber',l:'Last haircut'}]},
+{id:'s_hat',emoji:'🧢',name:'Hat / Headwear',desc:'Hats, caps, bandanas. Upload photos of your collection.',stats:[{k:'fav',l:'Favorite'},{k:'count',l:'Count'}]},
+{id:'s_glasses',emoji:'🕶️',name:'Glasses',desc:'Sunglasses, prescription glasses. Track which ones suit you best.',stats:[{k:'type',l:'Type'},{k:'brand',l:'Brand'}]},
+{id:'s_face',emoji:'😎',name:'Face Style',desc:'Beard, mustache, makeup, skincare. Track your look.',stats:[{k:'beard',l:'Beard'},{k:'skincare',l:'Routine'}]},
+{id:'s_necklace',emoji:'📿',name:'Chain / Necklace',desc:'Chains, pendants, beads. Your collection.',stats:[{k:'material',l:'Material'},{k:'fav',l:'Favorite'}]},
+{id:'s_top',emoji:'👕',name:'Top / T-Shirt',desc:'T-shirts, shirts, sweaters. Favorite combinations.',stats:[{k:'fav_color',l:'Color'},{k:'size',l:'Size'}]},
+{id:'s_jacket',emoji:'🧥',name:'Jacket / Coat',desc:'Jackets, coats, hoodies. Seasonal clothing.',stats:[{k:'type',l:'Type'},{k:'brand',l:'Brand'}]},
+{id:'s_watch',emoji:'⌚',name:'Watch',desc:'Watches, smart watches, bracelets.',stats:[{k:'model',l:'Model'},{k:'brand',l:'Brand'}]},
+{id:'s_rings',emoji:'💍',name:'Rings / Bracelets',desc:'Rings, bracelets, hand accessories.',stats:[{k:'count',l:'Count'},{k:'fav',l:'Favorite'}]},
+{id:'s_belt',emoji:'🪢',name:'Belt',desc:'Belts and waist accessories.',stats:[{k:'material',l:'Material'},{k:'color',l:'Color'}]},
+{id:'s_pants',emoji:'👖',name:'Pants / Bottoms',desc:'Jeans, pants, shorts. Favorite styles.',stats:[{k:'fit',l:'Fit type'},{k:'size',l:'Size'}]},
+{id:'s_socks',emoji:'🧦',name:'Socks',desc:'Sock collection and style.',stats:[{k:'fav',l:'Favorites'},{k:'style',l:'Style'}]},
+{id:'s_shoes',emoji:'👟',name:'Shoes',desc:'Sneakers, dress shoes, boots. Collection and favorites.',stats:[{k:'size',l:'Size'},{k:'fav',l:'Favorites'},{k:'count',l:'Count'}]},
+{id:'s_bag',emoji:'🎒',name:'Bag / Backpack',desc:'Backpacks, handbags, bags.',stats:[{k:'type',l:'Type'},{k:'brand',l:'Brand'}]},
+{id:'s_nails',emoji:'💅',name:'Nails',desc:'Nail care, manicure, designs.',stats:[{k:'style',l:'Style'},{k:'last_mani',l:'Last manicure'}]},
+{id:'s_perfume',emoji:'🧴',name:'Perfume / Care',desc:'Perfumes, lotions, deodorants. Favorite scents.',stats:[{k:'fav',l:'Favorites'},{k:'brand',l:'Brand'}]}
 ];
 
 const BODY_PARTS=[
-{id:'hair',emoji:'💇',name:'Plaukai',desc:'Plaukų sveikata, augimas, priežiūra.',stats:[{k:'type',l:'Tipas'},{k:'length',l:'Ilgis'}]},
-{id:'head',emoji:'🧠',name:'Galva / Protas',desc:'Smegenys, mąstymas, koncentracija, atmintis.',stats:[{k:'iq_goal',l:'IQ Tikslas'},{k:'books_read',l:'Knygų perskaityta'}]},
-{id:'face',emoji:'😊',name:'Veidas',desc:'Odos priežiūra, veido forma, pokyčiai.',stats:[{k:'skin_type',l:'Odos tipas'},{k:'routine',l:'Rutina'}]},
-{id:'eyes',emoji:'👁️',name:'Akys',desc:'Akių sveikata, regėjimas, ekrano laikas.',stats:[{k:'screen_hrs',l:'Ekrano val/d'},{k:'vision',l:'Regėjimas'}]},
-{id:'mouth',emoji:'👄',name:'Burna / Dantys',desc:'Dantų priežiūra, šypsena, odontologo vizitai.',stats:[{k:'water_l',l:'Vandens L/d'},{k:'dentist',l:'Pask. vizitas'}]},
-{id:'chest',emoji:'❤️',name:'Krūtinė / Širdis',desc:'Širdies sveikata, kvėpavimas, pulsas.',stats:[{k:'heart_rate',l:'Pulsas'},{k:'bp',l:'Kraujo spaudimas'}]},
-{id:'left_arm',emoji:'💪',name:'Kairė ranka',desc:'Jėga, lankstumas, treniruočių progresas.',stats:[{k:'strength',l:'Jėga (kg)'},{k:'flex',l:'Lankstumas'}]},
-{id:'right_arm',emoji:'💪',name:'Dešinė ranka',desc:'Jėga, lankstumas, treniruočių progresas.',stats:[{k:'strength',l:'Jėga (kg)'},{k:'flex',l:'Lankstumas'}]},
-{id:'core',emoji:'🔥',name:'Pilvas / Core',desc:'Pilvo raumenys, virškinimas, svoris.',stats:[{k:'weight',l:'Svoris (kg)'},{k:'waist',l:'Liemuo (cm)'}]},
-{id:'hands',emoji:'🤲',name:'Plaštakos',desc:'Plaštakų sveikata, pirštai.',stats:[{k:'grip',l:'Grip (kg)'},{k:'wpm',l:'WPM'}]},
-{id:'nails_b',emoji:'💅',name:'Nagai',desc:'Nagų sveikata, priežiūra.',stats:[{k:'health',l:'Būklė'},{k:'care',l:'Priežiūra'}]},
-{id:'left_leg',emoji:'🦵',name:'Kairė koja',desc:'Kojos jėga, bėgimas, mobilumas.',stats:[{k:'squat',l:'Squat (kg)'},{k:'run_km',l:'Bėgimas km'}]},
-{id:'right_leg',emoji:'🦵',name:'Dešinė koja',desc:'Kojos jėga, bėgimas, mobilumas.',stats:[{k:'squat',l:'Squat (kg)'},{k:'run_km',l:'Bėgimas km'}]},
-{id:'feet',emoji:'🦶',name:'Pėdos',desc:'Pėdų sveikata, balansas.',stats:[{k:'shoe_size',l:'Batų dydis'},{k:'steps',l:'Žingsniai/d'}]},
-{id:'skin',emoji:'✨',name:'Oda',desc:'Odos būklė, tatuiruotės, randai, priežiūra.',stats:[{k:'routine',l:'Rutina'},{k:'spf',l:'SPF'}]}
+{id:'hair',emoji:'💇',name:'Hair',desc:'Hair health, growth, care.',stats:[{k:'type',l:'Type'},{k:'length',l:'Length'}]},
+{id:'head',emoji:'🧠',name:'Head / Mind',desc:'Brain, thinking, concentration, memory.',stats:[{k:'iq_goal',l:'IQ Goal'},{k:'books_read',l:'Books read'}]},
+{id:'face',emoji:'😊',name:'Face',desc:'Skincare, face shape, changes.',stats:[{k:'skin_type',l:'Skin type'},{k:'routine',l:'Routine'}]},
+{id:'eyes',emoji:'👁️',name:'Eyes',desc:'Eye health, vision, screen time.',stats:[{k:'screen_hrs',l:'Screen hrs/d'},{k:'vision',l:'Vision'}]},
+{id:'mouth',emoji:'👄',name:'Mouth / Teeth',desc:'Dental care, smile, dentist visits.',stats:[{k:'water_l',l:'Water L/d'},{k:'dentist',l:'Last visit'}]},
+{id:'chest',emoji:'❤️',name:'Chest / Heart',desc:'Heart health, breathing, pulse.',stats:[{k:'heart_rate',l:'Heart rate'},{k:'bp',l:'Blood pressure'}]},
+{id:'left_arm',emoji:'💪',name:'Left Arm',desc:'Strength, flexibility, training progress.',stats:[{k:'strength',l:'Strength (kg)'},{k:'flex',l:'Flexibility'}]},
+{id:'right_arm',emoji:'💪',name:'Right Arm',desc:'Strength, flexibility, training progress.',stats:[{k:'strength',l:'Strength (kg)'},{k:'flex',l:'Flexibility'}]},
+{id:'core',emoji:'🔥',name:'Abs / Core',desc:'Abdominal muscles, digestion, weight.',stats:[{k:'weight',l:'Weight (kg)'},{k:'waist',l:'Waist (cm)'}]},
+{id:'hands',emoji:'🤲',name:'Hands',desc:'Hand health, fingers.',stats:[{k:'grip',l:'Grip (kg)'},{k:'wpm',l:'WPM'}]},
+{id:'nails_b',emoji:'💅',name:'Nails',desc:'Nail health, care.',stats:[{k:'health',l:'Condition'},{k:'care',l:'Care'}]},
+{id:'left_leg',emoji:'🦵',name:'Left Leg',desc:'Leg strength, running, mobility.',stats:[{k:'squat',l:'Squat (kg)'},{k:'run_km',l:'Running km'}]},
+{id:'right_leg',emoji:'🦵',name:'Right Leg',desc:'Leg strength, running, mobility.',stats:[{k:'squat',l:'Squat (kg)'},{k:'run_km',l:'Running km'}]},
+{id:'feet',emoji:'🦶',name:'Feet',desc:'Foot health, balance.',stats:[{k:'shoe_size',l:'Shoe size'},{k:'steps',l:'Steps/d'}]},
+{id:'skin',emoji:'✨',name:'Skin',desc:'Skin condition, tattoos, scars, care.',stats:[{k:'routine',l:'Routine'},{k:'spf',l:'SPF'}]}
 ];
 
 let bmMode='style',bmActive='s_hair';
@@ -588,8 +697,8 @@ function getBmParts(){return bmMode==='style'?STYLE_PARTS:BODY_PARTS}
 
 function renderBodyMap(){
 const modeToggle=`<div style="display:flex;justify-content:center;gap:6px;margin:10px 0 4px">
-<div class="tab${bmMode==='style'?' active':''}" onclick="bmMode='style';bmActive='s_hair';renderBodyMap()" style="font-size:11px;padding:8px 16px">👔 Stilius</div>
-<div class="tab${bmMode==='body'?' active':''}" onclick="bmMode='body';bmActive='hair';renderBodyMap()" style="font-size:11px;padding:8px 16px">🧬 Kūnas</div>
+<div class="tab${bmMode==='style'?' active':''}" onclick="bmMode='style';bmActive='s_hair';renderBodyMap()" style="font-size:11px;padding:8px 16px">👔 Style</div>
+<div class="tab${bmMode==='body'?' active':''}" onclick="bmMode='body';bmActive='hair';renderBodyMap()" style="font-size:11px;padding:8px 16px">🧬 Body</div>
 </div>`;
 const svgStyle=bmMode==='style'?svgStyleMode():svgBodyMode();
 $('bmBodyWrap').innerHTML=modeToggle+svgStyle;
@@ -734,19 +843,19 @@ $('bpDetail').innerHTML=`
 <div class="bp-body">
 <div class="bp-desc">${part.desc}</div>
 
-<div class="bp-status-row">${['🟢 Puiku','🟡 OK','🟠 Dėmesio','🔴 Blogai'].map((s,i)=>{const v=['great','ok','warn','bad'][i];return`<div class="bp-st${pd.status===v?' active':''}" onclick="saveBmStat('${part.id}','status','${v}');openBpDetail('${part.id}')">${s}</div>`}).join('')}</div>
+<div class="bp-status-row">${['🟢 Great','🟡 OK','🟠 Attention','🔴 Bad'].map((s,i)=>{const v=['great','ok','warn','bad'][i];return`<div class="bp-st${pd.status===v?' active':''}" onclick="saveBmStat('${part.id}','status','${v}');openBpDetail('${part.id}')">${s}</div>`}).join('')}</div>
 
-<div class="bp-photos-title"><div class="sec" style="margin:0">Nuotraukos</div><small style="color:rgba(255,255,255,.15);font-size:9px">${photos.length} foto</small></div>
+<div class="bp-photos-title"><div class="sec" style="margin:0">Photos</div><small style="color:rgba(255,255,255,.15);font-size:9px">${photos.length} photos</small></div>
 <div class="bp-photos-grid">
 ${photos.map((p,i)=>`<div class="bp-photo" onclick="viewBpPhoto('${part.id}',${i})"><img src="${p}"><div class="bp-photo-del" onclick="event.stopPropagation();delBpPhoto('${part.id}',${i})">✕</div></div>`).join('')}
-<div class="bp-photo-add" onclick="bpEditPart='${part.id}';$('bpPhotoIn').click()"><span>+</span><small>Pridėti</small></div>
+<div class="bp-photo-add" onclick="bpEditPart='${part.id}';$('bpPhotoIn').click()"><span>+</span><small>Add</small></div>
 </div>
 
-<div class="sec">Statistika</div>
+<div class="sec">Statistics</div>
 <div class="bm-stats">${part.stats.map(s=>`<div class="bm-stat"><div class="bm-stat-lbl">${s.l}</div><div class="bm-stat-val">${pd[s.k]||'—'}</div><input placeholder="${s.l}" value="${pd[s.k]||''}" oninput="saveBmStat('${part.id}','${s.k}',this.value)"></div>`).join('')}</div>
 
-<div class="sec">Užrašai</div>
-<textarea class="bm-notes-area" placeholder="Rašyk pastabas apie ${part.name.toLowerCase()}..." oninput="saveBmStat('${part.id}','notes',this.value)">${pd.notes||''}</textarea>
+<div class="sec">Notes</div>
+<textarea class="bm-notes-area" placeholder="Write notes about ${part.name.toLowerCase()}..." oninput="saveBmStat('${part.id}','notes',this.value)">${pd.notes||''}</textarea>
 </div>`;
 
 $('bpOverlay').classList.add('open');
@@ -818,9 +927,9 @@ const FB_KEYS=['cubes3','del3','events','myself','ideas','files','routine','note
 function renderSync(){
 const cfg=L('fb_config',null),code=L('vault_code',''),on=!!fbDb;
 $('syncContent').innerHTML=`
-<div class="sync-status ${on?'on':'off'}">${on?'● Prisijungta':'○ Neprisijungta'}</div>
+<div class="sync-status ${on?'on':'off'}">${on?'● Connected':'○ Not connected'}</div>
 
-<div class="sec">Greitas eksportas / importas</div>
+<div class="sec">Quick Export / Import</div>
 <div class="sync-actions">
 <button class="sync-act" onclick="exportData()">📥 Export JSON</button>
 <button class="sync-act" onclick="document.getElementById('importIn').click()">📤 Import JSON</button>
@@ -829,22 +938,22 @@ $('syncContent').innerHTML=`
 
 <div class="sec">Firebase Cloud Sync</div>
 <div class="setup-steps">
-<b>1.</b> Eik į <span class="hl">console.firebase.google.com</span><br>
-<b>2.</b> Spausk <b>Create a project</b> → įrašyk pavadinimą → <b>Continue</b> → išjunk Analytics → <b>Create</b><br>
-<b>3.</b> Kairėje spausk <b>Build → Realtime Database → Create Database → Start in test mode → Enable</b><br>
-<b>4.</b> Eik į ⚙️ <b>Project Settings</b> (viršuje kairėje) → apačioje spausk <b>&lt;/&gt;</b> (Web) → Register app<br>
-<b>5.</b> Nukopijuok <b>firebaseConfig = {...}</b> objektą ir įklijuok žemiau
+<b>1.</b> Go to <span class="hl">console.firebase.google.com</span><br>
+<b>2.</b> Click <b>Create a project</b> → enter a name → <b>Continue</b> → disable Analytics → <b>Create</b><br>
+<b>3.</b> On the left click <b>Build → Realtime Database → Create Database → Start in test mode → Enable</b><br>
+<b>4.</b> Go to ⚙️ <b>Project Settings</b> (top left) → at the bottom click <b>&lt;/&gt;</b> (Web) → Register app<br>
+<b>5.</b> Copy the <b>firebaseConfig = {...}</b> object and paste it below
 </div>
 <textarea class="my-input" id="fbCfgIn" rows="7" placeholder='{"apiKey":"...","authDomain":"...","databaseURL":"...","projectId":"...","storageBucket":"...","messagingSenderId":"...","appId":"..."}'style="font-size:10px;font-family:monospace">${cfg?JSON.stringify(cfg,null,2):''}</textarea>
 <div style="margin-top:8px">
-<div class="my-label">Vault Code (naudok tą patį visuose prietaisuose)</div>
-<input class="my-input" id="vaultIn" placeholder="pvz: mano-vault-2025" value="${code}">
+<div class="my-label">Vault Code (use the same one on all devices)</div>
+<input class="my-input" id="vaultIn" placeholder="e.g.: my-vault-2025" value="${code}">
 </div>
 <div class="sync-actions" style="margin-top:12px">
-<button class="sync-act primary" onclick="saveFirebaseConfig()">💾 Išsaugoti ir prisijungti</button>
-${on?`<button class="sync-act primary" onclick="pushToCloud()">⬆ Push į Cloud</button>
-<button class="sync-act primary" onclick="pullFromCloud()">⬇ Pull iš Cloud</button>`:''}
-${cfg?'<button class="sync-act" onclick="disconnectFB()">Atjungti</button>':''}
+<button class="sync-act primary" onclick="saveFirebaseConfig()">💾 Save & Connect</button>
+${on?`<button class="sync-act primary" onclick="pushToCloud()">⬆ Push to Cloud</button>
+<button class="sync-act primary" onclick="pullFromCloud()">⬇ Pull from Cloud</button>`:''}
+${cfg?'<button class="sync-act" onclick="disconnectFB()">Disconnect</button>':''}
 </div>`;
 }
 
@@ -853,13 +962,13 @@ try{
 let raw=$('fbCfgIn').value.trim();
 if(raw.startsWith('const ')||raw.startsWith('var ')||raw.startsWith('let '))raw=raw.replace(/^.*?=\s*/,'').replace(/;$/,'');
 const cfg=JSON.parse(raw);
-if(!cfg.databaseURL){alert('Trūksta databaseURL! Patikrink ar teisingai nukopijuota.');return}
+if(!cfg.databaseURL){alert('Missing databaseURL! Check if it was copied correctly.');return}
 const code=$('vaultIn').value.trim();
-if(!code){alert('Įvesk vault code!');return}
+if(!code){alert('Enter a vault code!');return}
 S('fb_config',cfg);S('vault_code',code);
 initFB(cfg,code);
 setTimeout(renderSync,500);
-}catch(e){alert('Neteisingas JSON formatas: '+e.message)}}
+}catch(e){alert('Invalid JSON format: '+e.message)}}
 
 function initFB(cfg,code){
 try{
@@ -883,21 +992,21 @@ pulling=false;
 }
 
 function pushToCloud(){
-if(!fbRef){alert('Neprisijungta!');return}
+if(!fbRef){alert('Not connected!');return}
 const data={};
 FB_KEYS.forEach(k=>{const v=localStorage.getItem('lv3_'+k);if(v)data[k]=v});
-fbRef.set(data).then(()=>alert('✅ Duomenys nusiųsti į cloud!')).catch(e=>alert('Klaida: '+e.message));
+fbRef.set(data).then(()=>alert('✅ Data pushed to cloud!')).catch(e=>alert('Error: '+e.message));
 }
 
 function pullFromCloud(){
-if(!fbRef){alert('Neprisijungta!');return}
+if(!fbRef){alert('Not connected!');return}
 fbRef.once('value',snap=>{
 const data=snap.val();
 if(data){
 FB_KEYS.forEach(k=>{if(data[k])localStorage.setItem('lv3_'+k,data[k])});
-alert('✅ Duomenys parsiųsti! Atnaujinama...');
+alert('✅ Data pulled! Refreshing...');
 location.reload();
-}else alert('Cloud tuščias - nėra duomenų.')});
+}else alert('Cloud is empty - no data found.')});
 }
 
 function disconnectFB(){
@@ -933,8 +1042,8 @@ const r=new FileReader();
 r.onload=()=>{try{
 const data=JSON.parse(r.result);
 Object.keys(data).forEach(k=>{if(k.startsWith('lv3_'))localStorage.setItem(k,data[k])});
-alert('✅ Importuota! Atnaujinama...');location.reload();
-}catch(e){alert('Neteisingas failas: '+e.message)}};
+alert('✅ Imported! Refreshing...');location.reload();
+}catch(e){alert('Invalid file: '+e.message)}};
 r.readAsText(file);
 }
 
