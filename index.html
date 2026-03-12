@@ -292,7 +292,7 @@ body{font-family:'Space Grotesk',sans-serif;background:#06070b;color:#e0dcd4;min
 
 <!-- HABITS --><div class="page" id="page-habits"><div class="ph"><div class="pb" onclick="closePage()">←</div><div class="pt">✅ Habits</div></div><div class="px"><div id="habitsStats"></div><button class="add-btn" onclick="openModal('habit')">+ Add Habit</button><div id="habitsList"></div></div></div>
 
-<!-- BODYMAP --><div class="page" id="page-bodymap"><div class="ph"><div class="pb" onclick="closePage()">←</div><div class="pt">🧬 Myself</div></div><div class="bm-layout"><div class="px" style="width:100%;max-width:500px;padding-bottom:0"><div class="sec">About Me</div><div id="bmMyselfFields"></div></div><div class="bm-body-wrap" id="bmBodyWrap"></div><div class="bm-tabs" id="bmTabs"></div></div></div>
+<!-- BODYMAP --><div class="page" id="page-bodymap"><div class="ph"><div class="pb" onclick="closePage()">←</div><div class="pt">🧬 Myself</div></div><div class="bm-layout"><div class="bm-body-wrap" id="bmBodyWrap"></div><div class="bm-tabs" id="bmTabs"></div></div></div>
 
 <!-- SYNC --><div class="page" id="page-sync"><div class="ph"><div class="pb" onclick="closePage()">←</div><div class="pt">☁️ Cloud Sync</div></div><div class="px" id="syncContent"></div></div>
 
@@ -472,41 +472,71 @@ function togH(hi,di){const h=L('habits',[]);if(!h[hi].days)h[hi].days=[0,0,0,0,0
 
 /* ═══ BODYMAP ═══ */
 const BM_PARTS=[
-{id:'head',emoji:'🧠',name:'Galva / Protas',desc:'Smegenys, mąstymas, koncentracija, atmintis. Sek savo protinę sveikatą, mokymąsi ir kognityvinius tikslus.',stats:[{k:'iq_goal',l:'IQ Tikslas'},{k:'books_read',l:'Knygų perskaityta'}]},
-{id:'eyes',emoji:'👁️',name:'Akys / Regėjimas',desc:'Akių sveikata, ekrano laikas, regėjimo būklė. Užsirašyk optometristo vizitus ir pokyčius.',stats:[{k:'screen_hrs',l:'Ekrano val/d'},{k:'vision',l:'Regėjimas'}]},
-{id:'mouth',emoji:'👄',name:'Burna / Mityba',desc:'Mityba, dieta, dantų priežiūra. Sek ką valgai ir geri, odontologo vizitus.',stats:[{k:'water_l',l:'Vandens L/d'},{k:'calories',l:'Kalorijos/d'}]},
-{id:'chest',emoji:'❤️',name:'Krūtinė / Širdis',desc:'Širdies ir kraujagyslių sveikata, kvėpavimas, emocijos. Pulsas, kraujo spaudimas.',stats:[{k:'heart_rate',l:'Pulsas'},{k:'bp',l:'Kraujo spaudimas'}]},
-{id:'left_arm',emoji:'💪',name:'Kairė ranka',desc:'Kairės rankos jėga, lankstumas, sužalojimai. Treniruočių progresas viršutinei kūno daliai.',stats:[{k:'strength',l:'Jėga (kg)'},{k:'flex',l:'Lankstumas'}]},
-{id:'right_arm',emoji:'💪',name:'Dešinė ranka',desc:'Dešinės rankos jėga, lankstumas, sužalojimai. Treniruočių progresas.',stats:[{k:'strength',l:'Jėga (kg)'},{k:'flex',l:'Lankstumas'}]},
-{id:'core',emoji:'🔥',name:'Pilvas / Core',desc:'Pilvo raumenys, virškinimas, kūno centras. Sek svorį, liemens apimtį ir treniruotes.',stats:[{k:'weight',l:'Svoris (kg)'},{k:'waist',l:'Liemuo (cm)'}]},
-{id:'left_leg',emoji:'🦵',name:'Kairė koja',desc:'Kairės kojos jėga, bėgimas, mobilumas. Sužalojimai ir atsistatymas.',stats:[{k:'squat',l:'Squat (kg)'},{k:'run_km',l:'Bėgimas km'}]},
-{id:'right_leg',emoji:'🦵',name:'Dešinė koja',desc:'Dešinės kojos jėga, bėgimas, mobilumas. Sužalojimai ir atsistatymas.',stats:[{k:'squat',l:'Squat (kg)'},{k:'run_km',l:'Bėgimas km'}]},
-{id:'hands',emoji:'🤲',name:'Plaštakos',desc:'Plaštakų ir pirštų sveikata, dexterity, tipavimo greitis, riešo kanalas.',stats:[{k:'grip',l:'Grip (kg)'},{k:'wpm',l:'WPM tipavimas'}]},
-{id:'feet',emoji:'🦶',name:'Pėdos',desc:'Pėdų sveikata, balansas, batų dydis. Pėdų priežiūra ir laikysena.',stats:[{k:'shoe_size',l:'Batų dydis'},{k:'steps',l:'Žingsniai/d'}]}
+{id:'hair',emoji:'💇',name:'Plaukai',desc:'Šukuosenos, plaukų spalva, stilius. Įkelk nuotraukas šukuosenų kurios patiko ir kurias nori išbandyti.',stats:[{k:'style',l:'Dabartinė šukuosena'},{k:'color',l:'Spalva'},{k:'length',l:'Ilgis'},{k:'barber_date',l:'Pask. kirpimas'}]},
+{id:'head',emoji:'🧠',name:'Galva / Protas',desc:'Smegenys, mąstymas, koncentracija, atmintis. Sek savo protinę sveikatą ir tikslus.',stats:[{k:'iq_goal',l:'IQ Tikslas'},{k:'books_read',l:'Knygų perskaityta'}]},
+{id:'face',emoji:'😎',name:'Veidas / Išvaizda',desc:'Odos priežiūra, barzda, stilius. Įkelk selfie ir sek savo look pokyčius.',stats:[{k:'skin_type',l:'Odos tipas'},{k:'routine',l:'Priežiūros rutina'}]},
+{id:'eyes',emoji:'👁️',name:'Akys / Regėjimas',desc:'Akių sveikata, ekrano laikas, regėjimo būklė.',stats:[{k:'screen_hrs',l:'Ekrano val/d'},{k:'vision',l:'Regėjimas'}]},
+{id:'mouth',emoji:'👄',name:'Burna / Dantys',desc:'Dantų priežiūra, šypsena, mityba. Odontologo vizitai.',stats:[{k:'water_l',l:'Vandens L/d'},{k:'dentist',l:'Pask. vizitas'}]},
+{id:'chest',emoji:'❤️',name:'Krūtinė / Širdis',desc:'Širdies sveikata, kvėpavimas, emocijos. Pulsas, kraujo spaudimas.',stats:[{k:'heart_rate',l:'Pulsas'},{k:'bp',l:'Kraujo spaudimas'}]},
+{id:'left_arm',emoji:'💪',name:'Kairė ranka',desc:'Jėga, lankstumas, treniruočių progresas.',stats:[{k:'strength',l:'Jėga (kg)'},{k:'flex',l:'Lankstumas'}]},
+{id:'right_arm',emoji:'💪',name:'Dešinė ranka',desc:'Jėga, lankstumas, treniruočių progresas.',stats:[{k:'strength',l:'Jėga (kg)'},{k:'flex',l:'Lankstumas'}]},
+{id:'core',emoji:'🔥',name:'Pilvas / Core',desc:'Pilvo raumenys, virškinimas, svoris, liemuo.',stats:[{k:'weight',l:'Svoris (kg)'},{k:'waist',l:'Liemuo (cm)'}]},
+{id:'nails',emoji:'💅',name:'Nagai',desc:'Nagų priežiūra, manikiūras, stilius. Įkelk nuotraukas nagų dizainų.',stats:[{k:'style',l:'Dabartinis stilius'},{k:'last_mani',l:'Pask. manikiūras'}]},
+{id:'left_leg',emoji:'🦵',name:'Kairė koja',desc:'Kojos jėga, bėgimas, mobilumas.',stats:[{k:'squat',l:'Squat (kg)'},{k:'run_km',l:'Bėgimas km'}]},
+{id:'right_leg',emoji:'🦵',name:'Dešinė koja',desc:'Kojos jėga, bėgimas, mobilumas.',stats:[{k:'squat',l:'Squat (kg)'},{k:'run_km',l:'Bėgimas km'}]},
+{id:'hands',emoji:'🤲',name:'Plaštakos',desc:'Plaštakų sveikata, pirštai, riešo kanalas.',stats:[{k:'grip',l:'Grip (kg)'},{k:'wpm',l:'WPM tipavimas'}]},
+{id:'feet',emoji:'🦶',name:'Pėdos',desc:'Pėdų sveikata, balansas, batų dydis.',stats:[{k:'shoe_size',l:'Batų dydis'},{k:'steps',l:'Žingsniai/d'}]},
+{id:'skin',emoji:'✨',name:'Oda / Kūnas',desc:'Odos būklė, tatuiruotės, randai, priežiūra. Įkelk nuotraukas pokyčiams sekti.',stats:[{k:'skin_routine',l:'Rutina'},{k:'spf',l:'SPF naudojimas'}]},
+{id:'outfit',emoji:'👔',name:'Apranga / Stilius',desc:'Mėgstami outfit\'ai, stilius, drabužių deriniai. Įkelk outfit foto inspiracijai.',stats:[{k:'style_type',l:'Stilius'},{k:'fav_brand',l:'Mėgstamas brand'}]}
 ];
-let bmActive='head';
+let bmActive='hair';
 
 function renderBodyMap(){
-/* About Me fields */
-const md=L('myself',{});
-$('bmMyselfFields').innerHTML=MF.map(f=>`<div class="my-field"><div class="my-label">${f.l}</div>${f.ta?`<textarea class="my-input" rows="2" placeholder="${f.l}..." oninput="saveMy('${f.k}',this.value)">${md[f.k]||''}</textarea>`:`<input class="my-input" placeholder="${f.l}..." value="${md[f.k]||''}" oninput="saveMy('${f.k}',this.value)">`}</div>`).join('');
 $('bmBodyWrap').innerHTML=`<div class="sec" style="text-align:center;margin-top:8px">Spausk ant kūno dalies</div><svg class="bm-svg" viewBox="0 0 240 520" xmlns="http://www.w3.org/2000/svg">
-<!-- Head -->
-<ellipse class="bm-part" data-part="head" cx="120" cy="52" rx="32" ry="38"/>
+<!-- Hair -->
+<path class="bm-part" data-part="hair" d="M88 30 Q88 8 120 4 Q152 8 152 30 Q155 16 148 10 Q136 2 120 0 Q104 2 92 10 Q85 16 88 30 Z" style="stroke-width:1"/>
+<path class="bm-part" data-part="hair" d="M88 30 Q86 42 88 52 L88 38 Q88 22 96 16 Q108 10 120 10 Q132 10 144 16 Q152 22 152 38 L152 52 Q154 42 152 30" style="stroke-width:.8;fill:rgba(108,92,231,.04)"/>
+<!-- Head/Brain -->
+<ellipse class="bm-part" data-part="head" cx="120" cy="52" rx="30" ry="28" style="fill:rgba(108,92,231,.01)"/>
+<!-- Face outline -->
+<path class="bm-part" data-part="face" d="M94 40 Q94 76 120 82 Q146 76 146 40" style="stroke-width:.7;fill:rgba(108,92,231,.01)"/>
+<!-- Eyes -->
+<ellipse class="bm-part" data-part="eyes" cx="108" cy="50" rx="7" ry="4.5" style="stroke-width:.7"/>
+<ellipse class="bm-part" data-part="eyes" cx="132" cy="50" rx="7" ry="4.5" style="stroke-width:.7"/>
+<circle class="bm-joint" cx="108" cy="50" r="2.5" style="fill:rgba(168,139,250,.3)"/>
+<circle class="bm-joint" cx="132" cy="50" r="2.5" style="fill:rgba(168,139,250,.3)"/>
+<!-- Nose -->
+<path class="bm-line" d="M120 54 L117 62 L120 63 L123 62 Z" style="stroke-width:.5"/>
+<!-- Mouth -->
+<path class="bm-part" data-part="mouth" d="M112 68 Q120 75 128 68" style="stroke-width:.8;fill:rgba(108,92,231,.02)"/>
 <!-- Neck -->
-<line class="bm-line" x1="120" y1="90" x2="120" y2="108"/>
+<line class="bm-line" x1="120" y1="84" x2="120" y2="108"/>
 <!-- Chest/Torso -->
 <path class="bm-part" data-part="chest" d="M82 108 Q120 98 158 108 L162 180 Q120 186 78 180 Z"/>
 <!-- Core/Stomach -->
 <path class="bm-part" data-part="core" d="M78 180 Q120 186 162 180 L158 260 Q120 268 82 260 Z"/>
 <!-- Left Arm -->
-<path class="bm-part" data-part="left_arm" d="M82 108 L58 118 L36 178 L28 230 L42 232 L52 186 L62 148 L78 140" />
+<path class="bm-part" data-part="left_arm" d="M82 108 L58 118 L36 178 L28 224 L42 226 L52 186 L62 148 L78 140"/>
 <!-- Right Arm -->
-<path class="bm-part" data-part="right_arm" d="M158 108 L182 118 L204 178 L212 230 L198 232 L188 186 L178 148 L162 140"/>
-<!-- Left Hand -->
-<ellipse class="bm-part" data-part="hands" cx="34" cy="242" rx="12" ry="16"/>
-<!-- Right Hand -->
-<ellipse class="bm-part" data-part="hands" cx="206" cy="242" rx="12" ry="16"/>
+<path class="bm-part" data-part="right_arm" d="M158 108 L182 118 L204 178 L212 224 L198 226 L188 186 L178 148 L162 140"/>
+<!-- Left Hand + Nails -->
+<ellipse class="bm-part" data-part="hands" cx="34" cy="238" rx="12" ry="16"/>
+<g class="bm-part" data-part="nails">
+<rect x="24" y="250" width="4" height="5" rx="1.5" style="stroke-width:.5"/>
+<rect x="29" y="252" width="4" height="5" rx="1.5" style="stroke-width:.5"/>
+<rect x="34" y="253" width="4" height="5" rx="1.5" style="stroke-width:.5"/>
+<rect x="39" y="252" width="4" height="5" rx="1.5" style="stroke-width:.5"/>
+<rect x="44" y="250" width="3.5" height="4.5" rx="1.5" style="stroke-width:.5"/>
+</g>
+<!-- Right Hand + Nails -->
+<ellipse class="bm-part" data-part="hands" cx="206" cy="238" rx="12" ry="16"/>
+<g class="bm-part" data-part="nails">
+<rect x="196" y="250" width="4" height="5" rx="1.5" style="stroke-width:.5"/>
+<rect x="201" y="252" width="4" height="5" rx="1.5" style="stroke-width:.5"/>
+<rect x="206" y="253" width="4" height="5" rx="1.5" style="stroke-width:.5"/>
+<rect x="211" y="252" width="4" height="5" rx="1.5" style="stroke-width:.5"/>
+<rect x="216" y="250" width="3.5" height="4.5" rx="1.5" style="stroke-width:.5"/>
+</g>
 <!-- Left Leg -->
 <path class="bm-part" data-part="left_leg" d="M82 260 Q90 268 98 260 L104 360 L96 440 L78 442 L74 362 Z"/>
 <!-- Right Leg -->
@@ -515,14 +545,10 @@ $('bmBodyWrap').innerHTML=`<div class="sec" style="text-align:center;margin-top:
 <ellipse class="bm-part" data-part="feet" cx="86" cy="456" rx="16" ry="12"/>
 <!-- Right Foot -->
 <ellipse class="bm-part" data-part="feet" cx="154" cy="456" rx="16" ry="12"/>
-<!-- Eyes -->
-<ellipse class="bm-part" data-part="eyes" cx="108" cy="46" rx="7" ry="5" style="stroke-width:.8"/>
-<ellipse class="bm-part" data-part="eyes" cx="132" cy="46" rx="7" ry="5" style="stroke-width:.8"/>
-<!-- Eye pupils -->
-<circle class="bm-joint" cx="108" cy="46" r="2.5" style="fill:rgba(168,139,250,.3)"/>
-<circle class="bm-joint" cx="132" cy="46" r="2.5" style="fill:rgba(168,139,250,.3)"/>
-<!-- Mouth -->
-<path class="bm-part" data-part="mouth" d="M112 62 Q120 70 128 62" style="stroke-width:.8;fill:rgba(108,92,231,.02)"/>
+<!-- Skin overlay (full body outline) -->
+<path class="bm-part" data-part="skin" d="M120 4 Q152 8 155 35 Q157 55 150 80 L158 108 L182 118 L212 230 L206 258 L198 226 L158 108 L162 260 L154 468 L86 468 L78 260 L82 108 L42 226 L34 258 L28 230 L58 118 L82 108 L90 80 Q83 55 85 35 Q88 8 120 4" style="stroke-width:0;fill:transparent;pointer-events:none"/>
+<!-- Outfit area (torso outer) -->
+<rect class="bm-part" data-part="outfit" x="70" y="100" width="100" height="170" rx="14" style="stroke-width:.6;fill:transparent;stroke-dasharray:3 3;stroke:rgba(168,139,250,.1)"/>
 <!-- Joints -->
 <circle class="bm-joint" cx="82" cy="108" r="4"/>
 <circle class="bm-joint" cx="158" cy="108" r="4"/>
