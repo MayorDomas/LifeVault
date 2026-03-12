@@ -77,7 +77,7 @@ body{font-family:'Space Grotesk',sans-serif;background:#06070b;color:#e0dcd4;min
 .hpanel.open{display:block}.hitem{display:flex;align-items:center;justify-content:space-between;padding:7px;margin-bottom:3px;background:rgba(255,255,255,.04);border-radius:9px;font-size:11px;cursor:pointer}
 
 /* PAGES */
-.page{position:fixed;inset:0;z-index:50;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .3s;overflow-y:auto;background:#07081a}.page.open{opacity:1;visibility:visible;pointer-events:auto}
+.page{position:fixed;inset:0;z-index:50;opacity:0;visibility:hidden;pointer-events:none;overflow-y:auto;background:#07081a;transform-origin:var(--zx,50%) var(--zy,50%);transform:scale(.6);transition:opacity .35s cubic-bezier(.4,0,.2,1),transform .4s cubic-bezier(.34,1.56,.64,1),visibility 0s .4s}.page.open{opacity:1;visibility:visible;pointer-events:auto;transform:scale(1);transition:opacity .35s cubic-bezier(.4,0,.2,1),transform .4s cubic-bezier(.34,1.56,.64,1),visibility 0s}
 .ph{display:flex;align-items:center;gap:12px;padding:14px 16px 8px;position:sticky;top:0;z-index:5;background:linear-gradient(180deg,#07081a,rgba(7,8,26,.96) 85%,transparent)}
 .pb{width:38px;height:38px;border-radius:12px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;color:#fff;flex-shrink:0}
 .pt{font-size:18px;font-weight:700}.px{padding:4px 16px 40px}
@@ -136,6 +136,36 @@ body{font-family:'Space Grotesk',sans-serif;background:#06070b;color:#e0dcd4;min
 .bm-stat input{width:100%;text-align:center;padding:4px;margin-top:4px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);border-radius:6px;color:#fff;font-family:inherit;font-size:11px;outline:none}
 .bm-stat input:focus{border-color:rgba(108,92,231,.3)}
 @keyframes bmPulse{0%,100%{filter:drop-shadow(0 0 20px rgba(108,92,231,.1))}50%{filter:drop-shadow(0 0 35px rgba(108,92,231,.2))}}.bm-svg{animation:bmPulse 4s ease-in-out infinite}
+
+/* Body Part Zoom Detail */
+.bp-overlay{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0);backdrop-filter:blur(0px);opacity:0;pointer-events:none;transition:all .35s cubic-bezier(.4,0,.2,1)}
+.bp-overlay.open{background:rgba(0,0,0,.65);backdrop-filter:blur(14px);opacity:1;pointer-events:auto}
+.bp-detail{background:rgba(14,12,28,.98);border:1px solid rgba(108,92,231,.12);border-radius:22px;width:min(440px,92vw);max-height:88vh;overflow-y:auto;box-shadow:0 24px 80px rgba(0,0,0,.7),0 0 60px rgba(108,92,231,.06);transform:scale(.5);transition:transform .45s cubic-bezier(.34,1.56,.64,1),opacity .3s;opacity:0}
+.bp-overlay.open .bp-detail{transform:scale(1);opacity:1}
+.bp-head{padding:20px 20px 0;display:flex;align-items:center;justify-content:space-between}
+.bp-head-left{display:flex;align-items:center;gap:12px}
+.bp-head-emoji{font-size:32px}
+.bp-head-title{font-size:20px;font-weight:700}
+.bp-close{width:34px;height:34px;border-radius:11px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:15px;color:rgba(255,255,255,.4);flex-shrink:0;transition:all .15s}
+.bp-close:hover{background:rgba(255,60,60,.1);border-color:rgba(255,60,60,.2);color:#f87171}
+.bp-body{padding:16px 20px 24px}
+.bp-desc{font-size:11px;color:rgba(255,255,255,.25);line-height:1.6;margin-bottom:16px;padding:10px 12px;background:rgba(255,255,255,.02);border-radius:10px;border:1px solid rgba(255,255,255,.04)}
+.bp-status-row{display:flex;gap:5px;margin-bottom:14px}
+.bp-st{padding:6px 10px;border-radius:8px;font-size:10px;font-weight:600;cursor:pointer;border:1px solid rgba(255,255,255,.06);background:rgba(255,255,255,.03);color:rgba(255,255,255,.3);transition:all .15s}
+.bp-st.active{border-color:rgba(108,92,231,.3);background:rgba(108,92,231,.12);color:#a78bfa}
+.bp-photos-title{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.bp-photos-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:14px}
+.bp-photo{aspect-ratio:1;border-radius:12px;overflow:hidden;position:relative;cursor:pointer;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.05);transition:all .2s}
+.bp-photo:hover{border-color:rgba(108,92,231,.3);transform:scale(1.03)}
+.bp-photo img{width:100%;height:100%;object-fit:cover}
+.bp-photo-del{position:absolute;top:4px;right:4px;width:20px;height:20px;border-radius:6px;background:rgba(0,0,0,.7);display:flex;align-items:center;justify-content:center;font-size:10px;color:#f87171;cursor:pointer;opacity:0;transition:opacity .15s}
+.bp-photo:hover .bp-photo-del{opacity:1}
+.bp-photo-add{aspect-ratio:1;border-radius:12px;border:2px dashed rgba(108,92,231,.15);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;background:rgba(108,92,231,.03);transition:all .2s;gap:3px}
+.bp-photo-add:hover{border-color:rgba(108,92,231,.4);background:rgba(108,92,231,.08)}
+.bp-photo-add span{font-size:18px}.bp-photo-add small{font-size:8px;color:rgba(255,255,255,.2)}
+.bp-viewer{position:fixed;inset:0;z-index:250;background:rgba(0,0,0,.9);display:flex;align-items:center;justify-content:center;cursor:pointer;opacity:0;pointer-events:none;transition:opacity .3s}
+.bp-viewer.open{opacity:1;pointer-events:auto}
+.bp-viewer img{max-width:92vw;max-height:92vh;border-radius:12px;object-fit:contain}
 
 /* MYSELF */
 .my-layout{display:flex;gap:16px;min-height:calc(100vh - 60px);padding:0 16px 30px}
@@ -262,11 +292,15 @@ body{font-family:'Space Grotesk',sans-serif;background:#06070b;color:#e0dcd4;min
 
 <!-- HABITS --><div class="page" id="page-habits"><div class="ph"><div class="pb" onclick="closePage()">←</div><div class="pt">✅ Habits</div></div><div class="px"><div id="habitsStats"></div><button class="add-btn" onclick="openModal('habit')">+ Add Habit</button><div id="habitsList"></div></div></div>
 
-<!-- BODYMAP --><div class="page" id="page-bodymap"><div class="ph"><div class="pb" onclick="closePage()">←</div><div class="pt">🧬 Myself</div></div><div class="bm-layout"><div class="px" style="width:100%;max-width:500px;padding-bottom:0"><div class="sec">About Me</div><div id="bmMyselfFields"></div></div><div class="bm-body-wrap" id="bmBodyWrap"></div><div class="bm-tabs" id="bmTabs"></div><div class="bm-detail" id="bmDetail"></div></div></div>
+<!-- BODYMAP --><div class="page" id="page-bodymap"><div class="ph"><div class="pb" onclick="closePage()">←</div><div class="pt">🧬 Myself</div></div><div class="bm-layout"><div class="px" style="width:100%;max-width:500px;padding-bottom:0"><div class="sec">About Me</div><div id="bmMyselfFields"></div></div><div class="bm-body-wrap" id="bmBodyWrap"></div><div class="bm-tabs" id="bmTabs"></div></div></div>
 
 <!-- SYNC --><div class="page" id="page-sync"><div class="ph"><div class="pb" onclick="closePage()">←</div><div class="pt">☁️ Cloud Sync</div></div><div class="px" id="syncContent"></div></div>
 
 <!-- GENERIC --><div class="page" id="innerPage"><div class="ph"><div class="pb" onclick="closePage()">←</div><div class="pt" id="innerTitle"></div></div><div class="px"><div class="empty-msg">Coming soon</div></div></div>
+
+<div class="bp-overlay" id="bpOverlay" onclick="if(event.target===this)closeBpDetail()"><div class="bp-detail" id="bpDetail"></div></div>
+<div class="bp-viewer" id="bpViewer" onclick="this.classList.remove('open')"><img id="bpViewerImg"></div>
+<input type="file" id="bpPhotoIn" accept="image/*" style="display:none" onchange="addBpPhoto(this.files[0])">
 
 <div class="ev-overlay" id="evOverlay" onclick="if(event.target===this)closeEvDetail()"><div class="ev-detail" id="evDetail"></div></div>
 
@@ -363,7 +397,13 @@ function restoreCube(i){const c=deleted.splice(i,1)[0];c.x=3+Math.random()*12;c.
 
 /* ═══ PAGES ═══ */
 const renderers={myself:renderMyself,ideas:renderIdeas,files:renderFiles,routine:renderRoutine,notes:renderNotes,goals:renderGoals,finance:renderFinance,mood:renderMood,passwords:renderPW,wishlist:renderWish,habits:renderHabits,bodymap:renderBodyMap,sync:renderSync};
-function openPage(cube){curPage=cube;const pg=$('page-'+cube.page);if(pg){pg.classList.add('open');(renderers[cube.page]||function(){})()} else{$('innerTitle').textContent=cube.emoji+' '+cube.name;$('innerPage').classList.add('open')}$('dashboard').style.opacity='0';$('dashboard').style.pointerEvents='none'}
+function openPage(cube){curPage=cube;
+/* Zoom from cube position */
+const el=document.querySelector(`.cube[data-id="${cube.id}"]`);
+const pg=$('page-'+cube.page)||(($('innerTitle').textContent=cube.emoji+' '+cube.name),$('innerPage'));
+if(el){const r=el.getBoundingClientRect();pg.style.setProperty('--zx',(r.left+r.width/2)/innerWidth*100+'%');pg.style.setProperty('--zy',(r.top+r.height/2)/innerHeight*100+'%')}
+pg.classList.add('open');(renderers[cube.page]||function(){})();
+$('dashboard').style.opacity='0';$('dashboard').style.pointerEvents='none'}
 function closePage(){document.querySelectorAll('.page.open').forEach(p=>p.classList.remove('open'));curPage=null;$('dashboard').style.opacity='1';$('dashboard').style.pointerEvents='auto'}
 
 /* ═══ MYSELF ═══ */
@@ -496,15 +536,14 @@ $('bmBodyWrap').innerHTML=`<div class="sec" style="text-align:center;margin-top:
 document.querySelectorAll('.bm-part').forEach(el=>{
 el.addEventListener('click',()=>{
 const p=el.dataset.part;
-if(p){bmActive=p;renderBmTabs();renderBmDetail()}
+if(p){bmActive=p;renderBmTabs();highlightBmPart(p);openBpDetail(p)}
 })});
 
 renderBmTabs();
-renderBmDetail();
 }
 
 function renderBmTabs(){
-$('bmTabs').innerHTML=BM_PARTS.map(p=>`<div class="bm-tab${p.id===bmActive?' active':''}" onclick="bmActive='${p.id}';renderBmTabs();renderBmDetail();highlightBmPart('${p.id}')">${p.emoji} ${p.name.split(' / ')[0]}</div>`).join('');
+$('bmTabs').innerHTML=BM_PARTS.map(p=>`<div class="bm-tab${p.id===bmActive?' active':''}" onclick="bmActive='${p.id}';renderBmTabs();highlightBmPart('${p.id}');openBpDetail('${p.id}')">${p.emoji} ${p.name.split(' / ')[0]}</div>`).join('');
 highlightBmPart(bmActive);
 }
 
@@ -513,26 +552,63 @@ document.querySelectorAll('.bm-part').forEach(el=>el.classList.remove('active'))
 document.querySelectorAll(`.bm-part[data-part="${id}"]`).forEach(el=>el.classList.add('active'));
 }
 
-function renderBmDetail(){
-const part=BM_PARTS.find(p=>p.id===bmActive);
-if(!part){$('bmDetail').innerHTML='';return}
-const data=L('bodymap',{});
-const pd=data[part.id]||{};
+/* Body Part Zoom Detail */
+let bpEditPart=null;
+function openBpDetail(partId){
+bpEditPart=partId;
+const part=BM_PARTS.find(p=>p.id===partId);if(!part)return;
+const data=L('bodymap',{});const pd=data[part.id]||{};
+const photos=pd.photos||[];
 
-$('bmDetail').innerHTML=`
-<div class="bm-panel">
-<div class="bm-panel-head">
-<div class="bm-panel-emoji">${part.emoji}</div>
-<div class="bm-panel-title">${part.name}</div>
+$('bpDetail').innerHTML=`
+<div class="bp-head">
+<div class="bp-head-left"><div class="bp-head-emoji">${part.emoji}</div><div class="bp-head-title">${part.name}</div></div>
+<div class="bp-close" onclick="closeBpDetail()">✕</div>
 </div>
-<div class="bm-panel-desc">${part.desc}</div>
+<div class="bp-body">
+<div class="bp-desc">${part.desc}</div>
+
+<div class="bp-status-row">${['🟢 Puiku','🟡 OK','🟠 Dėmesio','🔴 Blogai'].map((s,i)=>{const v=['great','ok','warn','bad'][i];return`<div class="bp-st${pd.status===v?' active':''}" onclick="saveBmStat('${part.id}','status','${v}');openBpDetail('${part.id}')">${s}</div>`}).join('')}</div>
+
+<div class="bp-photos-title"><div class="sec" style="margin:0">Nuotraukos</div><small style="color:rgba(255,255,255,.15);font-size:9px">${photos.length} foto</small></div>
+<div class="bp-photos-grid">
+${photos.map((p,i)=>`<div class="bp-photo" onclick="viewBpPhoto('${part.id}',${i})"><img src="${p}"><div class="bp-photo-del" onclick="event.stopPropagation();delBpPhoto('${part.id}',${i})">✕</div></div>`).join('')}
+<div class="bp-photo-add" onclick="bpEditPart='${part.id}';$('bpPhotoIn').click()"><span>+</span><small>Pridėti</small></div>
+</div>
+
 <div class="sec">Statistika</div>
 <div class="bm-stats">${part.stats.map(s=>`<div class="bm-stat"><div class="bm-stat-lbl">${s.l}</div><div class="bm-stat-val">${pd[s.k]||'—'}</div><input placeholder="${s.l}" value="${pd[s.k]||''}" oninput="saveBmStat('${part.id}','${s.k}',this.value)"></div>`).join('')}</div>
-<div class="sec">Būklė</div>
-<div style="display:flex;gap:6px;margin-bottom:12px">${['🟢 Puiku','🟡 OK','🟠 Dėmesio','🔴 Blogai'].map((s,i)=>{const v=['great','ok','warn','bad'][i];return`<div class="tab${pd.status===v?' active':''}" onclick="saveBmStat('${part.id}','status','${v}');renderBmDetail()" style="font-size:10px">${s}</div>`}).join('')}</div>
+
 <div class="sec">Užrašai</div>
 <textarea class="bm-notes-area" placeholder="Rašyk pastabas apie ${part.name.toLowerCase()}..." oninput="saveBmStat('${part.id}','notes',this.value)">${pd.notes||''}</textarea>
 </div>`;
+
+$('bpOverlay').classList.add('open');
+}
+
+function closeBpDetail(){$('bpOverlay').classList.remove('open')}
+
+function addBpPhoto(file){
+if(!file||!bpEditPart)return;
+const r=new FileReader();
+r.onload=()=>{
+const data=L('bodymap',{});
+if(!data[bpEditPart])data[bpEditPart]={};
+if(!data[bpEditPart].photos)data[bpEditPart].photos=[];
+data[bpEditPart].photos.push(r.result);
+S('bodymap',data);
+openBpDetail(bpEditPart);
+};r.readAsDataURL(file);
+}
+
+function delBpPhoto(partId,idx){
+const data=L('bodymap',{});
+if(data[partId]?.photos){data[partId].photos.splice(idx,1);S('bodymap',data);openBpDetail(partId)}
+}
+
+function viewBpPhoto(partId,idx){
+const data=L('bodymap',{});const src=data[partId]?.photos?.[idx];
+if(src){$('bpViewerImg').src=src;$('bpViewer').classList.add('open')}
 }
 
 function saveBmStat(partId,key,val){
@@ -540,7 +616,6 @@ const data=L('bodymap',{});
 if(!data[partId])data[partId]={};
 data[partId][key]=val;
 S('bodymap',data);
-/* Update stat display without full re-render */
 if(key!=='notes'&&key!=='status'){
 const statVals=document.querySelectorAll('.bm-stat-val');
 const part=BM_PARTS.find(p=>p.id===partId);
