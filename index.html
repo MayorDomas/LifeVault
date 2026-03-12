@@ -309,7 +309,7 @@ $('evDetail').innerHTML=`
 </div>
 <div class="ev-detail-body">
 <div class="ev-field-row">
-<div class="ev-field"><label>Time</label><input type="time" id="evTime" value="${e.time||''}"></div>
+<div class="ev-field"><label>Time</label><input type="text" id="evTime" value="${e.time||''}" placeholder="00:00" maxlength="5" oninput="fmtTime(this)" onclick="this.select()" inputmode="numeric" style="letter-spacing:1px"></div>
 <div class="ev-field"><label>Color</label><div class="ev-colors">${EV_COLORS.map(c=>`<div class="ev-clr${c===(e.color||EV_COLORS[0])?' sel':''}" style="background:${c}" onclick="document.querySelectorAll('.ev-clr').forEach(x=>x.classList.remove('sel'));this.classList.add('sel')"></div>`).join('')}</div></div>
 </div>
 <div class="ev-field"><label>Description</label><textarea id="evDesc" placeholder="Add details, notes, links...">${e.desc||''}</textarea></div>
@@ -322,6 +322,8 @@ $('evOverlay').classList.add('open');
 }
 
 function closeEvDetail(){$('evOverlay').classList.remove('open')}
+
+function fmtTime(el){let v=el.value.replace(/[^\d]/g,'');if(v.length>4)v=v.slice(0,4);if(v.length>=3){let h=parseInt(v.slice(0,-2)),m=parseInt(v.slice(-2));if(h>23)h=23;if(m>59)m=59;el.value=String(h).padStart(2,'0')+':'+String(m).padStart(2,'0')}else if(v.length===2&&!el.value.includes(':')){el.value=v+':'}else{el.value=v}}
 
 function saveEvDetail(dateKey,idx){
 const ev=L('events',{});if(!ev[dateKey]||!ev[dateKey][idx])return;
