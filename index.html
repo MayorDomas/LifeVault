@@ -601,8 +601,8 @@ function saveMy(k,v){const d=L('myself',{});d[k]=v;S('myself',d)}
 /* ═══ GRID DRAG REORDER ═══ */
 let ideaSort='new',noteSort='new',goalSort='new',wishSort='new',studySort='new';
 
-function gridDrag(el,itemId,dataKey,renderFn,openFn){
-let ht,dr=false,hr=false,sx,sy,lt=0,ghost=null,marker=null,fromIdx=-1;
+function gridDrag(el,itemId,dataKey,renderFn,openFn,sortResetFn){
+let ht,dr=false,hr=false,sx,sy,lt=0,ghost=null,marker=null;
 const st=(x,y)=>{sx=x;sy=y;hr=dr=false;ht=setTimeout(()=>hr=true,120)};
 const mv=(x,y)=>{const dx=x-sx,dy=y-sy;
 if(hr&&!dr&&(Math.abs(dx)>8||Math.abs(dy)>8)){dr=true;
@@ -610,10 +610,9 @@ const r=el.getBoundingClientRect();
 ghost=el.cloneNode(true);ghost.className=el.className+' drag-ghost';ghost.style.width=r.width+'px';ghost.style.height=r.height+'px';ghost.style.left=r.left+'px';ghost.style.top=r.top+'px';document.body.appendChild(ghost);
 el.style.opacity='0';
 marker=document.createElement('div');marker.className='drop-marker';
-const cv=el.parentElement;const items=[...cv.querySelectorAll('.idea-cube,.gen-cube')];fromIdx=items.indexOf(el);
 }if(!dr)return;
 ghost.style.left=(parseFloat(ghost.style.left)+x-sx)+'px';ghost.style.top=(parseFloat(ghost.style.top)+y-sy)+'px';sx=x;sy=y;
-const cv=el.parentElement;const items=[...cv.querySelectorAll('.idea-cube,.gen-cube')];
+const cv=el.parentElement;const items=[...cv.querySelectorAll('[data-item-id]')];
 let closest=null,closestDist=Infinity;
 items.forEach(c=>{if(c===el)return;const r=c.getBoundingClientRect();const cx=r.left+r.width/2,cy=r.top+r.height/2;const d=Math.hypot(x-cx,y-cy);if(d<closestDist){closestDist=d;closest=c}});
 if(marker.parentElement)marker.remove();
@@ -622,12 +621,18 @@ if(x<cx)closest.before(marker);else closest.after(marker)}
 };
 const en=(x,y)=>{clearTimeout(ht);
 if(dr){if(ghost){ghost.remove();ghost=null}el.style.opacity='';
-const cv=el.parentElement;const items=[...cv.querySelectorAll('.idea-cube,.gen-cube,.drop-marker')];
-const newIdx=items.indexOf(marker);if(marker.parentElement)marker.remove();
-if(newIdx>-1&&newIdx!==fromIdx){
-const a=L(dataKey,[]);const oldI=a.findIndex(z=>z.id===itemId);
-if(oldI>-1){const item=a.splice(oldI,1)[0];const actualNew=newIdx>oldI?newIdx-1:newIdx;a.splice(actualNew,0,item);S(dataKey,a)}
-}renderFn();dr=false}
+if(marker&&marker.parentElement){
+marker.before(el);marker.remove();
+const cv=el.parentElement;const domEls=[...cv.querySelectorAll('[data-item-id]')];
+const displayIds=domEls.map(d=>d.dataset.itemId);
+const a=L(dataKey,[]);
+const displaySet=new Set(displayIds);
+const displayItems=displayIds.map(id=>a.find(z=>z.id===id)).filter(Boolean);
+const nonDisplay=a.filter(z=>!displaySet.has(z.id));
+if(sortResetFn)sortResetFn();
+S(dataKey,[...displayItems,...nonDisplay]);
+}else{if(marker)marker.remove()}
+renderFn();dr=false}
 else{const n=Date.now();if(n-lt<400){openFn(itemId,el)}else lt=n}hr=false};
 el.addEventListener('mousedown',e=>{e.preventDefault();st(e.clientX,e.clientY);const mm=e2=>mv(e2.clientX,e2.clientY),mu=e2=>{document.removeEventListener('mousemove',mm);document.removeEventListener('mouseup',mu);en(e2.clientX,e2.clientY)};document.addEventListener('mousemove',mm);document.addEventListener('mouseup',mu)});
 el.addEventListener('touchstart',e=>{const t=e.touches[0];st(t.clientX,t.clientY);const tm=e2=>{e2.preventDefault();mv(e2.touches[0].clientX,e2.touches[0].clientY)},te=e2=>{el.removeEventListener('touchmove',tm);el.removeEventListener('touchend',te);const t2=e2.changedTouches[0];en(t2.clientX,t2.clientY)};el.addEventListener('touchmove',tm,{passive:false});el.addEventListener('touchend',te)},{passive:true})}
@@ -643,7 +648,7 @@ if($('ideaSortNew'))$('ideaSortNew').className='sort-btn'+(ideaSort==='new'?' ac
 if($('ideaSortOld'))$('ideaSortOld').className='sort-btn'+(ideaSort==='old'?' active':'');
 const all=L('ideas',[]),filtered=icat==='All'?all:all.filter(x=>x.cat===icat);const items=sortItems(filtered,ideaSort);
 const cv=$('ideasCanvas');cv.innerHTML='';if(!items.length){cv.innerHTML='<div class="empty-msg">No ideas yet — tap + to add one</div>';return}
-items.forEach(it=>{const el=document.createElement('div');el.className='idea-cube';const col=CAT_COLORS[it.cat]||CAT_COLORS.Other;el.innerHTML=`<div class="ic-glow" style="background:${col}"></div><div class="ic-emoji">${CAT_EMOJIS[it.cat]||'💡'}</div><div class="ic-title">${it.title}</div><div class="ic-cat" style="color:${col}">${it.cat||'Other'}</div>`;el.style.borderColor=col+'25';el.dataset.iid=it.id;gridDrag(el,it.id,'ideas',renderIdeas,openIdeaDetail);cv.appendChild(el)})}
+items.forEach(it=>{const el=document.createElement('div');el.className='idea-cube';const col=CAT_COLORS[it.cat]||CAT_COLORS.Other;el.innerHTML=`<div class="ic-glow" style="background:${col}"></div><div class="ic-emoji">${CAT_EMOJIS[it.cat]||'💡'}</div><div class="ic-title">${it.title}</div><div class="ic-cat" style="color:${col}">${it.cat||'Other'}</div>`;el.style.borderColor=col+'25';el.dataset.itemId=it.id;gridDrag(el,it.id,'ideas',renderIdeas,openIdeaDetail,()=>{ideaSort='old'});cv.appendChild(el)})}
 function openIdeaDetail(id,el){activeIdeaId=id;const a=L('ideas',[]),it=a.find(z=>z.id===id);if(!it)return;const ov=$('ideaOverlay');if(el){const r=el.getBoundingClientRect();ov.style.setProperty('--ix',(r.left+r.width/2)/innerWidth*100+'%');ov.style.setProperty('--iy',(r.top+r.height/2)/innerHeight*100+'%')}$('ioTitle').textContent=it.title;$('ioCat').textContent=it.cat||'Other';$('ioCat').style.color=CAT_COLORS[it.cat]||CAT_COLORS.Other;$('ioText').textContent=it.text||'No description';ov.classList.add('open')}
 function closeIdeaDetail(){$('ideaOverlay').classList.remove('open');activeIdeaId=null}
 function editIdeaFromDetail(){const a=L('ideas',[]),i=a.findIndex(z=>z.id===activeIdeaId);if(i<0)return;closeIdeaDetail();editIdea(i)}
@@ -674,7 +679,7 @@ function renderNotes(){
 if($('noteSortNew'))$('noteSortNew').className='sort-btn'+(noteSort==='new'?' active':'');
 if($('noteSortOld'))$('noteSortOld').className='sort-btn'+(noteSort==='old'?' active':'');
 const notes=sortItems(L('notes',[]),noteSort),cv=$('notesCanvas');cv.innerHTML='';if(!notes.length){cv.innerHTML='<div class="empty-msg">No notes yet — tap + to add one</div>';return}
-notes.forEach(nt=>{const el=document.createElement('div');el.className='gen-cube';const col=nt.color||NCOLS[0];el.innerHTML=`<div class="gc-glow" style="background:${col}"></div><div class="gc-emoji">${NOTE_EMOJIS[col]||'🗒️'}</div><div class="gc-title">${nt.title}</div><div class="gc-sub" style="color:${col}">${nt.text?nt.text.slice(0,20)+'…':'Empty'}</div>`;el.style.borderColor=col+'25';el.dataset.nid=nt.id;gridDrag(el,nt.id,'notes',renderNotes,openNoteDetail);cv.appendChild(el)})}
+notes.forEach(nt=>{const el=document.createElement('div');el.className='gen-cube';const col=nt.color||NCOLS[0];el.innerHTML=`<div class="gc-glow" style="background:${col}"></div><div class="gc-emoji">${NOTE_EMOJIS[col]||'🗒️'}</div><div class="gc-title">${nt.title}</div><div class="gc-sub" style="color:${col}">${nt.text?nt.text.slice(0,20)+'…':'Empty'}</div>`;el.style.borderColor=col+'25';el.dataset.itemId=nt.id;gridDrag(el,nt.id,'notes',renderNotes,openNoteDetail,()=>{noteSort='old'});cv.appendChild(el)})}
 function openNoteDetail(id,el){activeNoteId=id;const a=L('notes',[]),nt=a.find(z=>z.id===id);if(!nt)return;const ov=$('noteOverlay');if(el){const r=el.getBoundingClientRect();ov.style.setProperty('--ox',(r.left+r.width/2)/innerWidth*100+'%');ov.style.setProperty('--oy',(r.top+r.height/2)/innerHeight*100+'%')}$('noTitle').textContent=nt.title;$('noColor').textContent='Note';$('noColor').style.color=nt.color||NCOLS[0];$('noText').textContent=nt.text||'Empty note';ov.classList.add('open')}
 function closeNoteDetail(){$('noteOverlay').classList.remove('open');activeNoteId=null}
 function editNoteFromDetail(){const a=L('notes',[]),i=a.findIndex(z=>z.id===activeNoteId);if(i<0)return;closeNoteDetail();editNote(i)}
@@ -687,7 +692,7 @@ function renderGoals(){
 if($('goalSortNew'))$('goalSortNew').className='sort-btn'+(goalSort==='new'?' active':'');
 if($('goalSortOld'))$('goalSortOld').className='sort-btn'+(goalSort==='old'?' active':'');
 const goals=sortItems(L('goals',[]),goalSort),cv=$('goalsCanvas');cv.innerHTML='';if(!goals.length){cv.innerHTML='<div class="empty-msg">No goals yet — tap + to add one</div>';return}
-goals.forEach(gl=>{const el=document.createElement('div');el.className='gen-cube';const p=gl.progress||0;el.innerHTML=`<div class="gc-glow" style="background:#a855f7"></div><div class="gc-emoji">🎯</div><div class="gc-title">${gl.title}</div><div class="gc-sub" style="color:#a78bfa">${p}%</div><div class="gc-prog"><div class="gc-prog-fill" style="width:${p}%"></div></div>`;el.style.borderColor='#a855f725';el.dataset.gid=gl.id;gridDrag(el,gl.id,'goals',renderGoals,openGoalDetail);cv.appendChild(el)})}
+goals.forEach(gl=>{const el=document.createElement('div');el.className='gen-cube';const p=gl.progress||0;el.innerHTML=`<div class="gc-glow" style="background:#a855f7"></div><div class="gc-emoji">🎯</div><div class="gc-title">${gl.title}</div><div class="gc-sub" style="color:#a78bfa">${p}%</div><div class="gc-prog"><div class="gc-prog-fill" style="width:${p}%"></div></div>`;el.style.borderColor='#a855f725';el.dataset.itemId=gl.id;gridDrag(el,gl.id,'goals',renderGoals,openGoalDetail,()=>{goalSort='old'});cv.appendChild(el)})}
 function openGoalDetail(id,el){activeGoalId=id;const a=L('goals',[]),gl=a.find(z=>z.id===id);if(!gl)return;const ov=$('goalOverlay');if(el){const r=el.getBoundingClientRect();ov.style.setProperty('--ox',(r.left+r.width/2)/innerWidth*100+'%');ov.style.setProperty('--oy',(r.top+r.height/2)/innerHeight*100+'%')}$('glTitle').textContent=gl.title;$('glPct').textContent=(gl.progress||0)+'%';$('glSlider').value=gl.progress||0;ov.classList.add('open')}
 function closeGoalDetail(){$('goalOverlay').classList.remove('open');activeGoalId=null}
 function updGoalFromDetail(v){const a=L('goals',[]),i=a.findIndex(z=>z.id===activeGoalId);if(i<0)return;a[i].progress=+v;S('goals',a);$('glPct').textContent=v+'%';renderGoals()}
@@ -720,7 +725,7 @@ function renderWish(){
 if($('wishSortNew'))$('wishSortNew').className='sort-btn'+(wishSort==='new'?' active':'');
 if($('wishSortOld'))$('wishSortOld').className='sort-btn'+(wishSort==='old'?' active':'');
 const items=sortItems(L('wishlist',[]),wishSort),cv=$('wishCanvas');cv.innerHTML='';if(!items.length){cv.innerHTML='<div class="empty-msg">No items yet — tap + to add one</div>';return}
-items.forEach(wi=>{const el=document.createElement('div');el.className='gen-cube'+(wi.done?' wish-done':'');el.innerHTML=`<div class="gc-glow" style="background:#e84393"></div><div class="gc-emoji">${wi.emoji||'🎁'}</div><div class="gc-title">${wi.name}</div>${wi.price?`<div class="gc-sub" style="color:#e84393">€${wi.price}</div>`:''}`;el.style.borderColor=wi.done?'#4ade8025':'#e8439325';el.dataset.wid=wi.id;gridDrag(el,wi.id,'wishlist',renderWish,openWishDetail);cv.appendChild(el)})}
+items.forEach(wi=>{const el=document.createElement('div');el.className='gen-cube'+(wi.done?' wish-done':'');el.innerHTML=`<div class="gc-glow" style="background:#e84393"></div><div class="gc-emoji">${wi.emoji||'🎁'}</div><div class="gc-title">${wi.name}</div>${wi.price?`<div class="gc-sub" style="color:#e84393">€${wi.price}</div>`:''}`;el.style.borderColor=wi.done?'#4ade8025':'#e8439325';el.dataset.itemId=wi.id;gridDrag(el,wi.id,'wishlist',renderWish,openWishDetail,()=>{wishSort='old'});cv.appendChild(el)})}
 function openWishDetail(id,el){activeWishId=id;const a=L('wishlist',[]),wi=a.find(z=>z.id===id);if(!wi)return;const ov=$('wishOverlay');if(el){const r=el.getBoundingClientRect();ov.style.setProperty('--ox',(r.left+r.width/2)/innerWidth*100+'%');ov.style.setProperty('--oy',(r.top+r.height/2)/innerHeight*100+'%')}$('wiTitle').textContent=wi.name;$('wiPrice').textContent=wi.price?'€'+wi.price:'';$('wiPrice').style.color='#e84393';$('wiStatus').textContent=wi.done?'✓ Got it!':'Not yet';ov.classList.add('open')}
 function closeWishDetail(){$('wishOverlay').classList.remove('open');activeWishId=null}
 function togWishFromDetail(){const a=L('wishlist',[]),i=a.findIndex(z=>z.id===activeWishId);if(i<0)return;a[i].done=!a[i].done;S('wishlist',a);$('wiStatus').textContent=a[i].done?'✓ Got it!':'Not yet';renderWish()}
@@ -738,7 +743,7 @@ if($('studySortNew'))$('studySortNew').className='sort-btn'+(studySort==='new'?'
 if($('studySortOld'))$('studySortOld').className='sort-btn'+(studySort==='old'?' active':'');
 const all=L('studies',[]),filtered=scat==='All'?all:all.filter(x=>x.subject===scat);const items=sortItems(filtered,studySort);
 const cv=$('studiesCanvas');cv.innerHTML='';if(!items.length){cv.innerHTML='<div class="empty-msg">No studies yet — tap + to add one</div>';return}
-items.forEach(st=>{const el=document.createElement('div');el.className='gen-cube';const col=STUDY_COLORS[st.subject]||STUDY_COLORS.Other;el.innerHTML=`<div class="gc-glow" style="background:${col}"></div><div class="gc-emoji">${STUDY_EMOJIS[st.subject]||'📖'}</div><div class="gc-title">${st.title}</div><div class="gc-sub" style="color:${col}">${st.subject||'Other'}</div>`;el.style.borderColor=col+'25';el.dataset.sid=st.id;gridDrag(el,st.id,'studies',renderStudies,openStudyDetail);cv.appendChild(el)})}
+items.forEach(st=>{const el=document.createElement('div');el.className='gen-cube';const col=STUDY_COLORS[st.subject]||STUDY_COLORS.Other;el.innerHTML=`<div class="gc-glow" style="background:${col}"></div><div class="gc-emoji">${STUDY_EMOJIS[st.subject]||'📖'}</div><div class="gc-title">${st.title}</div><div class="gc-sub" style="color:${col}">${st.subject||'Other'}</div>`;el.style.borderColor=col+'25';el.dataset.itemId=st.id;gridDrag(el,st.id,'studies',renderStudies,openStudyDetail,()=>{studySort='old'});cv.appendChild(el)})}
 function openStudyDetail(id,el){activeStudyId=id;const a=L('studies',[]),st=a.find(z=>z.id===id);if(!st)return;const ov=$('studyOverlay');if(el){const r=el.getBoundingClientRect();ov.style.setProperty('--ox',(r.left+r.width/2)/innerWidth*100+'%');ov.style.setProperty('--oy',(r.top+r.height/2)/innerHeight*100+'%')}$('stTitle').textContent=st.title;$('stSubject').textContent=st.subject||'Other';$('stSubject').style.color=STUDY_COLORS[st.subject]||STUDY_COLORS.Other;$('stText').textContent=st.text||'No notes';ov.classList.add('open')}
 function closeStudyDetail(){$('studyOverlay').classList.remove('open');activeStudyId=null}
 function editStudyFromDetail(){const a=L('studies',[]),i=a.findIndex(z=>z.id===activeStudyId);if(i<0)return;closeStudyDetail();editStudy(i)}
