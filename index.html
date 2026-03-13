@@ -249,7 +249,7 @@ body{font-family:'Space Grotesk',sans-serif;background:#06070b;color:#e0dcd4;min
 .nc{width:22px;height:22px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:all .15s}.nc.sel{border-color:#fff;transform:scale(1.15)}
 .sort-bar{display:flex;gap:4px;align-items:center;margin-bottom:8px}.sort-lbl{font-size:9px;font-weight:600;color:rgba(255,255,255,.15);letter-spacing:.5px;text-transform:uppercase;margin-right:2px}
 .sort-btn{padding:5px 10px;border-radius:8px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.05);font-family:inherit;font-size:10px;font-weight:600;color:rgba(255,255,255,.25);cursor:pointer;transition:all .15s}.sort-btn:hover{background:rgba(255,255,255,.06)}.sort-btn.active{background:rgba(108,92,231,.12);border-color:rgba(108,92,231,.22);color:#a78bfa}
-.drag-ghost{position:fixed;z-index:999;pointer-events:none;opacity:.85;transform:scale(1.08)}.drop-marker{width:120px;height:120px;border-radius:16px;border:2px dashed rgba(108,92,231,.3);background:rgba(108,92,231,.05);flex-shrink:0}
+.drag-ghost{position:fixed;z-index:999;pointer-events:none}
 
 /* GOALS */
 .goal-prog{height:6px;border-radius:3px;background:rgba(255,255,255,.05);margin-top:6px;overflow:hidden}
@@ -308,7 +308,6 @@ body{font-family:'Space Grotesk',sans-serif;background:#06070b;color:#e0dcd4;min
   .gen-canvas,.ideas-canvas{max-width:100%;overflow-x:hidden;gap:6px}
   .gen-cube{width:calc(50% - 3px);height:auto;aspect-ratio:1;max-width:none}
   .idea-cube{width:calc(50% - 3px);height:auto;aspect-ratio:1;max-width:none}
-  .drop-marker{width:calc(50% - 3px);height:auto;aspect-ratio:1}
   .modal{width:min(360px,94vw);padding:20px}
   .bm-body-wrap{width:min(260px,65vw)}
   .bm-tabs{gap:3px;padding:0 6px;flex-wrap:wrap}
@@ -362,7 +361,6 @@ body{font-family:'Space Grotesk',sans-serif;background:#06070b;color:#e0dcd4;min
   .gen-cube .gc-emoji{font-size:20px}.gen-cube .gc-title{font-size:8px;max-height:20px}
   .idea-cube{width:calc(50% - 3px);height:auto;aspect-ratio:1;padding:6px;max-width:none}
   .idea-cube .ic-emoji{font-size:16px}.idea-cube .ic-title{font-size:8px;max-height:32px}
-  .drop-marker{width:calc(50% - 3px);height:auto;aspect-ratio:1}
   .modal{width:96vw;padding:16px;border-radius:14px;max-height:90vh}
   .modal input,.modal textarea,.modal select{padding:12px 14px;font-size:13px}
   .bm-body-wrap{width:min(220px,55vw)}
@@ -602,40 +600,35 @@ function saveMy(k,v){const d=L('myself',{});d[k]=v;S('myself',d)}
 let ideaSort='new',noteSort='new',goalSort='new',wishSort='new',studySort='new';
 
 function gridDrag(el,itemId,dataKey,renderFn,openFn,sortResetFn){
-let ht,dr=false,hr=false,sx,sy,lt=0,ghost=null,marker=null;
-const st=(x,y)=>{sx=x;sy=y;hr=dr=false;ht=setTimeout(()=>hr=true,120)};
+let ht,dr=false,hr=false,sx,sy,lt=0,ghost=null,tgt=null,gx=0,gy=0;
+const st=(x,y)=>{sx=x;sy=y;hr=dr=false;ht=setTimeout(()=>hr=true,100)};
 const mv=(x,y)=>{const dx=x-sx,dy=y-sy;
-if(hr&&!dr&&(Math.abs(dx)>8||Math.abs(dy)>8)){dr=true;
+if(hr&&!dr&&(Math.abs(dx)>6||Math.abs(dy)>6)){dr=true;
 const r=el.getBoundingClientRect();
-ghost=el.cloneNode(true);ghost.className=el.className+' drag-ghost';ghost.style.width=r.width+'px';ghost.style.height=r.height+'px';ghost.style.left=r.left+'px';ghost.style.top=r.top+'px';document.body.appendChild(ghost);
-el.style.opacity='0';
-marker=document.createElement('div');marker.className='drop-marker';
+ghost=el.cloneNode(true);ghost.className=el.className+' drag-ghost';
+ghost.style.cssText=`position:fixed;z-index:999;pointer-events:none;opacity:.85;width:${r.width}px;height:${r.height}px;left:0;top:0;transform:translate(${r.left}px,${r.top}px) scale(1.05);transition:none;border-radius:16px`;
+gx=r.left;gy=r.top;document.body.appendChild(ghost);
+el.style.opacity='.25';el.style.transition='opacity .15s';
 }if(!dr)return;
-ghost.style.left=(parseFloat(ghost.style.left)+x-sx)+'px';ghost.style.top=(parseFloat(ghost.style.top)+y-sy)+'px';sx=x;sy=y;
+gx+=x-sx;gy+=y-sy;sx=x;sy=y;
+ghost.style.transform=`translate(${gx}px,${gy}px) scale(1.05)`;
 const cv=el.parentElement;const items=[...cv.querySelectorAll('[data-item-id]')];
-let closest=null,closestDist=Infinity;
-items.forEach(c=>{if(c===el)return;const r=c.getBoundingClientRect();const cx=r.left+r.width/2,cy=r.top+r.height/2;const d=Math.hypot(x-cx,y-cy);if(d<closestDist){closestDist=d;closest=c}});
-if(marker.parentElement)marker.remove();
-if(closest&&closestDist<150){const r=closest.getBoundingClientRect();const cx=r.left+r.width/2;
-if(x<cx)closest.before(marker);else closest.after(marker)}
-};
-const en=(x,y)=>{clearTimeout(ht);
-if(dr){if(ghost){ghost.remove();ghost=null}el.style.opacity='';
-if(marker&&marker.parentElement){
-marker.before(el);marker.remove();
-const cv=el.parentElement;const domEls=[...cv.querySelectorAll('[data-item-id]')];
-const displayIds=domEls.map(d=>d.dataset.itemId);
-const a=L(dataKey,[]);
-const displaySet=new Set(displayIds);
-const displayItems=displayIds.map(id=>a.find(z=>z.id===id)).filter(Boolean);
-const nonDisplay=a.filter(z=>!displaySet.has(z.id));
-if(sortResetFn)sortResetFn();
-S(dataKey,[...displayItems,...nonDisplay]);
-}else{if(marker)marker.remove()}
-renderFn();dr=false}
+let newTgt=null,best=Infinity;
+items.forEach(c=>{if(c===el)return;const r=c.getBoundingClientRect();const d=Math.hypot(x-(r.left+r.width/2),y-(r.top+r.height/2));if(d<best&&d<100){best=d;newTgt=c}});
+if(tgt&&tgt!==newTgt){tgt.style.outline='';tgt.style.transform=''}
+if(newTgt){newTgt.style.outline='2px solid rgba(108,92,231,.45)';newTgt.style.outlineOffset='-2px';newTgt.style.transform='scale(.94)'}
+tgt=newTgt};
+const en=()=>{clearTimeout(ht);
+if(dr){if(ghost){ghost.remove();ghost=null}
+el.style.opacity='';el.style.transition='';
+if(tgt){tgt.style.outline='';tgt.style.transform='';
+const tid=tgt.dataset.itemId;const a=L(dataKey,[]);
+const fi=a.findIndex(z=>z.id===itemId),ti=a.findIndex(z=>z.id===tid);
+if(fi>-1&&ti>-1&&fi!==ti){[a[fi],a[ti]]=[a[ti],a[fi]];if(sortResetFn)sortResetFn();S(dataKey,a)}
+tgt=null}renderFn();dr=false}
 else{const n=Date.now();if(n-lt<400){openFn(itemId,el)}else lt=n}hr=false};
-el.addEventListener('mousedown',e=>{e.preventDefault();st(e.clientX,e.clientY);const mm=e2=>mv(e2.clientX,e2.clientY),mu=e2=>{document.removeEventListener('mousemove',mm);document.removeEventListener('mouseup',mu);en(e2.clientX,e2.clientY)};document.addEventListener('mousemove',mm);document.addEventListener('mouseup',mu)});
-el.addEventListener('touchstart',e=>{const t=e.touches[0];st(t.clientX,t.clientY);const tm=e2=>{e2.preventDefault();mv(e2.touches[0].clientX,e2.touches[0].clientY)},te=e2=>{el.removeEventListener('touchmove',tm);el.removeEventListener('touchend',te);const t2=e2.changedTouches[0];en(t2.clientX,t2.clientY)};el.addEventListener('touchmove',tm,{passive:false});el.addEventListener('touchend',te)},{passive:true})}
+el.addEventListener('mousedown',e=>{e.preventDefault();st(e.clientX,e.clientY);const mm=e2=>mv(e2.clientX,e2.clientY),mu=e2=>{document.removeEventListener('mousemove',mm);document.removeEventListener('mouseup',mu);en()};document.addEventListener('mousemove',mm);document.addEventListener('mouseup',mu)});
+el.addEventListener('touchstart',e=>{const t=e.touches[0];st(t.clientX,t.clientY);const tm=e2=>{e2.preventDefault();mv(e2.touches[0].clientX,e2.touches[0].clientY)},te=()=>{el.removeEventListener('touchmove',tm);el.removeEventListener('touchend',te);en()};el.addEventListener('touchmove',tm,{passive:false});el.addEventListener('touchend',te)},{passive:true})}
 
 function sortItems(arr,order){const s=[...arr];if(order==='old')return s;return s.reverse()}
 
