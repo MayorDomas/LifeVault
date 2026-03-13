@@ -567,13 +567,13 @@ const DEFS=[
   {id:'studies',emoji:'📖',name:'Studies',color:'#06d6a0',page:'studies'}
 ];
 let cubes=L('cubes3',null);
-if(!cubes||!Array.isArray(cubes)||!cubes.find(c=>c.id==='mood')||!cubes.find(c=>c.id==='studies')){
-  const pos=[{x:2,y:5},{x:2,y:18},{x:2,y:31},{x:2,y:44},{x:2,y:57},{x:84,y:5},{x:84,y:18},{x:84,y:31},{x:84,y:44},{x:84,y:57}];
-  cubes=DEFS.map((c,i)=>({...c,x:(pos[i]||{x:2,y:5+i*13}).x,y:(pos[i]||{x:2,y:5+i*13}).y}));S('cubes3',cubes);
+if(!cubes||!Array.isArray(cubes)){
+  const pos=[{x:2,y:5},{x:2,y:18},{x:2,y:31},{x:2,y:44},{x:2,y:57},{x:84,y:5},{x:84,y:18},{x:84,y:31},{x:84,y:44},{x:84,y:57},{x:43,y:70}];
+  cubes=DEFS.map((c,i)=>({...c,x:(pos[i]||{x:2+Math.floor(i/6)*82,y:5+(i%6)*13}).x,y:(pos[i]||{x:2+Math.floor(i/6)*82,y:5+(i%6)*13}).y}));S('cubes3',cubes);
 }
 cubes=cubes.filter(c=>c.id!=='habits'&&c.id!=='finance');
 if(!cubes.find(c=>c.id==='savings')){cubes.push({id:'savings',emoji:'🐷',name:'Savings',color:'#f9ca24',page:'savings',x:84,y:44});S('cubes3',cubes)}
-if(!cubes.find(c=>c.id==='studies')){cubes.push({id:'studies',emoji:'📖',name:'Studies',color:'#06d6a0',page:'studies',x:84,y:57});S('cubes3',cubes)}
+if(!cubes.find(c=>c.id==='studies')){cubes.push({id:'studies',emoji:'📖',name:'Studies',color:'#06d6a0',page:'studies',x:43,y:70});S('cubes3',cubes)}
 let deleted=L('del3',[]),curPage=null;
 function renderCubes(){const co=$('cubes');co.innerHTML='';cubes.forEach(c=>{const e=document.createElement('div');e.className='cube spawning';e.style.left=c.x+'%';e.style.top=c.y+'%';e.style.borderColor=c.color+'20';e.innerHTML=`<div class="glow" style="background:${c.color}"></div><div class="emoji">${c.emoji}</div><div class="label">${c.name}</div>`;e.dataset.id=c.id;drag(e,c);co.appendChild(e)})}
 function drag(el,cube){let ht,dr=false,hr=false,sx,sy,ox,oy,lt=0;const st=(x,y)=>{sx=x;sy=y;ox=el.offsetLeft;oy=el.offsetTop;hr=dr=false;ht=setTimeout(()=>hr=true,80)};const mv=(x,y)=>{const dx=x-sx,dy=y-sy;if(hr&&!dr&&(Math.abs(dx)>6||Math.abs(dy)>6)){dr=true;el.classList.add('dragging')}if(!dr)return;el.style.left=Math.max(0,Math.min(90,((ox+dx)/innerWidth)*100))+'%';el.style.top=Math.max(3,Math.min(87,((oy+dy)/innerHeight)*100))+'%';const t=$('trash').getBoundingClientRect();$('trash').classList.toggle('active',x>t.left-10&&x<t.right+10&&y>t.top-10&&y<t.bottom+10)};const en=(x,y)=>{clearTimeout(ht);if(dr){el.classList.remove('dragging');const t=$('trash').getBoundingClientRect();if(x>t.left-10&&x<t.right+10&&y>t.top-10&&y<t.bottom+10){deleted.push(cubes.find(z=>z.id===cube.id));S('del3',deleted);cubes=cubes.filter(z=>z.id!==cube.id);S('cubes3',cubes);renderCubes();$('trash').classList.remove('active')}else{cube.x=parseFloat(el.style.left);cube.y=parseFloat(el.style.top);S('cubes3',cubes)}dr=false}else{const n=Date.now();if(n-lt<400){openPage(cube);lt=0}else lt=n}hr=false};
