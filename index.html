@@ -295,18 +295,19 @@ body{font-family:'Space Grotesk',sans-serif;background:#06070b;color:#e0dcd4;min
 
 /* ═══ MOBILE RESPONSIVE ═══ */
 @media (max-width: 768px) {
-  body{overflow:auto;overflow-x:hidden}
-  .page{overflow-y:auto;-webkit-overflow-scrolling:touch}
+  html,body{overflow-x:hidden;max-width:100vw}
+  .page{overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch}
   .cube{width:68px;height:68px;border-radius:18px}
   .cube .emoji{font-size:20px}.cube .label{font-size:7px}
   .cal-wrap{width:min(440px,88vw);padding:14px}
   .cal-cell{font-size:11px}
-  .px{padding:4px 14px 40px}
-  .gen-cube{width:105px;min-height:95px}
-  .idea-cube{width:130px;min-height:85px}
+  .px{padding:4px 14px 40px;overflow-x:hidden;max-width:100vw}
+  .gen-canvas,.ideas-canvas{max-width:100%;overflow-x:hidden}
+  .gen-cube{width:calc(50% - 16px);min-height:90px;max-width:160px}
+  .idea-cube{width:calc(50% - 16px);min-height:80px;max-width:170px}
   .modal{width:min(360px,94vw);padding:20px}
   .bm-body-wrap{width:min(260px,65vw)}
-  .bm-tabs{gap:3px;padding:0 6px}
+  .bm-tabs{gap:3px;padding:0 6px;flex-wrap:wrap}
   .bm-tab{padding:5px 9px;font-size:9px}
   .my-layout{flex-direction:column;padding:0 14px 30px}
   .my-right{width:100%;height:auto;justify-content:center;margin-top:10px}
@@ -325,35 +326,45 @@ body{font-family:'Space Grotesk',sans-serif;background:#06070b;color:#e0dcd4;min
   .fin-val{font-size:18px}
   .mood-opt{font-size:28px}
   .pw-show{padding:6px 10px;font-size:10px;min-height:36px;display:flex;align-items:center}
+  .tt-wrap{overflow-x:auto;max-width:calc(100vw - 28px)}
   .tt{min-width:460px}
   .tt-cell{min-height:28px;font-size:8px}
   .search-bar{padding:11px 12px 11px 32px;font-size:13px}
+  .setup-steps{word-break:break-word;overflow-wrap:break-word}
+  #syncContent textarea{word-break:break-all;overflow-wrap:break-word}
+  .gen-overlay,.idea-overlay{padding:16px;overflow-y:auto}
+  .fin-summary{flex-wrap:wrap}
 }
 
 @media (max-width: 480px) {
-  body{overflow:auto;overflow-x:hidden}
-  .page{overflow-y:auto;-webkit-overflow-scrolling:touch}
-  .cube{width:64px;height:64px;border-radius:16px}
-  .cube .emoji{font-size:18px;margin-bottom:1px}.cube .label{font-size:7px}
-  .cal-wrap{width:92vw;padding:12px}
+  html,body{overflow-x:hidden;max-width:100vw}
+  *{max-width:100vw}
+  .page{overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch}
+  .cube{width:60px;height:60px;border-radius:14px}
+  .cube .emoji{font-size:17px;margin-bottom:1px}.cube .label{font-size:6px}
+  .cal-wrap{width:94vw;padding:10px}
   .cal-title{font-size:14px}
   .cal-cell{font-size:10px;border-radius:8px}
-  .cal-day{font-size:8px}
+  .cal-day{font-size:7px}
+  .cal-evs{max-height:80px}
+  .cal-ev{padding:6px 8px;font-size:10px}
   .cal-add input{padding:10px 12px;font-size:12px}
   .cal-add button{padding:10px 14px;font-size:12px;min-height:44px}
-  .px{padding:4px 12px 50px}
-  .ph{padding:12px 12px 8px}
-  .pt{font-size:16px}
-  .gen-cube{width:100px;min-height:90px;padding:6px}
-  .gen-cube .gc-emoji{font-size:22px}.gen-cube .gc-title{font-size:8px}
-  .idea-cube{width:120px;min-height:80px;padding:8px 6px}
-  .idea-cube .ic-emoji{font-size:18px}.idea-cube .ic-title{font-size:9px}
-  .modal{width:96vw;padding:18px;border-radius:16px}
+  .px{padding:4px 10px 50px;overflow-x:hidden;max-width:100vw;box-sizing:border-box}
+  .ph{padding:10px 10px 6px}
+  .pt{font-size:15px}
+  .gen-canvas,.ideas-canvas{max-width:100%;overflow:hidden;box-sizing:border-box}
+  .gen-cube{width:calc(50% - 12px);min-height:85px;padding:6px;max-width:150px}
+  .gen-cube .gc-emoji{font-size:20px}.gen-cube .gc-title{font-size:8px;max-height:20px}
+  .idea-cube{width:calc(50% - 12px);min-height:75px;padding:6px;max-width:160px}
+  .idea-cube .ic-emoji{font-size:16px}.idea-cube .ic-title{font-size:8px;max-height:32px}
+  .modal{width:96vw;padding:16px;border-radius:14px;max-height:90vh}
   .modal input,.modal textarea,.modal select{padding:12px 14px;font-size:13px}
-  .bm-body-wrap{width:min(240px,60vw)}
-  .bm-tabs{gap:2px;padding:0 4px}
-  .bm-tab{padding:5px 8px;font-size:8px}
-  .my-layout{flex-direction:column;gap:8px;padding:0 12px 30px}
+  .bm-body-wrap{width:min(220px,55vw)}
+  .bm-tabs{gap:2px;padding:0 4px;flex-wrap:wrap}
+  .bm-tab{padding:4px 7px;font-size:8px}
+  .bm-detail{padding:0 10px 40px}
+  .my-layout{flex-direction:column;gap:8px;padding:0 10px 30px}
   .my-right{width:100%;height:auto;justify-content:center;margin-top:8px}
   .my-right svg{width:70px}
   .my-input{padding:10px 12px;font-size:13px}
@@ -362,44 +373,56 @@ body{font-family:'Space Grotesk',sans-serif;background:#06070b;color:#e0dcd4;min
   .add-btn{min-height:44px;padding:11px 18px;font-size:12px}
   .del-btn{min-width:40px;min-height:40px;font-size:15px;border-radius:10px}
   .edit-btn{min-width:40px;min-height:40px;border-radius:10px}
-  .sync-act{min-height:44px;padding:11px 16px;font-size:12px}
+  .sync-act{min-height:44px;padding:11px 16px;font-size:12px;word-break:break-word}
   .mbtn button{min-height:48px;font-size:14px}
-  .tab{padding:9px 14px;font-size:11px;min-height:38px}
-  .ev-detail{width:min(400px,96vw)}
+  .tab{padding:8px 12px;font-size:10px;min-height:36px}
+  .ev-detail{width:96vw;max-height:90vh}
   .ev-detail-actions button{min-height:48px;font-size:14px}
   .ev-field input,.ev-field textarea{padding:12px 14px;font-size:13px}
-  .bp-detail{width:96vw;max-height:90vh}
-  .bp-head-title{font-size:18px}
-  .bp-st{padding:9px 12px;font-size:11px;min-height:40px}
-  .bp-photos-grid{grid-template-columns:repeat(2,1fr);gap:6px}
-  .bm-stats{grid-template-columns:1fr 1fr;gap:5px}
-  .bm-stat{padding:8px}
-  .bm-stat-val{font-size:16px}
-  .bm-notes-area{font-size:13px;padding:12px}
+  .bp-detail{width:96vw;max-height:92vh}
+  .bp-head-title{font-size:16px}
+  .bp-st{padding:8px 10px;font-size:10px;min-height:38px}
+  .bp-photos-grid{grid-template-columns:repeat(2,1fr);gap:5px}
+  .bm-stats{grid-template-columns:1fr 1fr;gap:4px}
+  .bm-stat{padding:7px}
+  .bm-stat-val{font-size:14px}
+  .bm-notes-area{font-size:13px;padding:10px}
   .fin-summary{padding:10px;flex-wrap:wrap;gap:4px}
   .fin-val{font-size:16px}
   .fin-lbl{font-size:8px}
-  .mood-picker{gap:10px}
-  .mood-opt{font-size:30px}
+  .mood-picker{gap:8px}
+  .mood-opt{font-size:28px}
   .mood-grid{gap:3px}
-  .mood-day .me{font-size:20px}
-  .pw-card{padding:10px;gap:8px}
-  .pw-show{padding:8px 12px;font-size:10px;min-height:40px;display:flex;align-items:center}
-  .file-card{padding:10px;gap:8px}
-  .file-name{font-size:12px}
-  .dl-btn{min-width:36px;min-height:36px}
-  .upload-zone{padding:24px}
-  .tt{min-width:420px}
-  .tt-cell{min-height:26px;font-size:8px;padding:2px 1px}
-  .tt-dayh{font-size:8px;padding:4px 1px}
-  .tt-timeh{font-size:7px}
+  .mood-day .me{font-size:18px}
+  .pw-card{padding:8px;gap:6px}
+  .pw-icon{width:32px;height:32px;font-size:14px}
+  .pw-show{padding:6px 10px;font-size:9px;min-height:36px;display:flex;align-items:center}
+  .file-card{padding:8px;gap:6px}
+  .file-ic{width:32px;height:32px;font-size:16px}
+  .file-name{font-size:11px}
+  .dl-btn{min-width:34px;min-height:34px}
+  .upload-zone{padding:20px}
+  .tt-wrap{overflow-x:auto;max-width:calc(100vw - 20px);-webkit-overflow-scrolling:touch}
+  .tt{min-width:400px}
+  .tt-cell{min-height:24px;font-size:7px;padding:2px 1px}
+  .tt-dayh{font-size:7px;padding:3px 1px}
+  .tt-timeh{font-size:6px}
   .search-bar{padding:12px 14px 12px 34px;font-size:14px}
-  .sec{font-size:10px;margin:14px 0 7px}
-  .empty-msg{font-size:13px;padding:30px 14px}
-  .card{padding:12px;border-radius:12px}
-  .hbtn{min-width:40px;min-height:40px}
-  .trash-zone{min-width:40px;min-height:40px}
-  .sync-btn{min-width:40px;min-height:40px}
+  .sec{font-size:9px;margin:12px 0 6px}
+  .empty-msg{font-size:12px;padding:24px 12px}
+  .card{padding:10px;border-radius:11px}
+  .hbtn{min-width:38px;min-height:38px;font-size:12px}
+  .trash-zone{min-width:38px;min-height:38px;font-size:12px}
+  .sync-btn{min-width:38px;min-height:38px;font-size:12px}
+  .setup-steps{word-break:break-word;overflow-wrap:break-word;font-size:10px}
+  #syncContent textarea{word-break:break-all;overflow-wrap:break-word;font-size:9px}
+  .gen-overlay,.idea-overlay{padding:14px}
+  .go-title,.io-title{font-size:18px}
+  .go-body,.io-text{font-size:12px}
+  .emoji-grid{grid-template-columns:repeat(4,1fr);gap:4px}
+  .emoji-opt{font-size:18px;padding:8px}
+  .note-colors{gap:8px}.nc{width:26px;height:26px}
+  .title{font-size:18px;letter-spacing:2px}
 }
 </style>
 <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-app-compat.js"></script>
@@ -903,6 +926,7 @@ if(part){part.stats.forEach((s,i)=>{if(s.k===key&&statVals[i])statVals[i].textCo
 function del(k,i){const a=L(k,[]);a.splice(i,1);S(k,a)}
 
 /* ═══ MODAL ═══ */
+function cubePos(cnt){const w=innerWidth;const cw=w<480?Math.floor((w-20)/2)-6:125;const cols=w<480?2:Math.max(2,Math.floor((w-40)/cw));const col=cnt%cols,row=Math.floor(cnt/cols);return{x:8+col*(cw+4),y:8+row*(Math.min(cw,110)+8)}}
 function openModal(t){const m=$('modalBody');
 if(t==='idea')m.innerHTML='<h3>New Idea</h3><input id="mT" placeholder="Title"><select id="mC"><option>Personal</option><option>Work</option><option>Creative</option><option>Remote</option><option>Other</option></select><textarea id="mX" placeholder="Description (optional)"></textarea><div class="mbtn"><button class="cn" onclick="closeModal()">Cancel</button><button class="sv" onclick="saveM(\'idea\')">Save</button></div>';
 else if(t==='note')m.innerHTML=`<h3>New Note</h3><input id="mT" placeholder="Title"><textarea id="mX" placeholder="Content"></textarea><div class="note-colors">${NCOLS.map((c,i)=>`<div class="nc${!i?' sel':''}" style="background:${c}" onclick="document.querySelectorAll('.nc').forEach(x=>x.classList.remove('sel'));this.classList.add('sel')"></div>`).join('')}</div><div class="mbtn"><button class="cn" onclick="closeModal()">Cancel</button><button class="sv" onclick="saveM('note')">Save</button></div>`;
@@ -913,12 +937,12 @@ else if(t==='wish')m.innerHTML=`<h3>Add to Wishlist</h3><input id="mN" placehold
 $('mbg').classList.add('open')}
 function closeModal(){$('mbg').classList.remove('open')}
 function saveM(t){const g=id=>$(id)?.value||'';
-if(t==='idea'){const a=L('ideas',[]);const cnt=a.length;const col=Math.floor(cnt%4),row=Math.floor(cnt/4);a.push({id:U(),title:g('mT')||'Untitled',cat:g('mC'),text:g('mX'),x:10+col*125,y:10+row*115});S('ideas',a);renderIdeas()}
-else if(t==='note'){const a=L('notes',[]);const cnt=a.length;const col=Math.floor(cnt%4),row=Math.floor(cnt/4);a.push({id:U(),title:g('mT')||'Untitled',text:g('mX'),color:document.querySelector('.nc.sel')?.style.background||NCOLS[0],x:10+col*125,y:10+row*115});S('notes',a);renderNotes()}
-else if(t==='goal'){const a=L('goals',[]);const cnt=a.length;const col=Math.floor(cnt%4),row=Math.floor(cnt/4);a.push({id:U(),title:g('mT')||'Goal',progress:0,x:10+col*125,y:10+row*115});S('goals',a);renderGoals()}
+if(t==='idea'){const a=L('ideas',[]);const cnt=a.length;const p=cubePos(cnt);a.push({id:U(),title:g('mT')||'Untitled',cat:g('mC'),text:g('mX'),x:p.x,y:p.y});S('ideas',a);renderIdeas()}
+else if(t==='note'){const a=L('notes',[]);const cnt=a.length;const p=cubePos(cnt);a.push({id:U(),title:g('mT')||'Untitled',text:g('mX'),color:document.querySelector('.nc.sel')?.style.background||NCOLS[0],x:p.x,y:p.y});S('notes',a);renderNotes()}
+else if(t==='goal'){const a=L('goals',[]);const cnt=a.length;const p=cubePos(cnt);a.push({id:U(),title:g('mT')||'Goal',progress:0,x:p.x,y:p.y});S('goals',a);renderGoals()}
 else if(t==='deposit'){const a=L('savings',[]);a.push({id:U(),desc:g('mD2')||'Deposit',amount:parseFloat(g('mA'))||0,date:new Date().toISOString().slice(0,10)});S('savings',a);renderSavings()}
 else if(t==='password'){const a=L('passwords',[]);a.push({id:U(),site:g('mSi')||'Site',user:g('mUs'),pw:g('mPw')});S('passwords',a);renderPW()}
-else if(t==='wish'){const a=L('wishlist',[]);const cnt=a.length;const col=Math.floor(cnt%4),row=Math.floor(cnt/4);a.push({id:U(),name:g('mN')||'Item',emoji:document.querySelector('.emoji-opt.sel')?.dataset.v||'🎁',price:parseFloat(g('mPr'))||0,done:false,x:10+col*125,y:10+row*115});S('wishlist',a);renderWish()}
+else if(t==='wish'){const a=L('wishlist',[]);const cnt=a.length;const p=cubePos(cnt);a.push({id:U(),name:g('mN')||'Item',emoji:document.querySelector('.emoji-opt.sel')?.dataset.v||'🎁',price:parseFloat(g('mPr'))||0,done:false,x:p.x,y:p.y});S('wishlist',a);renderWish()}
 closeModal()}
 
 /* ═══ CLOUD SYNC ═══ */
@@ -1039,9 +1063,9 @@ const items=snap.val();if(!items)return;
 let changed=false;
 Object.values(items).forEach(item=>{
 if(!item||!item.type)return;
-if(item.type==='idea'){const a=L('ideas',[]);const cnt=a.length;const col=Math.floor(cnt%4),row=Math.floor(cnt/4);a.push({id:U(),title:item.text||'Untitled',cat:'Remote',text:'',x:10+col*125,y:10+row*115});S('ideas',a);changed=true}
-else if(item.type==='note'){const a=L('notes',[]);const cnt=a.length;const col=Math.floor(cnt%4),row=Math.floor(cnt/4);a.push({id:U(),title:item.text||'Untitled',text:'',color:'#a78bfa',x:10+col*125,y:10+row*115});S('notes',a);changed=true}
-else if(item.type==='wish'){const a=L('wishlist',[]);const cnt=a.length;const col=Math.floor(cnt%4),row=Math.floor(cnt/4);a.push({id:U(),name:item.text||'Item',emoji:'🎁',price:0,done:false,x:10+col*125,y:10+row*115});S('wishlist',a);changed=true}
+if(item.type==='idea'){const a=L('ideas',[]);const p=cubePos(a.length);a.push({id:U(),title:item.text||'Untitled',cat:'Remote',text:'',x:p.x,y:p.y});S('ideas',a);changed=true}
+else if(item.type==='note'){const a=L('notes',[]);const p=cubePos(a.length);a.push({id:U(),title:item.text||'Untitled',text:'',color:'#a78bfa',x:p.x,y:p.y});S('notes',a);changed=true}
+else if(item.type==='wish'){const a=L('wishlist',[]);const p=cubePos(a.length);a.push({id:U(),name:item.text||'Item',emoji:'🎁',price:0,done:false,x:p.x,y:p.y});S('wishlist',a);changed=true}
 else if(item.type==='savings'){const a=L('savings',[]);a.push({id:U(),desc:item.text||'Deposit',amount:parseFloat(item.amount)||0,date:new Date().toISOString().slice(0,10)});S('savings',a);changed=true}
 });
 inRef.remove();
@@ -1072,7 +1096,7 @@ renderCubes();renderCal();
 /* Auto-connect Firebase if configured */
 (function(){const c=L('fb_config',null),v=L('vault_code','');if(c&&v)initFB(c,v)})();
 /* Siri Shortcut: ?t=TEXT or #idea=TEXT adds idea automatically */
-(function(){let txt=new URLSearchParams(location.search).get('t');if(!txt&&location.hash.startsWith('#idea='))txt=decodeURIComponent(location.hash.slice(6).replace(/\+/g,' '));if(!txt){const m=location.href.match(/[?&]t=([^&]+)/);if(m)txt=decodeURIComponent(m[1].replace(/\+/g,' '))}if(txt&&txt.length>0){const a=L('ideas',[]);const cnt=a.length;const col=Math.floor(cnt%4),row=Math.floor(cnt/4);a.push({id:U(),title:txt,cat:'Remote',text:'',x:10+col*125,y:10+row*115});S('ideas',a);history.replaceState(null,'',location.pathname);setTimeout(()=>{const cube=cubes.find(c=>c.id==='ideas');if(cube)openPage(cube)},300)}})();
+(function(){let txt=new URLSearchParams(location.search).get('t');if(!txt&&location.hash.startsWith('#idea='))txt=decodeURIComponent(location.hash.slice(6).replace(/\+/g,' '));if(!txt){const m=location.href.match(/[?&]t=([^&]+)/);if(m)txt=decodeURIComponent(m[1].replace(/\+/g,' '))}if(txt&&txt.length>0){const a=L('ideas',[]);const p=cubePos(a.length);a.push({id:U(),title:txt,cat:'Remote',text:'',x:p.x,y:p.y});S('ideas',a);history.replaceState(null,'',location.pathname);setTimeout(()=>{const cube=cubes.find(c=>c.id==='ideas');if(cube)openPage(cube)},300)}})();
 </script>
 </body>
 </html>
