@@ -436,7 +436,7 @@ body{font-family:'Space Grotesk',sans-serif;background:#06070b;color:#e0dcd4;min
 <!-- GOALS --><div class="page" id="page-goals"><div class="ph"><div class="pb" onclick="closePage()">←</div><div class="pt">🎯 Goals</div></div><div class="px"><button class="add-btn" onclick="openModal('goal')">+ New Goal</button><div class="gen-canvas" id="goalsCanvas"></div></div></div>
 <div class="gen-overlay" id="goalOverlay"><div class="go-back" onclick="closeGoalDetail()">←</div><div class="go-title" id="glTitle"></div><div class="go-pct" id="glPct"></div><input type="range" class="go-slider" id="glSlider" min="0" max="100" value="0" oninput="updGoalFromDetail(this.value)"><div class="go-actions"><button class="go-edit" onclick="editGoalFromDetail()">✎ Edit</button><button class="go-del" onclick="delGoalFromDetail()">✕ Delete</button></div></div>
 
-<!-- FINANCE --><div class="page" id="page-finance"><div class="ph"><div class="pb" onclick="closePage()">←</div><div class="pt">💰 Finance</div></div><div class="px"><div class="fin-summary" id="finSum"></div><button class="add-btn" onclick="openModal('transaction')">+ Add</button><div id="finList"></div></div></div>
+<!-- SAVINGS --><div class="page" id="page-savings"><div class="ph"><div class="pb" onclick="closePage()">←</div><div class="pt">🐷 Savings</div></div><div class="px"><div class="fin-summary" id="savSum"></div><button class="add-btn" onclick="openModal('deposit')">+ Add Deposit</button><div id="savList"></div></div></div>
 
 <!-- MOOD --><div class="page" id="page-mood"><div class="ph"><div class="pb" onclick="closePage()">←</div><div class="pt">😊 Mood</div></div><div class="px"><div class="sec">How are you today?</div><div class="mood-picker" id="moodPicker"></div><div class="sec">This week</div><div class="mood-grid" id="moodGrid"></div><div class="sec">Journal</div><textarea id="moodJournal" class="my-input" rows="4" placeholder="Write about your day..." oninput="saveMoodJournal()"></textarea></div></div>
 
@@ -529,7 +529,7 @@ const DEFS=[
   {id:'routine',emoji:'⏰',name:'Routine',color:'#e17055',page:'routine'},
   {id:'notes',emoji:'🗒️',name:'Notes',color:'#fd79a8',page:'notes'},
   {id:'goals',emoji:'🎯',name:'Goals',color:'#a855f7',page:'goals'},
-  {id:'finance',emoji:'💰',name:'Finance',color:'#f9ca24',page:'finance'},
+  {id:'savings',emoji:'🐷',name:'Savings',color:'#f9ca24',page:'savings'},
   {id:'mood',emoji:'😊',name:'Mood',color:'#74b9ff',page:'mood'},
   {id:'passwords',emoji:'🔐',name:'Passwords',color:'#636e72',page:'passwords'},
   {id:'wishlist',emoji:'🎁',name:'Wishlist',color:'#e84393',page:'wishlist'}
@@ -539,7 +539,8 @@ if(!cubes||!Array.isArray(cubes)||!cubes.find(c=>c.id==='mood')){
   const pos=[{x:2,y:5},{x:2,y:18},{x:2,y:31},{x:2,y:44},{x:2,y:57},{x:84,y:5},{x:84,y:18},{x:84,y:31},{x:84,y:44},{x:84,y:57}];
   cubes=DEFS.map((c,i)=>({...c,x:(pos[i]||{x:2,y:5+i*13}).x,y:(pos[i]||{x:2,y:5+i*13}).y}));S('cubes3',cubes);
 }
-cubes=cubes.filter(c=>c.id!=='habits');
+cubes=cubes.filter(c=>c.id!=='habits'&&c.id!=='finance');
+if(!cubes.find(c=>c.id==='savings')){cubes.push({id:'savings',emoji:'🐷',name:'Savings',color:'#f9ca24',page:'savings',x:84,y:44});S('cubes3',cubes)}
 let deleted=L('del3',[]),curPage=null;
 function renderCubes(){const co=$('cubes');co.innerHTML='';cubes.forEach(c=>{const e=document.createElement('div');e.className='cube spawning';e.style.left=c.x+'%';e.style.top=c.y+'%';e.style.borderColor=c.color+'20';e.innerHTML=`<div class="glow" style="background:${c.color}"></div><div class="emoji">${c.emoji}</div><div class="label">${c.name}</div>`;e.dataset.id=c.id;drag(e,c);co.appendChild(e)})}
 function drag(el,cube){let ht,dr=false,hr=false,sx,sy,ox,oy,lt=0;const st=(x,y)=>{sx=x;sy=y;ox=el.offsetLeft;oy=el.offsetTop;hr=dr=false;ht=setTimeout(()=>hr=true,80)};const mv=(x,y)=>{const dx=x-sx,dy=y-sy;if(hr&&!dr&&(Math.abs(dx)>6||Math.abs(dy)>6)){dr=true;el.classList.add('dragging')}if(!dr)return;el.style.left=Math.max(0,Math.min(90,((ox+dx)/innerWidth)*100))+'%';el.style.top=Math.max(3,Math.min(87,((oy+dy)/innerHeight)*100))+'%';const t=$('trash').getBoundingClientRect();$('trash').classList.toggle('active',x>t.left-10&&x<t.right+10&&y>t.top-10&&y<t.bottom+10)};const en=(x,y)=>{clearTimeout(ht);if(dr){el.classList.remove('dragging');const t=$('trash').getBoundingClientRect();if(x>t.left-10&&x<t.right+10&&y>t.top-10&&y<t.bottom+10){deleted.push(cubes.find(z=>z.id===cube.id));S('del3',deleted);cubes=cubes.filter(z=>z.id!==cube.id);S('cubes3',cubes);renderCubes();$('trash').classList.remove('active')}else{cube.x=parseFloat(el.style.left);cube.y=parseFloat(el.style.top);S('cubes3',cubes)}dr=false}else{const n=Date.now();if(n-lt<400){openPage(cube);lt=0}else lt=n}hr=false};
@@ -549,7 +550,7 @@ function toggleHistory(){const p=$('hpanel');p.classList.toggle('open');if(p.cla
 function restoreCube(i){const c=deleted.splice(i,1)[0];c.x=3+Math.random()*12;c.y=5+Math.random()*60;cubes.push(c);S('cubes3',cubes);S('del3',deleted);renderCubes();toggleHistory()}
 
 /* ═══ PAGES ═══ */
-const renderers={myself:renderMyself,ideas:renderIdeas,files:renderFiles,routine:renderRoutine,notes:renderNotes,goals:renderGoals,finance:renderFinance,mood:renderMood,passwords:renderPW,wishlist:renderWish,bodymap:renderBodyMap,sync:renderSync};
+const renderers={myself:renderMyself,ideas:renderIdeas,files:renderFiles,routine:renderRoutine,notes:renderNotes,goals:renderGoals,savings:renderSavings,mood:renderMood,passwords:renderPW,wishlist:renderWish,bodymap:renderBodyMap,sync:renderSync};
 function openPage(cube){curPage=cube;
 /* Zoom from cube position */
 const el=document.querySelector(`.cube[data-id="${cube.id}"]`);
@@ -624,10 +625,10 @@ function editGoalFromDetail(){const a=L('goals',[]),i=a.findIndex(z=>z.id===acti
 function delGoalFromDetail(){const a=L('goals',[]),i=a.findIndex(z=>z.id===activeGoalId);if(i<0)return;a.splice(i,1);S('goals',a);closeGoalDetail();renderGoals()}
 function editGoal(i){const a=L('goals',[]),g=a[i];$('modalBody').innerHTML=`<h3>Edit Goal</h3><input id="mT" value="${g.title}"><div class="mbtn"><button class="cn" onclick="closeModal()">Cancel</button><button class="sv" onclick="const a=L('goals',[]);a[${i}].title=$('mT').value;S('goals',a);closeModal();renderGoals()">Save</button></div>`;$('mbg').classList.add('open')}
 
-/* ═══ FINANCE ═══ */
-function renderFinance(){const f=L('finance',[]),inc=f.filter(x=>x.type==='in').reduce((s,x)=>s+x.amount,0),exp=f.filter(x=>x.type==='out').reduce((s,x)=>s+x.amount,0);
-$('finSum').innerHTML=`<div><div class="fin-val fin-in">+€${inc.toFixed(2)}</div><div class="fin-lbl">Income</div></div><div><div class="fin-val fin-bal">€${(inc-exp).toFixed(2)}</div><div class="fin-lbl">Balance</div></div><div><div class="fin-val fin-out">-€${exp.toFixed(2)}</div><div class="fin-lbl">Expenses</div></div>`;
-$('finList').innerHTML=f.length?f.slice().reverse().map((x,i)=>{const ri=f.length-1-i;return`<div class="card"><div style="display:flex;justify-content:space-between;align-items:center"><div><div style="font-size:12px;font-weight:600">${x.desc}</div><div style="font-size:9px;color:rgba(255,255,255,.2);margin-top:1px">${x.date||''}</div></div><div style="display:flex;align-items:center;gap:6px"><span style="font-size:13px;font-weight:700;color:${x.type==='in'?'#4ade80':'#f87171'}">${x.type==='in'?'+':'-'}€${x.amount.toFixed(2)}</span><div class="del-btn" onclick="del('finance',${ri});renderFinance()">×</div></div></div></div>`}).join(''):'<div class="empty-msg">No transactions</div>'}
+/* ═══ SAVINGS ═══ */
+function renderSavings(){const f=L('savings',[]),total=f.reduce((s,x)=>s+x.amount,0);
+$('savSum').innerHTML=`<div style="text-align:center"><div class="fin-val fin-in" style="font-size:28px">€${total.toFixed(2)}</div><div class="fin-lbl">Total Saved</div></div>`;
+$('savList').innerHTML=f.length?f.slice().reverse().map((x,i)=>{const ri=f.length-1-i;return`<div class="card"><div style="display:flex;justify-content:space-between;align-items:center"><div><div style="font-size:12px;font-weight:600">${x.desc||'Deposit'}</div><div style="font-size:9px;color:rgba(255,255,255,.2);margin-top:1px">${x.date||''}</div></div><div style="display:flex;align-items:center;gap:6px"><span style="font-size:13px;font-weight:700;color:#4ade80">+€${x.amount.toFixed(2)}</span><div class="del-btn" onclick="del('savings',${ri});renderSavings()">×</div></div></div></div>`}).join(''):'<div class="empty-msg">No deposits yet</div>'}
 
 /* ═══ MOOD ═══ */
 const MOODS=['😄','😊','😐','😔','😢'];
@@ -906,7 +907,7 @@ function openModal(t){const m=$('modalBody');
 if(t==='idea')m.innerHTML='<h3>New Idea</h3><input id="mT" placeholder="Title"><select id="mC"><option>Personal</option><option>Work</option><option>Creative</option><option>Remote</option><option>Other</option></select><textarea id="mX" placeholder="Description (optional)"></textarea><div class="mbtn"><button class="cn" onclick="closeModal()">Cancel</button><button class="sv" onclick="saveM(\'idea\')">Save</button></div>';
 else if(t==='note')m.innerHTML=`<h3>New Note</h3><input id="mT" placeholder="Title"><textarea id="mX" placeholder="Content"></textarea><div class="note-colors">${NCOLS.map((c,i)=>`<div class="nc${!i?' sel':''}" style="background:${c}" onclick="document.querySelectorAll('.nc').forEach(x=>x.classList.remove('sel'));this.classList.add('sel')"></div>`).join('')}</div><div class="mbtn"><button class="cn" onclick="closeModal()">Cancel</button><button class="sv" onclick="saveM('note')">Save</button></div>`;
 else if(t==='goal')m.innerHTML='<h3>New Goal</h3><input id="mT" placeholder="Goal title"><div class="mbtn"><button class="cn" onclick="closeModal()">Cancel</button><button class="sv" onclick="saveM(\'goal\')">Save</button></div>';
-else if(t==='transaction')m.innerHTML='<h3>New Transaction</h3><input id="mD2" placeholder="Description"><input id="mA" type="number" step="0.01" placeholder="Amount"><select id="mTp"><option value="in">Income</option><option value="out">Expense</option></select><input id="mDt" type="date"><div class="mbtn"><button class="cn" onclick="closeModal()">Cancel</button><button class="sv" onclick="saveM(\'transaction\')">Save</button></div>';
+else if(t==='deposit')m.innerHTML='<h3>Add Deposit</h3><input id="mA" type="number" step="0.01" placeholder="Amount (€)"><input id="mD2" placeholder="Note (optional)"><div class="mbtn"><button class="cn" onclick="closeModal()">Cancel</button><button class="sv" onclick="saveM(\'deposit\')">Save</button></div>';
 else if(t==='password')m.innerHTML='<h3>Add Password</h3><input id="mSi" placeholder="Site / App"><input id="mUs" placeholder="Username / Email"><input id="mPw" placeholder="Password" type="password"><div class="mbtn"><button class="cn" onclick="closeModal()">Cancel</button><button class="sv" onclick="saveM(\'password\')">Save</button></div>';
 else if(t==='wish')m.innerHTML=`<h3>Add to Wishlist</h3><input id="mN" placeholder="Item name"><div class="emoji-grid">${WISH_EMOJIS.map(e=>`<div class="emoji-opt${e==='🎁'?' sel':''}" onclick="document.querySelectorAll('.emoji-opt').forEach(x=>x.classList.remove('sel'));this.classList.add('sel');this.dataset.v='${e}'" data-v="${e}">${e}</div>`).join('')}</div><input id="mPr" type="number" step="0.01" placeholder="Price (optional)"><div class="mbtn"><button class="cn" onclick="closeModal()">Cancel</button><button class="sv" onclick="saveM('wish')">Save</button></div>`;
 $('mbg').classList.add('open')}
@@ -915,14 +916,14 @@ function saveM(t){const g=id=>$(id)?.value||'';
 if(t==='idea'){const a=L('ideas',[]);const cnt=a.length;const col=Math.floor(cnt%4),row=Math.floor(cnt/4);a.push({id:U(),title:g('mT')||'Untitled',cat:g('mC'),text:g('mX'),x:10+col*125,y:10+row*115});S('ideas',a);renderIdeas()}
 else if(t==='note'){const a=L('notes',[]);const cnt=a.length;const col=Math.floor(cnt%4),row=Math.floor(cnt/4);a.push({id:U(),title:g('mT')||'Untitled',text:g('mX'),color:document.querySelector('.nc.sel')?.style.background||NCOLS[0],x:10+col*125,y:10+row*115});S('notes',a);renderNotes()}
 else if(t==='goal'){const a=L('goals',[]);const cnt=a.length;const col=Math.floor(cnt%4),row=Math.floor(cnt/4);a.push({id:U(),title:g('mT')||'Goal',progress:0,x:10+col*125,y:10+row*115});S('goals',a);renderGoals()}
-else if(t==='transaction'){const a=L('finance',[]);a.push({id:U(),desc:g('mD2')||'Transaction',amount:parseFloat(g('mA'))||0,type:g('mTp'),date:g('mDt')});S('finance',a);renderFinance()}
+else if(t==='deposit'){const a=L('savings',[]);a.push({id:U(),desc:g('mD2')||'Deposit',amount:parseFloat(g('mA'))||0,date:new Date().toISOString().slice(0,10)});S('savings',a);renderSavings()}
 else if(t==='password'){const a=L('passwords',[]);a.push({id:U(),site:g('mSi')||'Site',user:g('mUs'),pw:g('mPw')});S('passwords',a);renderPW()}
 else if(t==='wish'){const a=L('wishlist',[]);const cnt=a.length;const col=Math.floor(cnt%4),row=Math.floor(cnt/4);a.push({id:U(),name:g('mN')||'Item',emoji:document.querySelector('.emoji-opt.sel')?.dataset.v||'🎁',price:parseFloat(g('mPr'))||0,done:false,x:10+col*125,y:10+row*115});S('wishlist',a);renderWish()}
 closeModal()}
 
 /* ═══ CLOUD SYNC ═══ */
 let fbDb=null,fbRef=null,syncTimer=null,pulling=false;
-const FB_KEYS=['cubes3','del3','events','myself','ideas','files','routine','notes','goals','finance','mood','passwords','wishlist','bodymap'];
+const FB_KEYS=['cubes3','del3','events','myself','ideas','files','routine','notes','goals','savings','mood','passwords','wishlist','bodymap'];
 
 function renderSync(){
 const cfg=L('fb_config',null),code=L('vault_code',''),on=!!fbDb;
@@ -981,6 +982,7 @@ firebase.initializeApp(cfg);
 fbDb=firebase.database();
 fbRef=fbDb.ref('vaults/'+encodeURIComponent(code));
 const sb=$('syncBtn');if(sb)sb.classList.add('connected');
+setTimeout(processInbox,1000);
 fbRef.on('value',snap=>{
 if(pulling)return;
 const data=snap.val();
@@ -1027,6 +1029,25 @@ fbRef.set(data).catch(()=>{});
 syncTimer=null;
 },2000);
 }
+
+/* ═══ INBOX (Siri Shortcut) ═══ */
+function processInbox(){
+if(!fbRef)return;
+const inRef=fbDb.ref(fbRef.toString().replace(fbDb.ref().toString(),'')+'/inbox');
+inRef.once('value',snap=>{
+const items=snap.val();if(!items)return;
+let changed=false;
+Object.values(items).forEach(item=>{
+if(!item||!item.type)return;
+if(item.type==='idea'){const a=L('ideas',[]);const cnt=a.length;const col=Math.floor(cnt%4),row=Math.floor(cnt/4);a.push({id:U(),title:item.text||'Untitled',cat:'Remote',text:'',x:10+col*125,y:10+row*115});S('ideas',a);changed=true}
+else if(item.type==='note'){const a=L('notes',[]);const cnt=a.length;const col=Math.floor(cnt%4),row=Math.floor(cnt/4);a.push({id:U(),title:item.text||'Untitled',text:'',color:'#a78bfa',x:10+col*125,y:10+row*115});S('notes',a);changed=true}
+else if(item.type==='wish'){const a=L('wishlist',[]);const cnt=a.length;const col=Math.floor(cnt%4),row=Math.floor(cnt/4);a.push({id:U(),name:item.text||'Item',emoji:'🎁',price:0,done:false,x:10+col*125,y:10+row*115});S('wishlist',a);changed=true}
+else if(item.type==='savings'){const a=L('savings',[]);a.push({id:U(),desc:item.text||'Deposit',amount:parseFloat(item.amount)||0,date:new Date().toISOString().slice(0,10)});S('savings',a);changed=true}
+});
+inRef.remove();
+if(changed)setTimeout(()=>cloudPush(),500);
+})}
+
 
 function exportData(){
 const data={};
