@@ -464,6 +464,7 @@ body{font-family:'Space Grotesk',sans-serif;background:#06070b;color:rgba(255,25
 
 <script>
 /* ═══ CORE HELPERS ═══ */
+let fbDb=null,fbRef=null,syncTimer=null,pulling=false;
 const S=(k,v)=>{localStorage.setItem('lv3_'+k,JSON.stringify(v));cloudPush()},L=(k,d)=>{try{return JSON.parse(localStorage.getItem('lv3_'+k))||d}catch{return d}},U=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6),$=id=>document.getElementById(id);
 
 /* Stars */
@@ -1037,7 +1038,6 @@ else if(t==='study'){const a=L('studies',[]);a.push({id:U(),title:g('mT')||'Unti
 closeModal()}
 
 /* ═══ CLOUD SYNC ═══ */
-let fbDb=null,fbRef=null,syncTimer=null,pulling=false;
 const FB_KEYS=['cubes3','del3','events','myself','ideas','files','routine','notes','goals','savings','mood','passwords','wishlist','studies','bodymap'];
 
 function renderSync(){
