@@ -48,7 +48,7 @@ body{font-family:'Space Grotesk',sans-serif;background:#0a0e1a;color:rgba(255,25
 .cubes-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;max-width:480px;margin:0 auto;padding:0 16px}
 .cube{border-radius:20px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;padding:16px 8px;background:linear-gradient(145deg,rgba(255,255,255,.07),rgba(255,255,255,.02));backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.08);box-shadow:0 8px 32px rgba(0,0,0,.25),inset 0 0 0 1px rgba(255,255,255,.05);transition:transform .25s cubic-bezier(.34,1.56,.64,1),box-shadow .25s;aspect-ratio:1;position:relative;min-height:48px}
 .cube::before{content:'';position:absolute;inset:0;border-radius:20px;background:linear-gradient(135deg,rgba(255,255,255,.1),transparent 50%);pointer-events:none}
-.cube:hover{transform:scale(1.05)}.cube:active{transform:scale(.96)}
+.cube:hover{transform:scale(1.05)}.cube:active{transform:scale(.88);transition:transform .1s}
 .cube .emoji{font-size:26px;margin-bottom:4px}.cube .label{font-size:11px;font-weight:600;color:rgba(255,255,255,.7);letter-spacing:.5px;text-transform:uppercase}
 .cube .glow{position:absolute;inset:-8px;border-radius:26px;opacity:0;transition:opacity .3s;pointer-events:none;filter:blur(15px)}.cube:hover .glow{opacity:.15}
 .cube.spawning{animation:cs .5s cubic-bezier(.34,1.56,.64,1)}
@@ -79,15 +79,16 @@ body{font-family:'Space Grotesk',sans-serif;background:#0a0e1a;color:rgba(255,25
 .ev-colors{display:flex;gap:7px;margin-top:4px}
 .ev-clr{width:28px;height:28px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:all .15s}.ev-clr:hover{transform:scale(1.1)}.ev-clr.sel{border-color:#fff;transform:scale(1.15);box-shadow:0 0 10px rgba(255,255,255,.15)}
 .ev-detail-actions{display:flex;gap:8px;margin-top:6px}
-.ev-detail-actions button{flex:1;padding:14px;border:none;border-radius:14px;font-family:inherit;font-weight:600;font-size:14px;cursor:pointer;transition:all .15s;min-height:48px}
+.ev-detail-actions button{flex:1;padding:11px;border:none;border-radius:12px;font-family:inherit;font-weight:600;font-size:13px;cursor:pointer;transition:all .15s}
 .ev-save{background:linear-gradient(135deg,#6c5ce7,#a855f7);color:#fff}
 .ev-save:hover{filter:brightness(1.1)}
 .ev-del{background:rgba(255,60,60,.08);color:#f87171;border:1px solid rgba(255,60,60,.15)!important}
 .ev-del:hover{background:rgba(255,60,60,.15)}
 
 /* ═══ PAGES ═══ */
-.page{position:fixed;inset:0;z-index:50;opacity:0;visibility:hidden;pointer-events:none;overflow-y:auto;background:#0b1020;transform-origin:var(--zx,50%) var(--zy,50%);transform:scale(.6);transition:opacity .35s cubic-bezier(.4,0,.2,1),transform .4s cubic-bezier(.34,1.56,.64,1),visibility 0s .4s}
-.page.open{opacity:1;visibility:visible;pointer-events:auto;transform:scale(1);transition:opacity .35s cubic-bezier(.4,0,.2,1),transform .4s cubic-bezier(.34,1.56,.64,1),visibility 0s}
+.page{position:fixed;inset:0;z-index:50;opacity:0;visibility:hidden;pointer-events:none;overflow-y:auto;background:#0b1020;transform-origin:var(--zx,50%) var(--zy,50%);transform:scale(.3);filter:blur(8px);transition:opacity .3s ease,transform .45s cubic-bezier(.34,1.4,.64,1),filter .3s ease,visibility 0s .45s}
+.page.open{opacity:1;visibility:visible;pointer-events:auto;transform:scale(1);filter:blur(0);transition:opacity .3s ease,transform .45s cubic-bezier(.34,1.4,.64,1),filter .3s ease,visibility 0s}
+.page.closing{opacity:0;transform:scale(.5);filter:blur(6px);transition:opacity .25s ease,transform .3s cubic-bezier(.4,0,1,1),filter .25s ease,visibility 0s .3s}
 .ph{display:flex;align-items:center;gap:14px;padding:16px 18px 10px;position:sticky;top:0;z-index:5;background:linear-gradient(180deg,#0b1020,rgba(11,16,32,.96) 85%,transparent)}
 .pb{width:48px;height:48px;border-radius:14px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;color:#fff;flex-shrink:0;min-height:48px}
 .pt{font-size:22px;font-weight:700}
@@ -98,9 +99,10 @@ body{font-family:'Space Grotesk',sans-serif;background:#0a0e1a;color:rgba(255,25
 .card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);border-radius:16px;padding:16px;margin-bottom:8px;transition:background .15s}.card:hover{background:rgba(255,255,255,.055)}
 .add-btn{display:inline-flex;align-items:center;gap:6px;padding:12px 20px;background:linear-gradient(135deg,rgba(99,102,241,.12),rgba(139,92,246,.08));border:1px solid rgba(99,102,241,.2);border-radius:14px;color:#818cf8;font-family:inherit;font-weight:600;font-size:14px;cursor:pointer;margin-bottom:12px;min-height:48px;transition:all .15s}
 .add-btn:hover{background:linear-gradient(135deg,rgba(99,102,241,.2),rgba(139,92,246,.12))}
-.del-btn{width:40px;height:40px;border-radius:12px;background:rgba(255,60,60,.08);border:1px solid rgba(255,60,60,.12);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:15px;flex-shrink:0;color:rgba(255,100,100,.6);min-height:48px;min-width:48px;transition:all .15s}
+.del-btn{width:30px;height:30px;border-radius:8px;background:rgba(255,60,60,.06);border:1px solid rgba(255,60,60,.1);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:13px;flex-shrink:0;color:rgba(255,100,100,.5);transition:all .15s}
 .del-btn:hover{background:rgba(255,60,60,.15);color:#f87171}
-.edit-btn{width:36px;height:36px;border-radius:10px;background:rgba(108,92,231,.08);border:1px solid rgba(108,92,231,.12);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:13px;flex-shrink:0;color:#a78bfa;min-height:48px;min-width:48px}
+.edit-btn{width:30px;height:30px;border-radius:8px;background:rgba(108,92,231,.06);border:1px solid rgba(108,92,231,.1);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:12px;flex-shrink:0;color:#a78bfa;transition:all .15s}
+.edit-btn:hover{background:rgba(108,92,231,.15)}
 .empty-msg{text-align:center;padding:40px 18px;color:rgba(255,255,255,.15);font-size:14px}
 
 /* ═══ TABS / SEARCH / SORT ═══ */
@@ -222,10 +224,12 @@ body{font-family:'Space Grotesk',sans-serif;background:#0a0e1a;color:rgba(255,25
 .idea-overlay .io-title{font-size:22px;font-weight:700;margin-bottom:6px}
 .idea-overlay .io-cat{font-size:13px;font-weight:600;letter-spacing:.4px;text-transform:uppercase;margin-bottom:18px;opacity:.5}
 .idea-overlay .io-text{font-size:15px;color:rgba(255,255,255,.65);line-height:1.6;white-space:pre-wrap;flex:1;overflow-y:auto}
-.idea-overlay .io-actions{display:flex;gap:8px;margin-top:18px}
-.idea-overlay .io-actions button{flex:1;padding:14px;border:none;border-radius:14px;font-family:inherit;font-weight:600;font-size:14px;cursor:pointer;min-height:48px}
-.idea-overlay .io-edit{background:linear-gradient(135deg,#6c5ce7,#a855f7);color:#fff}
-.idea-overlay .io-del{background:rgba(255,60,60,.08);color:#f87171;border:1px solid rgba(255,60,60,.15)!important}
+.idea-overlay .io-actions{display:flex;gap:6px;margin-bottom:16px}
+.idea-overlay .io-actions button{width:36px;height:36px;border:none;border-radius:10px;font-family:inherit;font-weight:600;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.idea-overlay .io-edit{background:rgba(108,92,231,.1);color:#a78bfa;border:1px solid rgba(108,92,231,.15)!important}
+.idea-overlay .io-edit:hover{background:rgba(108,92,231,.2)}
+.idea-overlay .io-del{background:rgba(255,60,60,.06);color:rgba(255,100,100,.5);border:1px solid rgba(255,60,60,.1)!important}
+.idea-overlay .io-del:hover{background:rgba(255,60,60,.15);color:#f87171}
 .idea-cat{font-size:11px;font-weight:700;letter-spacing:.3px;text-transform:uppercase;margin-top:3px}
 .idea-cat.Personal{color:#a78bfa}.idea-cat.Work{color:#38bdf8}.idea-cat.Creative{color:#fb923c}.idea-cat.Other{color:#4ade80}
 
@@ -266,10 +270,12 @@ body{font-family:'Space Grotesk',sans-serif;background:#0a0e1a;color:rgba(255,25
 .go-title{font-size:22px;font-weight:700;margin-bottom:6px}
 .go-sub{font-size:13px;font-weight:600;letter-spacing:.4px;text-transform:uppercase;margin-bottom:18px;opacity:.5}
 .go-body{font-size:15px;color:rgba(255,255,255,.65);line-height:1.6;white-space:pre-wrap;flex:1;overflow-y:auto}
-.go-actions{display:flex;gap:8px;margin-top:18px}
-.go-actions button{flex:1;padding:14px;border:none;border-radius:14px;font-family:inherit;font-weight:600;font-size:14px;cursor:pointer;min-height:48px}
-.go-edit{background:linear-gradient(135deg,#6c5ce7,#a855f7);color:#fff}
-.go-del{background:rgba(255,60,60,.08);color:#f87171;border:1px solid rgba(255,60,60,.15)!important}
+.go-actions{display:flex;gap:6px;margin-bottom:16px}
+.go-actions button{width:36px;height:36px;border:none;border-radius:10px;font-family:inherit;font-weight:600;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.go-edit{background:rgba(108,92,231,.1);color:#a78bfa;border:1px solid rgba(108,92,231,.15)!important}
+.go-edit:hover{background:rgba(108,92,231,.2)}
+.go-del{background:rgba(255,60,60,.06);color:rgba(255,100,100,.5);border:1px solid rgba(255,60,60,.1)!important}
+.go-del:hover{background:rgba(255,60,60,.15);color:#f87171}
 .go-slider{width:100%;margin:14px 0;accent-color:#6c5ce7;min-height:48px}
 .go-pct{font-size:32px;font-weight:700;text-align:center;background:linear-gradient(135deg,#6c5ce7,#a855f7);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .emoji-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:7px;margin:10px 0}
@@ -407,27 +413,27 @@ body{font-family:'Space Grotesk',sans-serif;background:#0a0e1a;color:rgba(255,25
 <!-- MYSELF --><div class="page" id="page-myself"><div class="ph"><div class="pb" onclick="closePage()">←</div><div class="pt">🧬 Profile</div></div><div class="my-layout"><div class="my-left" id="myselfFields"></div><div class="my-right"><svg class="body-svg" viewBox="0 0 120 320" width="100"><circle cx="60" cy="30" r="18" class="lm"/><line x1="60" y1="48" x2="60" y2="62" class="lm"/><path d="M60 62 L38 74 L34 145 L52 148 L55 105 L60 108 L65 105 L68 148 L86 145 L82 74 Z" class="lm tf"/><path d="M38 74 L16 118 L12 150" class="lm"/><path d="M82 74 L104 118 L108 150" class="lm"/><ellipse cx="12" cy="153" rx="4" ry="3.5" class="lm"/><ellipse cx="108" cy="153" rx="4" ry="3.5" class="lm"/><path d="M52 148 L46 225 L42 275" class="lm"/><path d="M68 148 L74 225 L78 275" class="lm"/><circle cx="46" cy="225" r="3" class="jt"/><circle cx="74" cy="225" r="3" class="jt"/><path d="M42 275 L34 290 L52 290 Z" class="lm"/><path d="M78 275 L70 290 L88 290 Z" class="lm"/></svg></div></div></div>
 
 <!-- IDEAS --><div class="page" id="page-ideas"><div class="ph"><div class="pb" onclick="closePage()">←</div><div class="pt">💡 Ideas</div></div><div class="px"><div class="tabs" id="ideaTabs"></div><div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px"><button class="add-btn" onclick="openModal('idea')">+ New Idea</button><div class="sort-bar"><span class="sort-lbl">Sort:</span><button class="sort-btn" id="ideaSortNew" onclick="ideaSort='new';renderIdeas()">Newest</button><button class="sort-btn" id="ideaSortOld" onclick="ideaSort='old';renderIdeas()">Oldest</button></div></div><div class="ideas-canvas" id="ideasCanvas"></div></div></div>
-<div class="idea-overlay" id="ideaOverlay"><div class="io-back" onclick="closeIdeaDetail()">←</div><div class="io-title" id="ioTitle"></div><div class="io-cat" id="ioCat"></div><div class="io-text" id="ioText"></div><div class="io-actions"><button class="io-edit" onclick="editIdeaFromDetail()">✎ Edit</button><button class="io-del" onclick="confirmDelete('idea')">✕ Delete</button></div></div>
+<div class="idea-overlay" id="ideaOverlay"><div style="display:flex;align-items:center;justify-content:space-between"><div class="io-back" onclick="closeIdeaDetail()">←</div><div class="io-actions"><button class="io-edit" onclick="editIdeaFromDetail()">✎</button><button class="io-del" onclick="confirmDelete('idea')">✕</button></div></div><div class="io-title" id="ioTitle"></div><div class="io-cat" id="ioCat"></div><div class="io-text" id="ioText"></div></div>
 
 <!-- FILES --><div class="page" id="page-files"><div class="ph"><div class="pb" onclick="closePage()">←</div><div class="pt">📁 Files</div></div><div class="px"><div class="search-wrap"><input class="search-bar" id="fileSearch" placeholder="Search files..." oninput="renderFiles()"></div><div class="tabs" id="fileTabs"></div><div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()"><div style="font-size:28px;margin-bottom:6px">📎</div><div style="color:rgba(255,255,255,.3);font-size:14px">Tap to upload</div></div><input type="file" id="fileInput" multiple style="display:none" onchange="handleFiles(this.files)"><div id="filesList"></div></div></div>
 
 <!-- ROUTINE --><div class="page" id="page-routine"><div class="ph"><div class="pb" onclick="closePage()">←</div><div class="pt">⏰ Routine</div></div><div class="px"><div class="tt-wrap" id="routineTT"></div></div></div>
 
 <!-- NOTES --><div class="page" id="page-notes"><div class="ph"><div class="pb" onclick="closePage()">←</div><div class="pt">🗒️ Notes</div></div><div class="px"><div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px"><button class="add-btn" onclick="openModal('note')">+ New Note</button><div class="sort-bar"><span class="sort-lbl">Sort:</span><button class="sort-btn" id="noteSortNew" onclick="noteSort='new';renderNotes()">Newest</button><button class="sort-btn" id="noteSortOld" onclick="noteSort='old';renderNotes()">Oldest</button></div></div><div class="gen-canvas" id="notesCanvas"></div></div></div>
-<div class="gen-overlay" id="noteOverlay"><div class="go-back" onclick="closeNoteDetail()">←</div><div class="go-title" id="noTitle"></div><div class="go-sub" id="noColor"></div><div class="go-body" id="noText"></div><div class="go-actions"><button class="go-edit" onclick="editNoteFromDetail()">✎ Edit</button><button class="go-del" onclick="confirmDelete('note')">✕ Delete</button></div></div>
+<div class="gen-overlay" id="noteOverlay"><div style="display:flex;align-items:center;justify-content:space-between"><div class="go-back" onclick="closeNoteDetail()">←</div><div class="go-actions"><button class="go-edit" onclick="editNoteFromDetail()">✎</button><button class="go-del" onclick="confirmDelete('note')">✕</button></div></div><div class="go-title" id="noTitle"></div><div class="go-sub" id="noColor"></div><div class="go-body" id="noText"></div></div>
 
 <!-- GOALS --><div class="page" id="page-goals"><div class="ph"><div class="pb" onclick="closePage()">←</div><div class="pt">🎯 Goals</div></div><div class="px"><div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px"><button class="add-btn" onclick="openModal('goal')">+ New Goal</button><div class="sort-bar"><span class="sort-lbl">Sort:</span><button class="sort-btn" id="goalSortNew" onclick="goalSort='new';renderGoals()">Newest</button><button class="sort-btn" id="goalSortOld" onclick="goalSort='old';renderGoals()">Oldest</button></div></div><div class="gen-canvas" id="goalsCanvas"></div></div></div>
-<div class="gen-overlay" id="goalOverlay"><div class="go-back" onclick="closeGoalDetail()">←</div><div class="go-title" id="glTitle"></div><div class="go-pct" id="glPct"></div><input type="range" class="go-slider" id="glSlider" min="0" max="100" value="0" oninput="updGoalFromDetail(this.value)"><div class="go-actions"><button class="go-edit" onclick="editGoalFromDetail()">✎ Edit</button><button class="go-del" onclick="confirmDelete('goal')">✕ Delete</button></div></div>
+<div class="gen-overlay" id="goalOverlay"><div style="display:flex;align-items:center;justify-content:space-between"><div class="go-back" onclick="closeGoalDetail()">←</div><div class="go-actions"><button class="go-edit" onclick="editGoalFromDetail()">✎</button><button class="go-del" onclick="confirmDelete('goal')">✕</button></div></div><div class="go-title" id="glTitle"></div><div class="go-pct" id="glPct"></div><input type="range" class="go-slider" id="glSlider" min="0" max="100" value="0" oninput="updGoalFromDetail(this.value)"></div>
 
 <!-- SAVINGS --><div class="page" id="page-savings"><div class="ph"><div class="pb" onclick="closePage()">←</div><div class="pt">💰 Savings</div></div><div class="px"><div class="fin-summary" id="savSum"></div><div class="sav-btns"><button class="sav-dep" onclick="openModal('deposit')">+ Deposit</button><button class="sav-wit" onclick="openModal('withdraw')">- Withdraw</button></div><div id="savList"></div></div></div>
 
 <!-- MOOD --><div class="page" id="page-mood"><div class="ph"><div class="pb" onclick="closePage()">←</div><div class="pt">😊 Mood</div></div><div class="px"><div class="sec">How are you today?</div><div class="mood-picker" id="moodPicker"></div><div class="sec">This week</div><div class="mood-grid" id="moodGrid"></div><div class="sec">Journal</div><textarea id="moodJournal" class="my-input" rows="4" placeholder="Write about your day..." oninput="saveMoodJournal()"></textarea></div></div>
 
 <!-- WISHLIST --><div class="page" id="page-wishlist"><div class="ph"><div class="pb" onclick="closePage()">←</div><div class="pt">🛒 Buy</div></div><div class="px"><div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px"><button class="add-btn" onclick="openModal('wish')">+ Add Item</button><div class="sort-bar"><span class="sort-lbl">Sort:</span><button class="sort-btn" id="wishSortNew" onclick="wishSort='new';renderWish()">Newest</button><button class="sort-btn" id="wishSortOld" onclick="wishSort='old';renderWish()">Oldest</button></div></div><div class="gen-canvas" id="wishCanvas"></div></div></div>
-<div class="gen-overlay" id="wishOverlay"><div class="go-back" onclick="closeWishDetail()">←</div><div class="go-title" id="wiTitle"></div><div class="go-sub" id="wiPrice"></div><div class="go-body" id="wiStatus"></div><div class="go-actions"><button class="go-edit" onclick="togWishFromDetail()">✓ Toggle Done</button><button class="go-edit" onclick="editWishFromDetail()">✎ Edit</button><button class="go-del" onclick="confirmDelete('wish')">✕ Delete</button></div></div>
+<div class="gen-overlay" id="wishOverlay"><div style="display:flex;align-items:center;justify-content:space-between"><div class="go-back" onclick="closeWishDetail()">←</div><div class="go-actions"><button class="go-edit" onclick="togWishFromDetail()">✓</button><button class="go-edit" onclick="editWishFromDetail()">✎</button><button class="go-del" onclick="confirmDelete('wish')">✕</button></div></div><div class="go-title" id="wiTitle"></div><div class="go-sub" id="wiPrice"></div><div class="go-body" id="wiStatus"></div></div>
 
 <!-- STUDIES --><div class="page" id="page-studies"><div class="ph"><div class="pb" onclick="closePage()">←</div><div class="pt">📖 Studies</div></div><div class="px"><div class="tabs" id="studyTabs"></div><div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px"><button class="add-btn" onclick="openModal('study')">+ New Study</button><div class="sort-bar"><span class="sort-lbl">Sort:</span><button class="sort-btn" id="studySortNew" onclick="studySort='new';renderStudies()">Newest</button><button class="sort-btn" id="studySortOld" onclick="studySort='old';renderStudies()">Oldest</button></div></div><div class="gen-canvas" id="studiesCanvas"></div></div></div>
-<div class="gen-overlay" id="studyOverlay"><div class="go-back" onclick="closeStudyDetail()">←</div><div class="go-title" id="stTitle"></div><div class="go-sub" id="stSubject"></div><div class="go-body" id="stText"></div><div class="go-actions"><button class="go-edit" onclick="editStudyFromDetail()">✎ Edit</button><button class="go-del" onclick="confirmDelete('study')">✕ Delete</button></div></div>
+<div class="gen-overlay" id="studyOverlay"><div style="display:flex;align-items:center;justify-content:space-between"><div class="go-back" onclick="closeStudyDetail()">←</div><div class="go-actions"><button class="go-edit" onclick="editStudyFromDetail()">✎</button><button class="go-del" onclick="confirmDelete('study')">✕</button></div></div><div class="go-title" id="stTitle"></div><div class="go-sub" id="stSubject"></div><div class="go-body" id="stText"></div></div>
 
 <!-- HISTORY --><div class="page" id="page-history"><div class="ph"><div class="pb" onclick="closePage()">←</div><div class="pt">📜 History</div></div><div class="px"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px"><div class="sec" style="margin:0">Deleted Items</div><button class="add-btn" style="background:rgba(255,60,60,.08);border-color:rgba(255,60,60,.15);color:#f87171" onclick="clearHistory()">Clear All</button></div><div id="historyList"></div></div></div>
 
@@ -585,7 +591,7 @@ var pg=$('page-'+cube.page)||(($('innerTitle').textContent=cube.emoji+' '+cube.n
 if(el){var r=el.getBoundingClientRect();pg.style.setProperty('--zx',(r.left+r.width/2)/innerWidth*100+'%');pg.style.setProperty('--zy',(r.top+r.height/2)/innerHeight*100+'%')}
 pg.classList.add('open');(renderers[cube.page]||function(){})();
 $('dashboard').style.opacity='0';$('dashboard').style.pointerEvents='none'}
-function closePage(){document.querySelectorAll('.page.open').forEach(function(p){p.classList.remove('open')});curPage=null;$('dashboard').style.opacity='1';$('dashboard').style.pointerEvents='auto'}
+function closePage(){document.querySelectorAll('.page.open').forEach(function(p){p.classList.add('closing');p.classList.remove('open');setTimeout(()=>p.classList.remove('closing'),350)});curPage=null;$('dashboard').style.opacity='1';$('dashboard').style.pointerEvents='auto'}
 
 /* ═══ MYSELF ═══ */
 var MF=[{k:'name',l:'Name'},{k:'age',l:'Age'},{k:'location',l:'Location'},{k:'bio',l:'Bio',ta:1},{k:'hobbies',l:'Hobbies'},{k:'goals',l:'Goals',ta:1},{k:'contact',l:'Contact'}];
