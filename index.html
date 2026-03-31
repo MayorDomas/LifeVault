@@ -127,6 +127,47 @@ body{font-family:'Space Grotesk',sans-serif;background:#0a0e1a;color:rgba(255,25
 .mbtn{display:flex;gap:8px;margin-top:8px}.mbtn button{flex:1;padding:14px;border:none;border-radius:14px;font-family:inherit;font-weight:600;font-size:14px;cursor:pointer;min-height:48px}
 .mbtn .sv{background:linear-gradient(135deg,#6c5ce7,#a855f7);color:#fff}.mbtn .cn{background:rgba(255,255,255,.06);color:rgba(255,255,255,.6)}
 
+/* ═══ NOTE-APP LIST ═══ */
+.nlist{display:flex;flex-direction:column;gap:6px}
+.nlist-item{display:flex;align-items:center;gap:12px;padding:14px 16px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.05);border-radius:14px;cursor:pointer;transition:all .15s}
+.nlist-item:hover{background:rgba(255,255,255,.06)}
+.nlist-item:active{transform:scale(.98)}
+.nlist-icon{font-size:22px;flex-shrink:0;width:36px;text-align:center}
+.nlist-info{flex:1;min-width:0}
+.nlist-title{font-size:14px;font-weight:600;color:rgba(255,255,255,.85);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.nlist-preview{font-size:12px;color:rgba(255,255,255,.25);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.nlist-meta{font-size:10px;color:rgba(255,255,255,.15);margin-top:3px}
+.nlist-color{width:4px;border-radius:4px;align-self:stretch;flex-shrink:0}
+/* note editor overlay */
+.note-editor-ov{position:fixed;inset:0;z-index:200;background:#0b1020;display:flex;flex-direction:column;opacity:0;visibility:hidden;transform:translateY(30px);transition:opacity .3s,transform .3s,visibility 0s .3s;overflow:hidden}
+.note-editor-ov.open{opacity:1;visibility:visible;transform:translateY(0);transition:opacity .3s,transform .3s,visibility 0s}
+.ne-header{display:flex;align-items:center;gap:10px;padding:14px 18px 8px;position:sticky;top:0;z-index:5;background:#0b1020}
+.ne-back{width:44px;height:44px;border-radius:12px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;color:#fff;flex-shrink:0}
+.ne-title-input{flex:1;background:none;border:none;color:#fff;font-family:inherit;font-size:20px;font-weight:700;outline:none;padding:8px 4px}
+.ne-title-input::placeholder{color:rgba(255,255,255,.15)}
+.ne-toolbar{display:flex;gap:6px;padding:6px 18px 10px;border-bottom:1px solid rgba(255,255,255,.05);flex-wrap:wrap;align-items:center}
+.ne-tool{width:40px;height:40px;border-radius:10px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;color:rgba(255,255,255,.5);transition:all .15s;flex-shrink:0}
+.ne-tool:hover{background:rgba(108,92,231,.12);color:#a78bfa;border-color:rgba(108,92,231,.2)}
+.ne-tool.danger{color:rgba(255,100,100,.5)}
+.ne-tool.danger:hover{background:rgba(255,60,60,.12);color:#f87171;border-color:rgba(255,60,60,.2)}
+.ne-body{flex:1;overflow-y:auto;padding:16px 18px 60px}
+.ne-content{min-height:200px;color:rgba(255,255,255,.75);font-size:15px;line-height:1.8;outline:none;white-space:pre-wrap;word-break:break-word}
+.ne-content:empty::before{content:attr(data-placeholder);color:rgba(255,255,255,.12)}
+.ne-content img{max-width:100%;border-radius:12px;margin:8px 0;cursor:grab;display:block;user-select:none;-webkit-user-select:none}
+.ne-content img.ne-dragging{opacity:.6;outline:2px dashed rgba(108,92,231,.4)}
+.ne-drop-indicator{height:3px;background:rgba(108,92,231,.5);border-radius:2px;margin:4px 0;pointer-events:none}
+.ne-extra-fields{padding:0 18px 8px;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.ne-select{padding:8px 28px 8px 12px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:10px;color:#fff;font-family:inherit;font-size:13px;outline:none;appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' fill='%23888' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center}
+.ne-select option{background:#14122a;color:#fff}
+.ne-price-input{padding:8px 12px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:10px;color:#fff;font-family:inherit;font-size:13px;outline:none;width:100px}
+.ne-color-dots{display:flex;gap:6px;align-items:center}
+.ne-cdot{width:22px;height:22px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:all .15s}
+.ne-cdot:hover{transform:scale(1.1)}
+.ne-cdot.sel{border-color:#fff;transform:scale(1.15);box-shadow:0 0 8px rgba(255,255,255,.15)}
+.ne-progress-wrap{padding:0 18px 8px;display:flex;align-items:center;gap:10px}
+.ne-progress-wrap input[type=range]{flex:1;accent-color:#a855f7}
+.ne-progress-pct{font-size:14px;font-weight:700;color:#a78bfa;min-width:40px;text-align:right}
+
 /* ═══ CONFIRM MODAL ═══ */
 .confirm-overlay{position:fixed;inset:0;z-index:300;background:rgba(0,0,0,.6);backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:all .25s}
 .confirm-overlay.open{opacity:1;pointer-events:auto}
@@ -412,28 +453,28 @@ body{font-family:'Space Grotesk',sans-serif;background:#0a0e1a;color:rgba(255,25
 
 <!-- MYSELF --><div class="page" id="page-myself"><div class="ph"><div class="pb" onclick="closePage()">←</div><div class="pt">🧬 Profile</div></div><div class="my-layout"><div class="my-left" id="myselfFields"></div><div class="my-right"><svg class="body-svg" viewBox="0 0 120 320" width="100"><circle cx="60" cy="30" r="18" class="lm"/><line x1="60" y1="48" x2="60" y2="62" class="lm"/><path d="M60 62 L38 74 L34 145 L52 148 L55 105 L60 108 L65 105 L68 148 L86 145 L82 74 Z" class="lm tf"/><path d="M38 74 L16 118 L12 150" class="lm"/><path d="M82 74 L104 118 L108 150" class="lm"/><ellipse cx="12" cy="153" rx="4" ry="3.5" class="lm"/><ellipse cx="108" cy="153" rx="4" ry="3.5" class="lm"/><path d="M52 148 L46 225 L42 275" class="lm"/><path d="M68 148 L74 225 L78 275" class="lm"/><circle cx="46" cy="225" r="3" class="jt"/><circle cx="74" cy="225" r="3" class="jt"/><path d="M42 275 L34 290 L52 290 Z" class="lm"/><path d="M78 275 L70 290 L88 290 Z" class="lm"/></svg></div></div></div>
 
-<!-- IDEAS --><div class="page" id="page-ideas"><div class="ph"><div class="pb" onclick="closePage()">←</div><div class="pt">💡 Ideas</div></div><div class="px"><div class="tabs" id="ideaTabs"></div><div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px"><button class="add-btn" onclick="openModal('idea')">+ New Idea</button><div class="sort-bar"><span class="sort-lbl">Sort:</span><button class="sort-btn" id="ideaSortNew" onclick="ideaSort='new';renderIdeas()">Newest</button><button class="sort-btn" id="ideaSortOld" onclick="ideaSort='old';renderIdeas()">Oldest</button></div></div><div class="ideas-canvas" id="ideasCanvas"></div></div></div>
-<div class="idea-overlay" id="ideaOverlay"><div style="display:flex;align-items:center;justify-content:space-between"><div class="io-back" onclick="closeIdeaDetail()">←</div><div class="io-actions"><button class="io-edit" onclick="editIdeaFromDetail()">✎</button><button class="io-del" onclick="confirmDelete('idea')">✕</button></div></div><div class="io-title" id="ioTitle"></div><div class="io-cat" id="ioCat"></div><div class="io-text" id="ioText"></div></div>
+<!-- IDEAS --><div class="page" id="page-ideas"><div class="ph"><div class="pb" onclick="closePage()">←</div><div class="pt">💡 Ideas</div></div><div class="px"><div class="tabs" id="ideaTabs"></div><div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px"><button class="add-btn" onclick="neNew('idea')">+ New Idea</button><div class="sort-bar"><span class="sort-lbl">Sort:</span><button class="sort-btn" id="ideaSortNew" onclick="ideaSort='new';renderIdeas()">Newest</button><button class="sort-btn" id="ideaSortOld" onclick="ideaSort='old';renderIdeas()">Oldest</button></div></div><div class="nlist" id="ideasList"></div></div></div>
+<div class="note-editor-ov" id="ideaEditor"><div class="ne-header"><div class="ne-back" onclick="neSave('idea')">←</div><input class="ne-title-input" id="neIdeaTitle" placeholder="Idea title..."></div><div class="ne-extra-fields"><select class="ne-select" id="neIdeaCat"><option>Personal</option><option>Work</option><option>Creative</option><option>Remote</option><option>Other</option></select></div><div class="ne-toolbar"><div class="ne-tool" onclick="neImg('idea')">📷</div><div class="ne-tool danger" onclick="neDel('idea')">🗑</div><input type="file" id="neIdeaFile" accept="image/*" style="display:none" multiple></div><div class="ne-body"><div class="ne-content" id="neIdeaBody" contenteditable="true" data-placeholder="Write your idea..."></div></div></div>
 
 <!-- FILES --><div class="page" id="page-files"><div class="ph"><div class="pb" onclick="closePage()">←</div><div class="pt">📁 Files</div></div><div class="px"><div class="search-wrap"><input class="search-bar" id="fileSearch" placeholder="Search files..." oninput="renderFiles()"></div><div class="tabs" id="fileTabs"></div><div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()"><div style="font-size:28px;margin-bottom:6px">📎</div><div style="color:rgba(255,255,255,.3);font-size:14px">Tap to upload</div></div><input type="file" id="fileInput" multiple style="display:none" onchange="handleFiles(this.files)"><div id="filesList"></div></div></div>
 
 <!-- ROUTINE --><div class="page" id="page-routine"><div class="ph"><div class="pb" onclick="closePage()">←</div><div class="pt">⏰ Routine</div></div><div class="px"><div class="tt-wrap" id="routineTT"></div></div></div>
 
-<!-- NOTES --><div class="page" id="page-notes"><div class="ph"><div class="pb" onclick="closePage()">←</div><div class="pt">🗒️ Notes</div></div><div class="px"><div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px"><button class="add-btn" onclick="openModal('note')">+ New Note</button><div class="sort-bar"><span class="sort-lbl">Sort:</span><button class="sort-btn" id="noteSortNew" onclick="noteSort='new';renderNotes()">Newest</button><button class="sort-btn" id="noteSortOld" onclick="noteSort='old';renderNotes()">Oldest</button></div></div><div class="gen-canvas" id="notesCanvas"></div></div></div>
-<div class="gen-overlay" id="noteOverlay"><div style="display:flex;align-items:center;justify-content:space-between"><div class="go-back" onclick="closeNoteDetail()">←</div><div class="go-actions"><button class="go-edit" onclick="editNoteFromDetail()">✎</button><button class="go-del" onclick="confirmDelete('note')">✕</button></div></div><div class="go-title" id="noTitle"></div><div class="go-sub" id="noColor"></div><div class="go-body" id="noText"></div></div>
+<!-- NOTES --><div class="page" id="page-notes"><div class="ph"><div class="pb" onclick="closePage()">←</div><div class="pt">🗒️ Notes</div></div><div class="px"><div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px"><button class="add-btn" onclick="neNew('note')">+ New Note</button><div class="sort-bar"><span class="sort-lbl">Sort:</span><button class="sort-btn" id="noteSortNew" onclick="noteSort='new';renderNotes()">Newest</button><button class="sort-btn" id="noteSortOld" onclick="noteSort='old';renderNotes()">Oldest</button></div></div><div class="nlist" id="notesList"></div></div></div>
+<div class="note-editor-ov" id="noteEditor"><div class="ne-header"><div class="ne-back" onclick="neSave('note')">←</div><input class="ne-title-input" id="neNoteTitle" placeholder="Note title..."></div><div class="ne-extra-fields"><div class="ne-color-dots" id="neNoteColors"></div></div><div class="ne-toolbar"><div class="ne-tool" onclick="neImg('note')">📷</div><div class="ne-tool danger" onclick="neDel('note')">🗑</div><input type="file" id="neNoteFile" accept="image/*" style="display:none" multiple></div><div class="ne-body"><div class="ne-content" id="neNoteBody" contenteditable="true" data-placeholder="Write your note..."></div></div></div>
 
-<!-- GOALS --><div class="page" id="page-goals"><div class="ph"><div class="pb" onclick="closePage()">←</div><div class="pt">🎯 Goals</div></div><div class="px"><div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px"><button class="add-btn" onclick="openModal('goal')">+ New Goal</button><div class="sort-bar"><span class="sort-lbl">Sort:</span><button class="sort-btn" id="goalSortNew" onclick="goalSort='new';renderGoals()">Newest</button><button class="sort-btn" id="goalSortOld" onclick="goalSort='old';renderGoals()">Oldest</button></div></div><div class="gen-canvas" id="goalsCanvas"></div></div></div>
-<div class="gen-overlay" id="goalOverlay"><div style="display:flex;align-items:center;justify-content:space-between"><div class="go-back" onclick="closeGoalDetail()">←</div><div class="go-actions"><button class="go-edit" onclick="editGoalFromDetail()">✎</button><button class="go-del" onclick="confirmDelete('goal')">✕</button></div></div><div class="go-title" id="glTitle"></div><div class="go-pct" id="glPct"></div><input type="range" class="go-slider" id="glSlider" min="0" max="100" value="0" oninput="updGoalFromDetail(this.value)"></div>
+<!-- GOALS --><div class="page" id="page-goals"><div class="ph"><div class="pb" onclick="closePage()">←</div><div class="pt">🎯 Goals</div></div><div class="px"><div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px"><button class="add-btn" onclick="neNew('goal')">+ New Goal</button><div class="sort-bar"><span class="sort-lbl">Sort:</span><button class="sort-btn" id="goalSortNew" onclick="goalSort='new';renderGoals()">Newest</button><button class="sort-btn" id="goalSortOld" onclick="goalSort='old';renderGoals()">Oldest</button></div></div><div class="nlist" id="goalsList"></div></div></div>
+<div class="note-editor-ov" id="goalEditor"><div class="ne-header"><div class="ne-back" onclick="neSave('goal')">←</div><input class="ne-title-input" id="neGoalTitle" placeholder="Goal title..."></div><div class="ne-progress-wrap"><input type="range" id="neGoalSlider" min="0" max="100" value="0" oninput="$('neGoalPct').textContent=this.value+'%'"><div class="ne-progress-pct" id="neGoalPct">0%</div></div><div class="ne-toolbar"><div class="ne-tool" onclick="neImg('goal')">📷</div><div class="ne-tool danger" onclick="neDel('goal')">🗑</div><input type="file" id="neGoalFile" accept="image/*" style="display:none" multiple></div><div class="ne-body"><div class="ne-content" id="neGoalBody" contenteditable="true" data-placeholder="Describe your goal, track progress..."></div></div></div>
 
 <!-- SAVINGS --><div class="page" id="page-savings"><div class="ph"><div class="pb" onclick="closePage()">←</div><div class="pt">💰 Savings</div></div><div class="px"><div class="fin-summary" id="savSum"></div><div class="sav-btns"><button class="sav-dep" onclick="openModal('deposit')">+ Deposit</button><button class="sav-wit" onclick="openModal('withdraw')">- Withdraw</button></div><div id="savList"></div></div></div>
 
 <!-- MOOD --><div class="page" id="page-mood"><div class="ph"><div class="pb" onclick="closePage()">←</div><div class="pt">😊 Mood</div></div><div class="px"><div class="sec">How are you today?</div><div class="mood-picker" id="moodPicker"></div><div class="sec">This week</div><div class="mood-grid" id="moodGrid"></div><div class="sec">Journal</div><textarea id="moodJournal" class="my-input" rows="4" placeholder="Write about your day..." oninput="saveMoodJournal()"></textarea></div></div>
 
-<!-- WISHLIST --><div class="page" id="page-wishlist"><div class="ph"><div class="pb" onclick="closePage()">←</div><div class="pt">🛒 Buy</div></div><div class="px"><div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px"><button class="add-btn" onclick="openModal('wish')">+ Add Item</button><div class="sort-bar"><span class="sort-lbl">Sort:</span><button class="sort-btn" id="wishSortNew" onclick="wishSort='new';renderWish()">Newest</button><button class="sort-btn" id="wishSortOld" onclick="wishSort='old';renderWish()">Oldest</button></div></div><div class="gen-canvas" id="wishCanvas"></div></div></div>
-<div class="gen-overlay" id="wishOverlay"><div style="display:flex;align-items:center;justify-content:space-between"><div class="go-back" onclick="closeWishDetail()">←</div><div class="go-actions"><button class="go-edit" onclick="togWishFromDetail()">✓</button><button class="go-edit" onclick="editWishFromDetail()">✎</button><button class="go-del" onclick="confirmDelete('wish')">✕</button></div></div><div class="go-title" id="wiTitle"></div><div class="go-sub" id="wiPrice"></div><div class="go-body" id="wiStatus"></div></div>
+<!-- WISHLIST --><div class="page" id="page-wishlist"><div class="ph"><div class="pb" onclick="closePage()">←</div><div class="pt">🛒 Buy</div></div><div class="px"><div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px"><button class="add-btn" onclick="neNew('wish')">+ Add Item</button><div class="sort-bar"><span class="sort-lbl">Sort:</span><button class="sort-btn" id="wishSortNew" onclick="wishSort='new';renderWish()">Newest</button><button class="sort-btn" id="wishSortOld" onclick="wishSort='old';renderWish()">Oldest</button></div></div><div class="nlist" id="wishList"></div></div></div>
+<div class="note-editor-ov" id="wishEditor"><div class="ne-header"><div class="ne-back" onclick="neSave('wish')">←</div><input class="ne-title-input" id="neWishTitle" placeholder="Item name..."></div><div class="ne-extra-fields"><input class="ne-price-input" id="neWishPrice" type="number" step="0.01" placeholder="€ Price"><div class="ne-select" id="neWishEmoji" style="cursor:pointer;font-size:20px;padding:6px 10px" onclick="neToggleEmojiPick()">🎁</div><div id="neEmojiPick" style="display:none;flex-wrap:wrap;gap:4px"></div></div><div class="ne-toolbar"><div class="ne-tool" onclick="neImg('wish')">📷</div><div class="ne-tool" onclick="neBought()" title="Mark as bought">✓</div><div class="ne-tool danger" onclick="neDel('wish')">🗑</div><input type="file" id="neWishFile" accept="image/*" style="display:none" multiple></div><div class="ne-body"><div class="ne-content" id="neWishBody" contenteditable="true" data-placeholder="Notes about this item..."></div></div></div>
 
-<!-- STUDIES --><div class="page" id="page-studies"><div class="ph"><div class="pb" onclick="closePage()">←</div><div class="pt">📖 Studies</div></div><div class="px"><div class="tabs" id="studyTabs"></div><div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px"><button class="add-btn" onclick="openModal('study')">+ New Study</button><div class="sort-bar"><span class="sort-lbl">Sort:</span><button class="sort-btn" id="studySortNew" onclick="studySort='new';renderStudies()">Newest</button><button class="sort-btn" id="studySortOld" onclick="studySort='old';renderStudies()">Oldest</button></div></div><div class="gen-canvas" id="studiesCanvas"></div></div></div>
-<div class="gen-overlay" id="studyOverlay"><div style="display:flex;align-items:center;justify-content:space-between"><div class="go-back" onclick="closeStudyDetail()">←</div><div class="go-actions"><button class="go-edit" onclick="editStudyFromDetail()">✎</button><button class="go-del" onclick="confirmDelete('study')">✕</button></div></div><div class="go-title" id="stTitle"></div><div class="go-sub" id="stSubject"></div><div class="go-body" id="stText"></div></div>
+<!-- STUDIES --><div class="page" id="page-studies"><div class="ph"><div class="pb" onclick="closePage()">←</div><div class="pt">📖 Studies</div></div><div class="px"><div class="tabs" id="studyTabs"></div><div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px"><button class="add-btn" onclick="neNew('study')">+ New Study</button><div class="sort-bar"><span class="sort-lbl">Sort:</span><button class="sort-btn" id="studySortNew" onclick="studySort='new';renderStudies()">Newest</button><button class="sort-btn" id="studySortOld" onclick="studySort='old';renderStudies()">Oldest</button></div></div><div class="nlist" id="studiesList"></div></div></div>
+<div class="note-editor-ov" id="studyEditor"><div class="ne-header"><div class="ne-back" onclick="neSave('study')">←</div><input class="ne-title-input" id="neStudyTitle" placeholder="Study title..."></div><div class="ne-extra-fields"><select class="ne-select" id="neStudySub"><option>Math</option><option>Science</option><option>Languages</option><option>History</option><option>IT</option><option>Other</option></select></div><div class="ne-toolbar"><div class="ne-tool" onclick="neImg('study')">📷</div><div class="ne-tool danger" onclick="neDel('study')">🗑</div><input type="file" id="neStudyFile" accept="image/*" style="display:none" multiple></div><div class="ne-body"><div class="ne-content" id="neStudyBody" contenteditable="true" data-placeholder="Write your study notes..."></div></div></div>
 
 <!-- HISTORY --><div class="page" id="page-history"><div class="ph"><div class="pb" onclick="closePage()">←</div><div class="pt">📜 History</div></div><div class="px"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px"><div class="sec" style="margin:0">Deleted Items</div><button class="add-btn" style="background:rgba(255,60,60,.08);border-color:rgba(255,60,60,.15);color:#f87171" onclick="clearHistory()">Clear All</button></div><div id="historyList"></div></div></div>
 
@@ -477,11 +518,7 @@ function closeConfirm(){$('confirmOverlay').classList.remove('open');confirmCall
 $('confirmDeleteBtn').addEventListener('click',function(){if(confirmCallback)confirmCallback();closeConfirm()});
 
 function confirmDelete(type){
-  if(type==='idea'){var a=L('ideas',[]),it=a.find(function(z){return z.id===activeIdeaId});showConfirm('Are you sure you want to delete "'+(it&&it.title||'this item')+'"?',function(){delIdeaFromDetail()})}
-  else if(type==='note'){var a=L('notes',[]),it=a.find(function(z){return z.id===activeNoteId});showConfirm('Are you sure you want to delete "'+(it&&it.title||'this note')+'"?',function(){delNoteFromDetail()})}
-  else if(type==='goal'){var a=L('goals',[]),it=a.find(function(z){return z.id===activeGoalId});showConfirm('Are you sure you want to delete "'+(it&&it.title||'this goal')+'"?',function(){delGoalFromDetail()})}
-  else if(type==='wish'){var a=L('wishlist',[]),it=a.find(function(z){return z.id===activeWishId});showConfirm('Are you sure you want to delete "'+(it&&it.name||'this item')+'"?',function(){delWishFromDetail()})}
-  else if(type==='study'){var a=L('studies',[]),it=a.find(function(z){return z.id===activeStudyId});showConfirm('Are you sure you want to delete "'+(it&&it.title||'this study')+'"?',function(){delStudyFromDetail()})}
+  /* legacy — now handled by neDel() in note editor */
 }
 
 function addToHistory(type,title){
@@ -602,24 +639,153 @@ function saveMy(k,v){var d=L('myself',{});d[k]=v;S('myself',d)}
 var ideaSort='new',noteSort='new',goalSort='new',wishSort='new',studySort='new';
 function sortItems(arr,order){var s=arr.slice();if(order==='old')return s;return s.reverse()}
 
-/* ═══ IDEAS ═══ */
-var IC=['All','Personal','Work','Creative','Remote','Other'];var icat='All';var activeIdeaId=null;
+/* ═══ NOTE-APP ENGINE ═══ */
+var neActiveId=null,neActiveType=null;
+var IC=['All','Personal','Work','Creative','Remote','Other'];var icat='All';
 var CAT_COLORS={Personal:'#a78bfa',Work:'#38bdf8',Creative:'#fb923c',Remote:'#22d3ee',Other:'#4ade80'};
 var CAT_EMOJIS={Personal:'💜',Work:'💼',Creative:'🎨',Remote:'📡',Other:'💚'};
+
+/* strip HTML to plain text for previews */
+function stripHtml(h){var d=document.createElement('div');d.innerHTML=h;return d.textContent||d.innerText||''}
+
+/* open editor for any type */
+function neOpen(type,id){
+neActiveType=type;neActiveId=id;
+var ov=$(type+'Editor');
+if(type==='idea'){
+var a=L('ideas',[]),it=a.find(function(z){return z.id===id});if(!it)return;
+$('neIdeaTitle').value=it.title||'';$('neIdeaCat').value=it.cat||'Personal';
+$('neIdeaBody').innerHTML=it.body||it.text||'';
+}else if(type==='note'){
+var a=L('notes',[]),it=a.find(function(z){return z.id===id});if(!it)return;
+$('neNoteTitle').value=it.title||'';
+$('neNoteBody').innerHTML=it.body||it.text||'';
+var cols=$('neNoteColors');cols.innerHTML=NCOLS.map(function(c){return'<div class="ne-cdot'+(c===(it.color||NCOLS[0])?' sel':'')+'" style="background:'+c+'" onclick="document.querySelectorAll(\'#neNoteColors .ne-cdot\').forEach(function(x){x.classList.remove(\'sel\')});this.classList.add(\'sel\')"></div>'}).join('');
+}else if(type==='goal'){
+var a=L('goals',[]),it=a.find(function(z){return z.id===id});if(!it)return;
+$('neGoalTitle').value=it.title||'';$('neGoalSlider').value=it.progress||0;$('neGoalPct').textContent=(it.progress||0)+'%';
+$('neGoalBody').innerHTML=it.body||'';
+}else if(type==='wish'){
+var a=L('wishlist',[]),it=a.find(function(z){return z.id===id});if(!it)return;
+$('neWishTitle').value=it.name||'';$('neWishPrice').value=it.price||'';
+$('neWishEmoji').textContent=it.emoji||'🎁';
+$('neWishBody').innerHTML=it.body||'';
+var ep=$('neEmojiPick');ep.style.display='none';
+ep.innerHTML=WISH_EMOJIS.map(function(e){return'<span style="font-size:22px;cursor:pointer;padding:4px" onclick="$(\'neWishEmoji\').textContent=\''+e+'\';$(\'neEmojiPick\').style.display=\'none\'">'+e+'</span>'}).join('');
+}else if(type==='study'){
+var a=L('studies',[]),it=a.find(function(z){return z.id===id});if(!it)return;
+$('neStudyTitle').value=it.title||'';$('neStudySub').value=it.subject||'Other';
+$('neStudyBody').innerHTML=it.body||it.text||'';
+}
+ov.classList.add('open');
+neInitDrag(type);
+}
+
+/* create new item and open editor */
+function neNew(type){
+var id=U();
+if(type==='idea'){var a=L('ideas',[]);a.push({id:id,title:'',cat:'Personal',body:''});S('ideas',a)}
+else if(type==='note'){var a=L('notes',[]);a.push({id:id,title:'',body:'',color:NCOLS[0]});S('notes',a)}
+else if(type==='goal'){var a=L('goals',[]);a.push({id:id,title:'',progress:0,body:''});S('goals',a)}
+else if(type==='wish'){var a=L('wishlist',[]);a.push({id:id,name:'',emoji:'🎁',price:0,body:''});S('wishlist',a)}
+else if(type==='study'){var a=L('studies',[]);a.push({id:id,title:'',subject:'Other',body:''});S('studies',a)}
+neOpen(type,id);
+}
+
+/* save and close editor */
+function neSave(type){
+var id=neActiveId;
+if(type==='idea'){
+var a=L('ideas',[]),i=a.findIndex(function(z){return z.id===id});if(i<0){neClose(type);return}
+a[i].title=$('neIdeaTitle').value||'Untitled';a[i].cat=$('neIdeaCat').value;a[i].body=$('neIdeaBody').innerHTML;a[i].text=stripHtml(a[i].body);S('ideas',a);renderIdeas();
+}else if(type==='note'){
+var a=L('notes',[]),i=a.findIndex(function(z){return z.id===id});if(i<0){neClose(type);return}
+a[i].title=$('neNoteTitle').value||'Untitled';a[i].body=$('neNoteBody').innerHTML;a[i].text=stripHtml(a[i].body);
+var sc=document.querySelector('#neNoteColors .ne-cdot.sel');a[i].color=sc?sc.style.background:NCOLS[0];
+S('notes',a);renderNotes();
+}else if(type==='goal'){
+var a=L('goals',[]),i=a.findIndex(function(z){return z.id===id});if(i<0){neClose(type);return}
+a[i].title=$('neGoalTitle').value||'Goal';a[i].progress=+$('neGoalSlider').value;a[i].body=$('neGoalBody').innerHTML;S('goals',a);renderGoals();
+}else if(type==='wish'){
+var a=L('wishlist',[]),i=a.findIndex(function(z){return z.id===id});if(i<0){neClose(type);return}
+a[i].name=$('neWishTitle').value||'Item';a[i].price=parseFloat($('neWishPrice').value)||0;a[i].emoji=$('neWishEmoji').textContent.trim()||'🎁';a[i].body=$('neWishBody').innerHTML;S('wishlist',a);renderWish();
+}else if(type==='study'){
+var a=L('studies',[]),i=a.findIndex(function(z){return z.id===id});if(i<0){neClose(type);return}
+a[i].title=$('neStudyTitle').value||'Untitled';a[i].subject=$('neStudySub').value;a[i].body=$('neStudyBody').innerHTML;a[i].text=stripHtml(a[i].body);S('studies',a);renderStudies();
+}
+neClose(type);
+}
+
+function neClose(type){$(type+'Editor').classList.remove('open');neActiveId=null;neActiveType=null}
+
+/* delete from editor */
+function neDel(type){
+var id=neActiveId,name='';
+if(type==='idea'){var a=L('ideas',[]),it=a.find(function(z){return z.id===id});name=it?it.title:''}
+else if(type==='note'){var a=L('notes',[]),it=a.find(function(z){return z.id===id});name=it?it.title:''}
+else if(type==='goal'){var a=L('goals',[]),it=a.find(function(z){return z.id===id});name=it?it.title:''}
+else if(type==='wish'){var a=L('wishlist',[]),it=a.find(function(z){return z.id===id});name=it?it.name:''}
+else if(type==='study'){var a=L('studies',[]),it=a.find(function(z){return z.id===id});name=it?it.title:''}
+showConfirm('Delete "'+name+'"?',function(){
+var key=type==='wish'?'wishlist':type==='idea'?'ideas':type==='note'?'notes':type==='goal'?'goals':'studies';
+var a=L(key,[]),i=a.findIndex(function(z){return z.id===id});
+if(i>=0){addToHistory(type,a[i].title||a[i].name);a.splice(i,1);S(key,a)}
+neClose(type);
+if(type==='idea')renderIdeas();else if(type==='note')renderNotes();else if(type==='goal')renderGoals();else if(type==='wish')renderWish();else renderStudies();
+});
+}
+
+/* image upload */
+function neImg(type){var fi=$(type==='idea'?'neIdeaFile':type==='note'?'neNoteFile':type==='goal'?'neGoalFile':type==='wish'?'neWishFile':'neStudyFile');fi.onchange=function(){Array.from(fi.files).forEach(function(f){var r=new FileReader();r.onload=function(){var bodyId=type==='idea'?'neIdeaBody':type==='note'?'neNoteBody':type==='goal'?'neGoalBody':type==='wish'?'neWishBody':'neStudyBody';var img=document.createElement('img');img.src=r.result;$(bodyId).appendChild(img);$(bodyId).appendChild(document.createElement('br'))};r.readAsDataURL(f)});fi.value=''};fi.click()}
+
+/* emoji picker toggle for wishlist */
+function neToggleEmojiPick(){var ep=$('neEmojiPick');ep.style.display=ep.style.display==='none'?'flex':'none'}
+
+/* mark bought */
+function neBought(){
+var id=neActiveId,a=L('wishlist',[]),i=a.findIndex(function(z){return z.id===id});
+if(i<0)return;addToHistory('buy',a[i].name);a.splice(i,1);S('wishlist',a);neClose('wish');renderWish();
+}
+
+/* drag-to-reposition images inside contenteditable */
+function neInitDrag(type){
+var bodyId=type==='idea'?'neIdeaBody':type==='note'?'neNoteBody':type==='goal'?'neGoalBody':type==='wish'?'neWishBody':'neStudyBody';
+var body=$(bodyId);var dragImg=null,indicator=null;
+body.addEventListener('dragstart',function(e){
+if(e.target.tagName==='IMG'){dragImg=e.target;dragImg.classList.add('ne-dragging');e.dataTransfer.effectAllowed='move';e.dataTransfer.setData('text/plain','')}
+});
+body.addEventListener('dragover',function(e){
+if(!dragImg)return;e.preventDefault();e.dataTransfer.dropEffect='move';
+if(indicator)indicator.remove();
+indicator=document.createElement('div');indicator.className='ne-drop-indicator';
+var target=document.elementFromPoint(e.clientX,e.clientY);
+if(target&&target!==dragImg&&body.contains(target)){
+var rect=target.getBoundingClientRect();
+if(e.clientY<rect.top+rect.height/2)target.parentNode.insertBefore(indicator,target);
+else target.parentNode.insertBefore(indicator,target.nextSibling);
+}else body.appendChild(indicator);
+});
+body.addEventListener('drop',function(e){
+if(!dragImg)return;e.preventDefault();
+if(indicator){indicator.parentNode.insertBefore(dragImg,indicator);indicator.remove();indicator=null}
+dragImg.classList.remove('ne-dragging');dragImg=null;
+});
+body.addEventListener('dragend',function(){
+if(dragImg)dragImg.classList.remove('ne-dragging');dragImg=null;
+if(indicator){indicator.remove();indicator=null}
+});
+}
+
+/* ═══ IDEAS (list view) ═══ */
 function renderIdeas(){$('ideaTabs').innerHTML=IC.map(function(c){return'<div class="tab'+(c===icat?' active':'')+'" onclick="icat=\''+c+'\';renderIdeas()">'+c+'</div>'}).join('');
 if($('ideaSortNew'))$('ideaSortNew').className='sort-btn'+(ideaSort==='new'?' active':'');
 if($('ideaSortOld'))$('ideaSortOld').className='sort-btn'+(ideaSort==='old'?' active':'');
 var all=L('ideas',[]),filtered=icat==='All'?all:all.filter(function(x){return x.cat===icat});var items=sortItems(filtered,ideaSort);
-var cv=$('ideasCanvas');cv.innerHTML='';if(!items.length){cv.innerHTML='<div class="empty-msg">No ideas yet -- tap + to add one</div>';return}
-items.forEach(function(it){var el=document.createElement('div');el.className='idea-cube';var col=CAT_COLORS[it.cat]||CAT_COLORS.Other;el.innerHTML='<div class="ic-glow" style="background:'+col+'"></div><div class="ic-emoji">'+(CAT_EMOJIS[it.cat]||'💡')+'</div><div class="ic-title">'+it.title+'</div><div class="ic-cat" style="color:'+col+'">'+(it.cat||'Other')+'</div>';el.style.borderColor=col+'25';el.dataset.itemId=it.id;
-el.addEventListener('click',function(){openIdeaDetail(it.id,el)});
-cv.appendChild(el)})}
-
-function openIdeaDetail(id,el){activeIdeaId=id;var a=L('ideas',[]),it=a.find(function(z){return z.id===id});if(!it)return;var ov=$('ideaOverlay');if(el){var r=el.getBoundingClientRect();ov.style.setProperty('--ix',(r.left+r.width/2)/innerWidth*100+'%');ov.style.setProperty('--iy',(r.top+r.height/2)/innerHeight*100+'%')}$('ioTitle').textContent=it.title;$('ioCat').textContent=it.cat||'Other';$('ioCat').style.color=CAT_COLORS[it.cat]||CAT_COLORS.Other;$('ioText').textContent=it.text||'No description';ov.classList.add('open')}
-function closeIdeaDetail(){$('ideaOverlay').classList.remove('open');activeIdeaId=null}
-function editIdeaFromDetail(){var a=L('ideas',[]),i=a.findIndex(function(z){return z.id===activeIdeaId});if(i<0)return;closeIdeaDetail();editIdea(i)}
-function delIdeaFromDetail(){var a=L('ideas',[]),i=a.findIndex(function(z){return z.id===activeIdeaId});if(i<0)return;addToHistory('idea',a[i].title);a.splice(i,1);S('ideas',a);closeIdeaDetail();renderIdeas()}
-function editIdea(i){var a=L('ideas',[]),it=a[i];$('modalBody').innerHTML='<h3>Edit Idea</h3><input id="mT" value="'+it.title+'"><select id="mC">'+['Personal','Work','Creative','Remote','Other'].map(function(c){return'<option'+(c===it.cat?' selected':'')+'>'+c+'</option>'}).join('')+'</select><textarea id="mX">'+(it.text||'')+'</textarea><div class="mbtn"><button class="cn" onclick="closeModal()">Cancel</button><button class="sv" onclick="var a=L(\'ideas\',[]);a['+i+'].title=$(\'mT\').value;a['+i+'].cat=$(\'mC\').value;a['+i+'].text=$(\'mX\').value;S(\'ideas\',a);closeModal();renderIdeas()">Save</button></div>';$('mbg').classList.add('open')}
+var cv=$('ideasList');cv.innerHTML='';if(!items.length){cv.innerHTML='<div class="empty-msg">No ideas yet -- tap + to add one</div>';return}
+items.forEach(function(it){
+var preview=stripHtml(it.body||it.text||'').slice(0,60);
+cv.innerHTML+='<div class="nlist-item" onclick="neOpen(\'idea\',\''+it.id+'\')"><div class="nlist-icon">'+(CAT_EMOJIS[it.cat]||'💡')+'</div><div class="nlist-info"><div class="nlist-title">'+it.title+'</div><div class="nlist-preview">'+(preview||'Empty')+'</div><div class="nlist-meta" style="color:'+(CAT_COLORS[it.cat]||CAT_COLORS.Other)+'">'+(it.cat||'Other')+'</div></div></div>'
+})}
 
 /* ═══ FILES ═══ */
 var FC=['All','Personal','Study','Work','Other'];var fcat='All';
@@ -637,40 +803,25 @@ function renderRoutine(){var tt=L('routine',{});var h='<div class="tt" style="gr
 RTIMES.forEach(function(t,r){h+='<div class="tt-timeh">'+t+'</div>';for(var c=0;c<7;c++){var k=r+'_'+c,v=tt[k]||'';h+='<div class="tt-cell'+(v?' filled':'')+'" onclick="editRT(\''+k+'\')">'+v+'</div>'}});h+='</div>';$('routineTT').innerHTML=h}
 function editRT(k){var tt=L('routine',{});var v=prompt('Activity:',tt[k]||'');if(v===null)return;if(v.trim())tt[k]=v.trim();else delete tt[k];S('routine',tt);renderRoutine()}
 
-/* ═══ NOTES ═══ */
+/* ═══ NOTES (list view) ═══ */
 var NCOLS=['#a78bfa','#38bdf8','#fb923c','#4ade80','#f87171','#fbbf24'];
 var NOTE_EMOJIS={'#a78bfa':'🗒️','#38bdf8':'📝','#fb923c':'🔥','#4ade80':'📗','#f87171':'❤️','#fbbf24':'⭐'};
-var activeNoteId=null;
 function renderNotes(){
 if($('noteSortNew'))$('noteSortNew').className='sort-btn'+(noteSort==='new'?' active':'');
 if($('noteSortOld'))$('noteSortOld').className='sort-btn'+(noteSort==='old'?' active':'');
-var notes=sortItems(L('notes',[]),noteSort),cv=$('notesCanvas');cv.innerHTML='';if(!notes.length){cv.innerHTML='<div class="empty-msg">No notes yet -- tap + to add one</div>';return}
-notes.forEach(function(nt){var el=document.createElement('div');el.className='gen-cube';var col=nt.color||NCOLS[0];el.innerHTML='<div class="gc-glow" style="background:'+col+'"></div><div class="gc-emoji">'+(NOTE_EMOJIS[col]||'🗒️')+'</div><div class="gc-title">'+nt.title+'</div><div class="gc-sub" style="color:'+col+'">'+(nt.text?nt.text.slice(0,20)+'...':'Empty')+'</div>';el.style.borderColor=col+'25';el.dataset.itemId=nt.id;
-el.addEventListener('click',function(){openNoteDetail(nt.id,el)});
-cv.appendChild(el)})}
+var notes=sortItems(L('notes',[]),noteSort),cv=$('notesList');cv.innerHTML='';if(!notes.length){cv.innerHTML='<div class="empty-msg">No notes yet -- tap + to add one</div>';return}
+notes.forEach(function(nt){var col=nt.color||NCOLS[0];var preview=stripHtml(nt.body||nt.text||'').slice(0,60);
+cv.innerHTML+='<div class="nlist-item" onclick="neOpen(\'note\',\''+nt.id+'\')"><div class="nlist-color" style="background:'+col+'"></div><div class="nlist-icon">'+(NOTE_EMOJIS[col]||'🗒️')+'</div><div class="nlist-info"><div class="nlist-title">'+nt.title+'</div><div class="nlist-preview">'+(preview||'Empty')+'</div></div></div>'
+})}
 
-function openNoteDetail(id,el){activeNoteId=id;var a=L('notes',[]),nt=a.find(function(z){return z.id===id});if(!nt)return;var ov=$('noteOverlay');if(el){var r=el.getBoundingClientRect();ov.style.setProperty('--ox',(r.left+r.width/2)/innerWidth*100+'%');ov.style.setProperty('--oy',(r.top+r.height/2)/innerHeight*100+'%')}$('noTitle').textContent=nt.title;$('noColor').textContent='Note';$('noColor').style.color=nt.color||NCOLS[0];$('noText').textContent=nt.text||'Empty note';ov.classList.add('open')}
-function closeNoteDetail(){$('noteOverlay').classList.remove('open');activeNoteId=null}
-function editNoteFromDetail(){var a=L('notes',[]),i=a.findIndex(function(z){return z.id===activeNoteId});if(i<0)return;closeNoteDetail();editNote(i)}
-function delNoteFromDetail(){var a=L('notes',[]),i=a.findIndex(function(z){return z.id===activeNoteId});if(i<0)return;addToHistory('note',a[i].title);a.splice(i,1);S('notes',a);closeNoteDetail();renderNotes()}
-function editNote(i){var a=L('notes',[]),n=a[i];$('modalBody').innerHTML='<h3>Edit Note</h3><input id="mT" value="'+n.title+'"><textarea id="mX">'+(n.text||'')+'</textarea><div class="note-colors" id="ncPick">'+NCOLS.map(function(c){return'<div class="nc'+(c===n.color?' sel':'')+'" style="background:'+c+'" onclick="document.querySelectorAll(\'.nc\').forEach(function(x){x.classList.remove(\'sel\')});this.classList.add(\'sel\')"></div>'}).join('')+'</div><div class="mbtn"><button class="cn" onclick="closeModal()">Cancel</button><button class="sv" onclick="var a=L(\'notes\',[]);a['+i+'].title=$(\'mT\').value;a['+i+'].text=$(\'mX\').value;var sc=document.querySelector(\'.nc.sel\');a['+i+'].color=sc?sc.style.background:\''+NCOLS[0]+'\';S(\'notes\',a);closeModal();renderNotes()">Save</button></div>';$('mbg').classList.add('open')}
-
-/* ═══ GOALS ═══ */
-var activeGoalId=null;
+/* ═══ GOALS (list view) ═══ */
 function renderGoals(){
 if($('goalSortNew'))$('goalSortNew').className='sort-btn'+(goalSort==='new'?' active':'');
 if($('goalSortOld'))$('goalSortOld').className='sort-btn'+(goalSort==='old'?' active':'');
-var goals=sortItems(L('goals',[]),goalSort),cv=$('goalsCanvas');cv.innerHTML='';if(!goals.length){cv.innerHTML='<div class="empty-msg">No goals yet -- tap + to add one</div>';return}
-goals.forEach(function(gl){var el=document.createElement('div');el.className='gen-cube';var p=gl.progress||0;el.innerHTML='<div class="gc-glow" style="background:#a855f7"></div><div class="gc-emoji">🎯</div><div class="gc-title">'+gl.title+'</div><div class="gc-sub" style="color:#a78bfa">'+p+'%</div><div class="gc-prog"><div class="gc-prog-fill" style="width:'+p+'%"></div></div>';el.style.borderColor='#a855f725';el.dataset.itemId=gl.id;
-el.addEventListener('click',function(){openGoalDetail(gl.id,el)});
-cv.appendChild(el)})}
-
-function openGoalDetail(id,el){activeGoalId=id;var a=L('goals',[]),gl=a.find(function(z){return z.id===id});if(!gl)return;var ov=$('goalOverlay');if(el){var r=el.getBoundingClientRect();ov.style.setProperty('--ox',(r.left+r.width/2)/innerWidth*100+'%');ov.style.setProperty('--oy',(r.top+r.height/2)/innerHeight*100+'%')}$('glTitle').textContent=gl.title;$('glPct').textContent=(gl.progress||0)+'%';$('glSlider').value=gl.progress||0;ov.classList.add('open')}
-function closeGoalDetail(){$('goalOverlay').classList.remove('open');activeGoalId=null}
-function updGoalFromDetail(v){var a=L('goals',[]),i=a.findIndex(function(z){return z.id===activeGoalId});if(i<0)return;a[i].progress=+v;S('goals',a);$('glPct').textContent=v+'%';renderGoals()}
-function editGoalFromDetail(){var a=L('goals',[]),i=a.findIndex(function(z){return z.id===activeGoalId});if(i<0)return;closeGoalDetail();editGoal(i)}
-function delGoalFromDetail(){var a=L('goals',[]),i=a.findIndex(function(z){return z.id===activeGoalId});if(i<0)return;addToHistory('goal',a[i].title);a.splice(i,1);S('goals',a);closeGoalDetail();renderGoals()}
-function editGoal(i){var a=L('goals',[]),g=a[i];$('modalBody').innerHTML='<h3>Edit Goal</h3><input id="mT" value="'+g.title+'"><div class="mbtn"><button class="cn" onclick="closeModal()">Cancel</button><button class="sv" onclick="var a=L(\'goals\',[]);a['+i+'].title=$(\'mT\').value;S(\'goals\',a);closeModal();renderGoals()">Save</button></div>';$('mbg').classList.add('open')}
+var goals=sortItems(L('goals',[]),goalSort),cv=$('goalsList');cv.innerHTML='';if(!goals.length){cv.innerHTML='<div class="empty-msg">No goals yet -- tap + to add one</div>';return}
+goals.forEach(function(gl){var p=gl.progress||0;var preview=stripHtml(gl.body||'').slice(0,50);
+cv.innerHTML+='<div class="nlist-item" onclick="neOpen(\'goal\',\''+gl.id+'\')"><div class="nlist-icon">🎯</div><div class="nlist-info"><div class="nlist-title">'+gl.title+'</div><div class="nlist-preview">'+(preview||p+'% progress')+'</div><div class="nlist-meta" style="color:#a78bfa">'+p+'%</div></div><div style="width:40px;height:40px;border-radius:50%;border:3px solid rgba(168,139,250,.15);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#a78bfa;flex-shrink:0;background:conic-gradient(#a855f7 '+p*3.6+'deg,transparent 0)">'+p+'</div></div>'
+})}
 
 /* ═══ SAVINGS (Deposit + Withdraw) ═══ */
 function renderSavings(){
@@ -698,43 +849,29 @@ $('moodJournal').value=(md[today]&&md[today].journal)||''}
 function setMood(i){var k=new Date().toISOString().slice(0,10),md=L('mood',{});if(!md[k])md[k]={};md[k].mood=i;S('mood',md);renderMood()}
 function saveMoodJournal(){var k=new Date().toISOString().slice(0,10),md=L('mood',{});if(!md[k])md[k]={};md[k].journal=$('moodJournal').value;S('mood',md)}
 
-/* ═══ WISHLIST ═══ */
+/* ═══ WISHLIST (list view) ═══ */
 var WISH_EMOJIS=['🎁','🎮','👟','📱','💻','🎧','📚','🎨','✈️','🏠','🚗','💎','👗','🍕','🎵','🌸'];
-var activeWishId=null;
 function renderWish(){
 if($('wishSortNew'))$('wishSortNew').className='sort-btn'+(wishSort==='new'?' active':'');
 if($('wishSortOld'))$('wishSortOld').className='sort-btn'+(wishSort==='old'?' active':'');
-var items=sortItems(L('wishlist',[]),wishSort),cv=$('wishCanvas');cv.innerHTML='';if(!items.length){cv.innerHTML='<div class="empty-msg">No items yet -- tap + to add one</div>';return}
-items.forEach(function(wi){var el=document.createElement('div');el.className='gen-cube'+(wi.done?' wish-done':'');el.innerHTML='<div class="gc-glow" style="background:#e84393"></div><div class="gc-emoji">'+(wi.emoji||'🎁')+'</div><div class="gc-title">'+wi.name+'</div>'+(wi.price?'<div class="gc-sub" style="color:#e84393">€'+wi.price+'</div>':'');el.style.borderColor=wi.done?'#4ade8025':'#e8439325';el.dataset.itemId=wi.id;
-el.addEventListener('click',function(){openWishDetail(wi.id,el)});
-cv.appendChild(el)})}
+var items=sortItems(L('wishlist',[]),wishSort),cv=$('wishList');cv.innerHTML='';if(!items.length){cv.innerHTML='<div class="empty-msg">No items yet -- tap + to add one</div>';return}
+items.forEach(function(wi){var preview=stripHtml(wi.body||'').slice(0,50);
+cv.innerHTML+='<div class="nlist-item" onclick="neOpen(\'wish\',\''+wi.id+'\')"><div class="nlist-icon">'+(wi.emoji||'🎁')+'</div><div class="nlist-info"><div class="nlist-title">'+wi.name+'</div><div class="nlist-preview">'+(preview||'No notes')+'</div>'+(wi.price?'<div class="nlist-meta" style="color:#e84393">€'+wi.price+'</div>':'')+'</div></div>'
+})}
 
-function openWishDetail(id,el){activeWishId=id;var a=L('wishlist',[]),wi=a.find(function(z){return z.id===id});if(!wi)return;var ov=$('wishOverlay');if(el){var r=el.getBoundingClientRect();ov.style.setProperty('--ox',(r.left+r.width/2)/innerWidth*100+'%');ov.style.setProperty('--oy',(r.top+r.height/2)/innerHeight*100+'%')}$('wiTitle').textContent=wi.name;$('wiPrice').textContent=wi.price?'€'+wi.price:'';$('wiPrice').style.color='#e84393';$('wiStatus').textContent=wi.done?'✓ Got it!':'Not yet';ov.classList.add('open')}
-function closeWishDetail(){$('wishOverlay').classList.remove('open');activeWishId=null}
-function togWishFromDetail(){var a=L('wishlist',[]),i=a.findIndex(function(z){return z.id===activeWishId});if(i<0)return;addToHistory('buy',a[i].name);a.splice(i,1);S('wishlist',a);closeWishDetail();renderWish()}
-function editWishFromDetail(){var a=L('wishlist',[]),i=a.findIndex(function(z){return z.id===activeWishId});if(i<0)return;closeWishDetail();editWish(i)}
-function delWishFromDetail(){var a=L('wishlist',[]),i=a.findIndex(function(z){return z.id===activeWishId});if(i<0)return;addToHistory('wishlist',a[i].name);a.splice(i,1);S('wishlist',a);closeWishDetail();renderWish()}
-function editWish(i){var a=L('wishlist',[]),w=a[i];$('modalBody').innerHTML='<h3>Edit Wish</h3><input id="mN" value="'+w.name+'"><div class="emoji-grid">'+WISH_EMOJIS.map(function(e){return'<div class="emoji-opt'+(e===w.emoji?' sel':'')+'" onclick="document.querySelectorAll(\'.emoji-opt\').forEach(function(x){x.classList.remove(\'sel\')});this.classList.add(\'sel\');this.dataset.v=\''+e+'\'"data-v="'+e+'">'+e+'</div>'}).join('')+'</div><input id="mPr" type="number" step="0.01" placeholder="Price (optional)" value="'+(w.price||'')+'"><div class="mbtn"><button class="cn" onclick="closeModal()">Cancel</button><button class="sv" onclick="var a=L(\'wishlist\',[]);a['+i+'].name=$(\'mN\').value;var se=document.querySelector(\'.emoji-opt.sel\');a['+i+'].emoji=se?se.dataset.v:\'🎁\';a['+i+'].price=parseFloat($(\'mPr\').value)||0;S(\'wishlist\',a);closeModal();renderWish()">Save</button></div>';$('mbg').classList.add('open')}
-
-/* ═══ STUDIES ═══ */
+/* ═══ STUDIES (list view) ═══ */
 var STUDY_CATS=['All','Math','Science','Languages','History','IT','Other'];
 var STUDY_COLORS={Math:'#38bdf8',Science:'#4ade80',Languages:'#fb923c',History:'#a78bfa',IT:'#22d3ee',Other:'#f87171'};
 var STUDY_EMOJIS={Math:'🔢',Science:'🔬',Languages:'🌍',History:'📜',IT:'💻',Other:'📖'};
-var scat='All',activeStudyId=null;
+var scat='All';
 function renderStudies(){$('studyTabs').innerHTML=STUDY_CATS.map(function(c){return'<div class="tab'+(c===scat?' active':'')+'" onclick="scat=\''+c+'\';renderStudies()">'+c+'</div>'}).join('');
 if($('studySortNew'))$('studySortNew').className='sort-btn'+(studySort==='new'?' active':'');
 if($('studySortOld'))$('studySortOld').className='sort-btn'+(studySort==='old'?' active':'');
 var all=L('studies',[]),filtered=scat==='All'?all:all.filter(function(x){return x.subject===scat});var items=sortItems(filtered,studySort);
-var cv=$('studiesCanvas');cv.innerHTML='';if(!items.length){cv.innerHTML='<div class="empty-msg">No studies yet -- tap + to add one</div>';return}
-items.forEach(function(st){var el=document.createElement('div');el.className='gen-cube';var col=STUDY_COLORS[st.subject]||STUDY_COLORS.Other;el.innerHTML='<div class="gc-glow" style="background:'+col+'"></div><div class="gc-emoji">'+(STUDY_EMOJIS[st.subject]||'📖')+'</div><div class="gc-title">'+st.title+'</div><div class="gc-sub" style="color:'+col+'">'+(st.subject||'Other')+'</div>';el.style.borderColor=col+'25';el.dataset.itemId=st.id;
-el.addEventListener('click',function(){openStudyDetail(st.id,el)});
-cv.appendChild(el)})}
-
-function openStudyDetail(id,el){activeStudyId=id;var a=L('studies',[]),st=a.find(function(z){return z.id===id});if(!st)return;var ov=$('studyOverlay');if(el){var r=el.getBoundingClientRect();ov.style.setProperty('--ox',(r.left+r.width/2)/innerWidth*100+'%');ov.style.setProperty('--oy',(r.top+r.height/2)/innerHeight*100+'%')}$('stTitle').textContent=st.title;$('stSubject').textContent=st.subject||'Other';$('stSubject').style.color=STUDY_COLORS[st.subject]||STUDY_COLORS.Other;$('stText').textContent=st.text||'No notes';ov.classList.add('open')}
-function closeStudyDetail(){$('studyOverlay').classList.remove('open');activeStudyId=null}
-function editStudyFromDetail(){var a=L('studies',[]),i=a.findIndex(function(z){return z.id===activeStudyId});if(i<0)return;closeStudyDetail();editStudy(i)}
-function delStudyFromDetail(){var a=L('studies',[]),i=a.findIndex(function(z){return z.id===activeStudyId});if(i<0)return;addToHistory('study',a[i].title);a.splice(i,1);S('studies',a);closeStudyDetail();renderStudies()}
-function editStudy(i){var a=L('studies',[]),st=a[i];$('modalBody').innerHTML='<h3>Edit Study</h3><input id="mT" value="'+st.title+'"><select id="mSub">'+['Math','Science','Languages','History','IT','Other'].map(function(c){return'<option'+(c===st.subject?' selected':'')+'>'+c+'</option>'}).join('')+'</select><textarea id="mX">'+(st.text||'')+'</textarea><div class="mbtn"><button class="cn" onclick="closeModal()">Cancel</button><button class="sv" onclick="var a=L(\'studies\',[]);a['+i+'].title=$(\'mT\').value;a['+i+'].subject=$(\'mSub\').value;a['+i+'].text=$(\'mX\').value;S(\'studies\',a);closeModal();renderStudies()">Save</button></div>';$('mbg').classList.add('open')}
+var cv=$('studiesList');cv.innerHTML='';if(!items.length){cv.innerHTML='<div class="empty-msg">No studies yet -- tap + to add one</div>';return}
+items.forEach(function(st){var col=STUDY_COLORS[st.subject]||STUDY_COLORS.Other;var preview=stripHtml(st.body||st.text||'').slice(0,60);
+cv.innerHTML+='<div class="nlist-item" onclick="neOpen(\'study\',\''+st.id+'\')"><div class="nlist-icon">'+(STUDY_EMOJIS[st.subject]||'📖')+'</div><div class="nlist-info"><div class="nlist-title">'+st.title+'</div><div class="nlist-preview">'+(preview||'No notes')+'</div><div class="nlist-meta" style="color:'+col+'">'+(st.subject||'Other')+'</div></div></div>'
+})}
 
 /* ═══ HISTORY ═══ */
 var HIST_EMOJIS={idea:'💡',note:'🗒️',goal:'🎯',wishlist:'🛒',study:'📖',savings:'💰',files:'📁',event:'📅',routine:'⏰'};
@@ -873,23 +1010,14 @@ function del(k,i){var a=L(k,[]);a.splice(i,1);S(k,a)}
 
 /* ═══ MODAL ═══ */
 function openModal(t){var m=$('modalBody');
-if(t==='idea')m.innerHTML='<h3>New Idea</h3><input id="mT" placeholder="Title"><select id="mC"><option>Personal</option><option>Work</option><option>Creative</option><option>Remote</option><option>Other</option></select><textarea id="mX" placeholder="Description (optional)"></textarea><div class="mbtn"><button class="cn" onclick="closeModal()">Cancel</button><button class="sv" onclick="saveM(\'idea\')">Save</button></div>';
-else if(t==='note')m.innerHTML='<h3>New Note</h3><input id="mT" placeholder="Title"><textarea id="mX" placeholder="Content"></textarea><div class="note-colors">'+NCOLS.map(function(c,i){return'<div class="nc'+(!i?' sel':'')+'" style="background:'+c+'" onclick="document.querySelectorAll(\'.nc\').forEach(function(x){x.classList.remove(\'sel\')});this.classList.add(\'sel\')"></div>'}).join('')+'</div><div class="mbtn"><button class="cn" onclick="closeModal()">Cancel</button><button class="sv" onclick="saveM(\'note\')">Save</button></div>';
-else if(t==='goal')m.innerHTML='<h3>New Goal</h3><input id="mT" placeholder="Goal title"><div class="mbtn"><button class="cn" onclick="closeModal()">Cancel</button><button class="sv" onclick="saveM(\'goal\')">Save</button></div>';
-else if(t==='deposit')m.innerHTML='<h3>Deposit</h3><input id="mA" type="number" step="0.01" placeholder="Amount (€)"><div class="mbtn"><button class="cn" onclick="closeModal()">Cancel</button><button class="sv" onclick="saveM(\'deposit\')">Save</button></div>';
+if(t==='deposit')m.innerHTML='<h3>Deposit</h3><input id="mA" type="number" step="0.01" placeholder="Amount (€)"><div class="mbtn"><button class="cn" onclick="closeModal()">Cancel</button><button class="sv" onclick="saveM(\'deposit\')">Save</button></div>';
 else if(t==='withdraw')m.innerHTML='<h3>Withdraw</h3><input id="mA" type="number" step="0.01" placeholder="Amount (€)"><div class="mbtn"><button class="cn" onclick="closeModal()">Cancel</button><button class="sv" onclick="saveM(\'withdraw\')">Save</button></div>';
-else if(t==='wish')m.innerHTML='<h3>Add to Wishlist</h3><input id="mN" placeholder="Item name"><div class="emoji-grid">'+WISH_EMOJIS.map(function(e){return'<div class="emoji-opt'+(e==='🎁'?' sel':'')+'" onclick="document.querySelectorAll(\'.emoji-opt\').forEach(function(x){x.classList.remove(\'sel\')});this.classList.add(\'sel\');this.dataset.v=\''+e+'\'" data-v="'+e+'">'+e+'</div>'}).join('')+'</div><input id="mPr" type="number" step="0.01" placeholder="Price (optional)"><div class="mbtn"><button class="cn" onclick="closeModal()">Cancel</button><button class="sv" onclick="saveM(\'wish\')">Save</button></div>';
-else if(t==='study')m.innerHTML='<h3>New Study</h3><input id="mT" placeholder="Title"><select id="mSub"><option>Math</option><option>Science</option><option>Languages</option><option>History</option><option>IT</option><option>Other</option></select><textarea id="mX" placeholder="Notes (optional)"></textarea><div class="mbtn"><button class="cn" onclick="closeModal()">Cancel</button><button class="sv" onclick="saveM(\'study\')">Save</button></div>';
+else return;
 $('mbg').classList.add('open')}
 function closeModal(){$('mbg').classList.remove('open')}
 function saveM(t){var g=function(id){return $(id)?$(id).value:''};
-if(t==='idea'){var a=L('ideas',[]);a.push({id:U(),title:g('mT')||'Untitled',cat:g('mC'),text:g('mX')});S('ideas',a);renderIdeas()}
-else if(t==='note'){var a=L('notes',[]);var sc=document.querySelector('.nc.sel');a.push({id:U(),title:g('mT')||'Untitled',text:g('mX'),color:sc?sc.style.background:NCOLS[0]});S('notes',a);renderNotes()}
-else if(t==='goal'){var a=L('goals',[]);a.push({id:U(),title:g('mT')||'Goal',progress:0});S('goals',a);renderGoals()}
-else if(t==='deposit'){var a=L('savings',[]);a.push({id:U(),desc:'Deposit',amount:parseFloat(g('mA'))||0,date:new Date().toISOString().slice(0,10),type:'deposit'});S('savings',a);renderSavings()}
+if(t==='deposit'){var a=L('savings',[]);a.push({id:U(),desc:'Deposit',amount:parseFloat(g('mA'))||0,date:new Date().toISOString().slice(0,10),type:'deposit'});S('savings',a);renderSavings()}
 else if(t==='withdraw'){var a=L('savings',[]);a.push({id:U(),desc:'Withdrawal',amount:parseFloat(g('mA'))||0,date:new Date().toISOString().slice(0,10),type:'withdraw'});S('savings',a);renderSavings()}
-else if(t==='wish'){var a=L('wishlist',[]);var se=document.querySelector('.emoji-opt.sel');a.push({id:U(),name:g('mN')||'Item',emoji:se?se.dataset.v:'🎁',price:parseFloat(g('mPr'))||0,done:false});S('wishlist',a);renderWish()}
-else if(t==='study'){var a=L('studies',[]);a.push({id:U(),title:g('mT')||'Untitled',subject:g('mSub'),text:g('mX')});S('studies',a);renderStudies()}
 closeModal()}
 
 /* ═══ CLOUD SYNC ═══ */
