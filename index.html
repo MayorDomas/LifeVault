@@ -632,7 +632,7 @@ document.addEventListener('DOMContentLoaded',function(){var uz=$('uploadZone');u
 
 /* ═══ ROUTINE (timetable 6:00-00:00) ═══ */
 var RDAYS=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],RTIMES=[];
-for(var h=6;h<=23;h++)RTIMES.push(String(h).padStart(2,'0')+':00');RTIMES.push('00:00');
+for(var h=6;h<=23;h++){RTIMES.push(String(h).padStart(2,'0')+':00');RTIMES.push(String(h).padStart(2,'0')+':30')}RTIMES.push('00:00');
 function renderRoutine(){var tt=L('routine',{});var h='<div class="tt" style="grid-template-columns:50px repeat(7,1fr)"><div class="tt-corner"></div>';RDAYS.forEach(function(d){h+='<div class="tt-dayh">'+d+'</div>'});
 RTIMES.forEach(function(t,r){h+='<div class="tt-timeh">'+t+'</div>';for(var c=0;c<7;c++){var k=r+'_'+c,v=tt[k]||'';h+='<div class="tt-cell'+(v?' filled':'')+'" onclick="editRT(\''+k+'\')">'+v+'</div>'}});h+='</div>';$('routineTT').innerHTML=h}
 function editRT(k){var tt=L('routine',{});var v=prompt('Activity:',tt[k]||'');if(v===null)return;if(v.trim())tt[k]=v.trim();else delete tt[k];S('routine',tt);renderRoutine()}
